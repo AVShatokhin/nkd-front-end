@@ -1,0 +1,14 @@
+{
+  "local_port": "3001",
+  "db_host": "185.118.165.144",
+  "db_user": "yelka_user",
+  "db_password": "hra0Ckoh",
+  "db_name": "yelka",
+  "redis_host": "127.0.0.1",
+  "redis_port": 6379,
+  "smtp_user": "no-reply@yelka.ru",
+  "smtp_pass": "1O9ZWp8Epo",
+  "smtp_server": "smtp.titan.email",
+  "redis_secret": "you secret key",
+  "base_url": "127.0.0.1:3001"
+}

@@ -1,0 +1,18 @@
+<li class="sidebar-item"><a class="sidebar-link" id="btn__show_main" href="#">Интерфейс оператора</a></li>
+
+
+<% for ( var i=0; i < 1; i++ ) {%>
+    <li class="sidebar-item">
+        <a data-bs-target=<%="#id_"+i %> data-bs-toggle="collapse" class="sidebar-link collapsed">        
+            <span class="align-middle">Настройки</span>
+        </a>
+        <ul id=<%="id_"+i %> class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <li class="sidebar-item"><a class="sidebar-link" href="#" id="btn__test">Тест</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" href="#">Настройки 2</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" href="#">Настройки 3</a></li>
+            <li class="sidebar-item"><a class="sidebar-link" href="#">Настройки 4</a></li>
+        </ul>
+    </li>
+<%} %>
+
+

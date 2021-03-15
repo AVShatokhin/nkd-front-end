@@ -1,0 +1,13 @@
+body {
+  font-family: "Raleway";
+}
+
+.input-group-navbar {
+  min-width: 140px;
+}
+
+.form-control#input__search_card,
+button#btn__search_card {
+  padding-left: 6px;
+  padding-right: 6px;
+}

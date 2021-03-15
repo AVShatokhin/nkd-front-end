@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>GTLab.Диагностика - НКД</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" >
+    <link rel="stylesheet" type="text/css" href="/theme/css/dark.css" >
+    <link rel="stylesheet" type="text/css" href="public/css/styles.css">
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+        crossorigin="anonymous">
+    </script>
+
+    <script src="/public/js/f_common.js"></script>
+    <script src="/public/js/f_dashboard.js"></script>
+    <script src="/public/js/f_client.js"></script>
+
+</head>
+
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
+
+    <div class="wrapper">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-content js-simplebar">
+                <a class="sidebar-brand" href="/">
+                    <img src="/public/img/logo.png" class="align-middle me-1" width="50px">
+                </a>
+                <ul class="sidebar-nav" id="menu__left"></ul>
+        
+            </div>
+        </nav>
+    
+        <div class="main">
+
+            <nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle"><i class="hamburger align-self-center"></i></a>      
+                
+                <div class="mb-1">
+                    <span class="badge bg-success p-2">Сервер на связи</span>
+                </div>
+            
+                
+                <div class="navbar-collapse collapse">
+                    <ul class="navbar-nav navbar-align">                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+                                <i class="align-middle" data-feather="settings"></i>
+                            </a>
+
+                            <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+                                <img src="/public/img/avatars/<%= avatar %>" class="avatar img-fluid rounded-circle me-1" alt="<%= email %>" id="img__avatar"/> <span class="text-dark"><%= email %></span>
+                            </a>
+                                
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <button type="button" class="dropdown-item" id="btn__go_profile">
+                                    <i class="align-middle me-1" data-feather="user"></i>Профиль                                
+                                </button>
+                                <div class="dropdown-divider"></div>
+                                <button id="button__change_password_dialog" type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#window__password_dialog">
+                                    <i class="align-middle me-1" data-feather="settings"></i>Смена пароля
+                                </button>
+                                <a class="dropdown-item" href="/logout"><i class="align-middle me-1" data-feather="log-out"></i>Выход</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="content p-3">
+                <div class="container-fluid p-0" id="dashboard_main_content">
+                </div>
+            </main>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row text-muted">
+                        <div class="col-6 text-start">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="#">Техподдержка</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="#">Реквизиты</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="#">Соглашение</a>
+                                </li>                                
+                            </ul>
+                        </div>
+                        <div class="col-6 text-end">
+                            <p class="mb-0">
+                                &copy; 2021 - <a href="index.html" class="text-muted">GTLab.Диагностика</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="window__password_dialog" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Смена пароля</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="validation-form">
+                    <div class="modal-body m-3">
+                        <div class="mb-3 error-placeholder">
+                            <label class="form-label">Новый пароль</label>
+                            <input type="password" class="form-control" name="newPassword" id="validation-password" placeholder="Новый пароль">                        
+                        </div>
+                        <div class="mb-3 error-placeholder">
+                            <label class="form-label">Подтверждение пароля</label>
+                            <input type="password" class="form-control" name="newPasswordConfirmation" id="validation-password-confirmation" placeholder="Подтверждение пароля">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" disabled id="btn__change_password" data-bs-dismiss="modal">Принять изменения</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/theme/js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,83 @@
+<div class="row">
+	<div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-2">
+		<div class="card">			
+			<div class="card-body text-center">
+				<img class="img-fluid rounded-circle mb-2" src="/public/img/avatars/<%= avatar %>" alt="Фото" width="128" heigth="128" id="img__ava_preview"> 
+			</div>				
+			<div class="card-footer">
+				<form name="upload_ava" id="upload_ava">
+					<div class="row">
+						<div class="col-12 text-nowrap p-1">
+							<label class="btn btn-primary col-12">
+								<i class="align-middle me-1" data-feather="upload"></i>Выбрать файл<input type="file" form="upload_ava" name="new_ava" id="input__ava_upload" hidden>
+							</label>
+						</div>	
+						<div class="col-12 text-nowrap p-1">
+							<button class="btn btn-success col-12" id="btn__upload_ava" form="upload_ava" value="Сохранить" disabled>
+							<i class="align-middle me-1" data-feather="save"></i>
+							<span>Сохранить</span></button>	
+						</div>
+						<div class="col-12 text-nowrap p-1">
+							<a class="btn btn-danger col-12" id="btn__reset_ava"><i class="align-middle me-1" data-feather="delete"></i>
+							<span>Удалить</span></a>
+						</div>
+					</div>
+				</form>
+			</div>				
+		</div>
+	</div>
+	<div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-5">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title mb-0">Данные пользователя</h5>
+			</div>
+			<div class="card-body p-0">
+				<div class="row p-3">
+					<form name="user_data" id="user_data">
+						<div class="form-group row pb-2">
+							<label class="text-nowrap col-form-label text-right col-3">Имя</label>
+							<div class="col-9">
+								<input class="form-control" type="text" name="name" form="user_data" placeholder="Имя" value="<%= name %>">
+							</div>
+						</div>
+						<div class="form-group row pb-2">
+							<label class="text-nowrap col-form-label text-right col-3">Отчество</label>
+							<div class="col-9">
+								<input class="form-control" type="text" name="second_name" form="user_data" placeholder="Отчество" value="<%= second_name %>">
+							</div>
+						</div>
+						<div class="form-group row pb-2">
+							<label class="text-nowrap col-form-label text-right col-3">Фамилия</label>
+							<div class="col-9">
+								<input class="form-control" type="text" name="surname" form="user_data" placeholder="Фамилия" value="<%= surname %>">
+							</div>
+						</div>
+						<div class="form-group row pb-2">
+							<label class="text-nowrap col-form-label text-right col-3">Адрес</label>
+							<div class="col-9">
+								<input class="form-control" type="text" name="address" form="user_data" placeholder="Адрес" value="<%= address %>">
+							</div>
+						</div>
+						<div class="form-group row pb-2">
+							<label class="text-nowrap col-form-label text-right col-3">Телефон</label>
+							<div class="col-9">
+								<input class="form-control" type="text" name="phone" form="user_data" placeholder="Телефон" value="<%= phone %>">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="px-0">
+					<hr class="mt-0 mb-0">
+				</div>
+				<div class="row justify-content-end p-3 pb-1 pt-1">
+					<div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-nowrap p-1">
+						<button class="btn btn-success col-12" id="btn__upload_user_data" form="user_data" value="Сохранить">
+							<i class="align-middle me-1" data-feather="save"></i>
+							<span>Сохранить</span></button>	
+					</div>		
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
