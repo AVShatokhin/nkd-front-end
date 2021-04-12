@@ -1,0 +1,6 @@
+docker stop nkd
+docker rm nkd
+docker run -it -d --restart=always --name valera-back-end -v /home/webmaster/nkd-front-end/nkd-front:/home/webmaster/nkd-front-end/nkd-front \
+					   --link nkd-db \
+					   --link nkd-redis \
+                                           -w /home/webmaster/nkd-front-end/nkd-front/ -p 80:3000 node:latest node bin/www
