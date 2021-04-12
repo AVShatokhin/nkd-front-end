@@ -1,0 +1,22 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width:25%;">Дата замены</th>
+            <th style="width:25%;">Активный редуктор</th>
+            <th style="width:25%;">Наработка, моточасы</th>
+            <th style="width:25%;">Активировал</th>
+        </tr>    
+    </thead>
+    <tbody>
+
+        <% for (i=0; i < stat.length; i++) { %>
+        <tr>
+            <td><%=stat[i].date%></td>
+            <td><%=active_gear_collection.active_gear.values[stat[i].active_gear]%></td>                            
+            <td><%=stat[i].op_time%></td>                            
+            <td><%=JSON.parse(stat[i].signature).email%></td>            
+        </tr>
+        <% } %>
+
+    </tbody>
+</table>

@@ -1,0 +1,49 @@
+{
+    "tacho" : { 
+        "name": "Частота вращения первичного вала",        
+        "device_type": "d001", 
+        "device_id": 0,
+        "default_value": 0,
+        "channel" : 0       
+    },
+    "moto1" : { 
+        "name": "Наработка редуктора 1",        
+        "default_value": 0
+    },
+    "moto2" : { 
+        "name": "Наработка редуктора 2",        
+        "default_value": 0
+    },    
+    "speed" : { 
+        "name": "Расчетная скорость кабинок",        
+        "default_value": 0
+    },
+    "signal1" : { 
+        "name": "Ступень 1",
+        "device_type": "d001", 
+        "limit_normal": 10,
+        "limit_warning": 20,
+        "device_id": 0,
+        "default_value": 0,
+        "channel" : 1       
+    },
+    "signal2" : { 
+        "name": "Ступень 2",
+        "device_type": "d001", 
+        "limit_normal": 10,
+        "limit_warning": 20,
+        "device_id": 0,
+        "default_value": 0,
+        "channel" : 2       
+    },
+    "signal3" : { 
+        "name": "Ступень 3",
+        "device_type": "d001", 
+        "limit_normal": 10,
+        "limit_warning": 20,
+        "device_id": 0,
+        "default_value": 0,
+        "channel" : 3       
+    }
+}
+

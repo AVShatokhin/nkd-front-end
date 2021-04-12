@@ -1,22 +1,21 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const logger = require("morgan");
+const favicon = require("serve-favicon");
+const fileUpload = require("express-fileupload");
+const mysql = require("mysql");
 const session = require("express-session");
 const redisStorage = require("connect-redis")(session);
 const redis = require("redis");
 const client = redis.createClient();
-var authRouter = require("./routes/auth");
-var dashboardRouter = require("./routes/dashboard");
-var debugRouter = require("./routes/debug");
-var configsRouter = require("./routes/actions/configs");
-
-var favicon = require("serve-favicon");
-var fileUpload = require("express-fileupload");
-
+const engineRouter = require("./engine/engine");
+const authRouter = require("./routes/auth");
+const dashboardRouter = require("./routes/dashboard");
+const optionsRouter = require("./routes/options");
+const debugRouter = require("./routes/debug");
 const { allowedNodeEnvironmentFlags } = require("process");
-
-var app = express();
+const app = express();
 
 function init(conf) {
   app.set("port", conf.get("local_port"));
@@ -47,7 +46,8 @@ function init(conf) {
   app.use(authRouter);
   app.use("/dashboard", dashboardRouter);
   app.use("/debug", debugRouter);
-  app.use("/actions", configsRouter);
+  app.use("/options", optionsRouter);
+  app.use("/api", engineRouter);
 
   app.use(function (req, res, next) {
     next(createError(404));
@@ -60,6 +60,38 @@ function init(conf) {
     res.render("error");
   });
 }
+
+var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
+
+const connection = mysql.createConnection({
+  host: conf.get("db_host"),
+  user: conf.get("db_user"),
+  database: conf.get("db_name"),
+  password: conf.get("db_password"),
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.log(err);
+    throw err;
+  }
+
+  connection.query("SET time_zone='+3:00';", function (err, result) {
+    if (err) {
+      throw err;
+    } else {
+      console.log("mysql connected");
+      authRouter.setConnection(connection);
+      dashboardRouter.setConnection(connection);
+      optionsRouter.setConnection(connection);
+      engineRouter.setConnection(connection);
+    }
+  });
+});
+
+optionsRouter.on("active_gear", (data) => {
+  engineRouter.updateActiveGear(data);
+});
 
 module.exports = app;
 module.exports.init = init;

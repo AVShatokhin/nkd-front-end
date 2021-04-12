@@ -20,7 +20,7 @@
 
 </head>
 
-<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky" ws_url="<%= ws_url %>">
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
@@ -39,7 +39,7 @@
 				<a class="sidebar-toggle"><i class="hamburger align-self-center"></i></a>      
                 
                 <div class="mb-1">
-                    <span class="badge bg-success p-2">Сервер на связи</span>
+                    <span class="badge p-2" id="span__serverState"></span>
                 </div>
             
                 
@@ -78,7 +78,7 @@
                 <div class="container-fluid">
                     <div class="row text-muted">
                         <div class="col-6 text-start">
-                            <ul class="list-inline">
+                            <!-- <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <a class="text-muted" href="#">Техподдержка</a>
                                 </li>
@@ -88,11 +88,14 @@
                                 <li class="list-inline-item">
                                     <a class="text-muted" href="#">Соглашение</a>
                                 </li>                                
-                            </ul>
+                            </ul> -->
+                            <p class="mb-0">
+                               Build: <%=build%></a>
+                            </p>
                         </div>
                         <div class="col-6 text-end">
                             <p class="mb-0">
-                                &copy; 2021 - <a href="index.html" class="text-muted">GTLab.Диагностика</a>
+                                &copy; 2021 - <a href="/" class="text-muted">GTLab.Диагностика</a>
                             </p>
                         </div>
                     </div>

@@ -1,15 +1,20 @@
-const nodemailer = require("nodemailer");
-const mysql = require("mysql");
+//const mysql = require("mysql");
+
 var express = require("express");
 var router = express.Router();
+
+const nodemailer = require("nodemailer");
 var crypto = require("crypto");
 const redis = require("redis");
+var api = require("../libs/nkd.js");
 
 var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
 
 router.get("/", function (req, res, next) {
-  if (check_auth(req, res)) {
+  if (!api.check_role(req, "")) {
     res.redirect("/dashboard");
+  } else {
+    res.redirect("/auth");
   }
 });
 
@@ -33,7 +38,7 @@ router.get("/logout", function (req, res, next) {
 router.post("/login", function (req, res, next) {
   let sql_data = [req.body.email, req.body.password];
   let sql =
-    "SELECT uid, email, ava, address, phone, name, second_name, surname, acount from users where email = ? and pass_hash=md5(?);";
+    "SELECT uid, email, ava, address, phone, name, second_name, surname, role from users where email = ? and pass_hash=md5(?);";
   let query = connection.query(sql, sql_data, (err, result) => {
     if (err) {
       req.session.auth = false;
@@ -47,14 +52,14 @@ router.post("/login", function (req, res, next) {
         req.session.name = result[0].name;
         req.session.second_name = result[0].second_name;
         req.session.surname = result[0].surname;
-        req.session.acount = result[0].acount;
+        req.session.role = result[0].role;
         req.session.email = result[0].email;
         req.session.auth = true;
       } else {
         req.session.auth = false;
       }
 
-      if (check_auth(req, res)) {
+      if (api.check_role(req, "")) {
         res.redirect("/dashboard");
       }
     }
@@ -75,7 +80,8 @@ router.post("/changepass", function (req, res, next) {
       (err, result) => {
         if (err == undefined) ans.success = true;
         console.log("Password changed from user: " + req.session.email);
-        sendPasswordChanged(req.session.email);
+        if (req.session.email != undefined)
+          sendPasswordChanged(req.session.email);
         res.json(ans);
       }
     );
@@ -112,12 +118,13 @@ router.post("/email_verif_req", function (req, res, next) {
                 // отправим письмо и создадим пользователя
                 sendAuthMail(hash, email);
                 let new_user = connection.query(
-                  "insert into users set email = ?, pass_hash=?, ava='noava.png', acount=0, reg_ts=now();",
+                  "insert into users set email = ?, pass_hash=?;",
                   [email, hash],
                   (sql2Err, sql2Res) => {
                     // создали пользователя
                     if (sql2Err) {
-                      next(sql2Err);
+                      console.log(sql2Err);
+                      // next(sql2Err);
                     }
                   }
                 );
@@ -150,18 +157,7 @@ router.post("/password_reset_req", function (req, res, next) {
         } else {
           if (sqlRes[0] != undefined) {
             // пользователь такой есть можно продолжать работать над этой задачей
-            let secret = Math.random();
-            let hash = crypto
-              .createHash("md5")
-              .update(secret.toString())
-              .digest("hex");
-            redisClient.set("code:" + hash, email, (redisErr, redisRes) => {
-              // добавим code в redis
-              if (redisErr) console.log(redisErr);
-              redisClient.expire("code", 3600 * 24, () => {});
-              // отправим письмо
-              if (redisRes == "OK") sendPasswordRecoveryMail(hash, email);
-            });
+            passwordRecoveryGenCodeAndSend(email);
             res.render("security/reset_send"); // сказали что ждём верификацию
           } else {
             res.render("security/user_notfound"); // оказалось что пользователь есть уже
@@ -175,8 +171,13 @@ router.post("/password_reset_req", function (req, res, next) {
 router.get("/email_confirm/:code", function (req, res, next) {
   req.session.auth = false;
   let code = req.params["code"];
+
+  console.log(code);
+
   redisClient.get("code:" + code, (err, email) => {
-    if (err) next(sqlErr);
+    console.log("Установка пароля для пользователя: " + email);
+
+    if (err) next(err);
 
     if (email == undefined) {
       res.redirect("/auth");
@@ -309,15 +310,77 @@ router.post("/change_user_data", function (req, res, next) {
   }
 });
 
+router.get("/get_users", async function (req, res, next) {
+  if (!api.check_role(req, "admin")) {
+    res.render("security/noauthreq");
+    return;
+  }
+
+  let users = await getUsers(connection);
+  res.render("security/users", { users: users });
+});
+
+router.post("/change_role", async function (req, res, next) {
+  let ans = { success: false };
+  if (!api.check_role(req, "admin")) {
+    console.log("Not permit while changing user role");
+    res.json(ans);
+  } else {
+    let result = await updateUserRole(connection, req.body.role, req.body.uid);
+
+    if (result.error == undefined) {
+      ans.success = true;
+      console.log(`Change role for user: ${req.body.uid} to ${req.body.role}`);
+    }
+
+    res.json(ans);
+  }
+});
+
+router.post("/reset_pwd", async function (req, res, next) {
+  // сброс пароля по запросу администратора через административный интерфейс
+  let ans = { success: false };
+  if (!api.check_role(req, "admin")) {
+    console.log("Not permit while reset req for user");
+    res.json(ans);
+  } else {
+    let result = await getUsers(connection, req.body.uid);
+
+    if (result.error == undefined) {
+      passwordRecoveryGenCodeAndSend(result[0].email);
+      ans.success = true;
+      console.log(`Reset pwd request by admin for user: ${result[0].email}`);
+    }
+
+    res.json(ans);
+  }
+});
+
+router.post("/delete_user", async function (req, res, next) {
+  // сброс пароля по запросу администратора через административный интерфейс
+  let ans = { success: false };
+  if (!api.check_role(req, "admin")) {
+    console.log("Not permit while reset req for user");
+    res.json(ans);
+  } else {
+    let result = await deleteUser(connection, req.body.uid);
+
+    if (result.error == undefined) {
+      ans.success = true;
+      console.log(`User deleted: ${req.body.uid}`);
+    }
+
+    res.json(ans);
+  }
+});
+
 async function sendAuthMail(hash, email) {
   let result = await transporter.sendMail({
-    from: '"Роберт Суровый" <no-reply@yelka.ru>',
+    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
     to: email,
-    subject: `YELKA: подтверждение электронного ящика [${hash}]`,
+    subject: `GTLab.Диагностика: подтверждение электронного ящика [${hash}]`,
     html:
-      "Доброе время суток!" +
-      "<br>Это <b>Роберт Суровый</b>. Я робот из YELKA.<br>" +
-      "Не надо мне отвечать, я не читаю писем.<br><br>" +
+      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
       "<b>Для завершения регистрации перейдите по ссылке:</b> " +
       `<a href="http://${conf.get(
         "base_url"
@@ -327,13 +390,11 @@ async function sendAuthMail(hash, email) {
 
 async function sendPasswordRecoveryMail(hash, email) {
   let result = await transporter.sendMail({
-    from: '"Роберт Суровый" <no-reply@yelka.ru>',
+    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
     to: email,
-    subject: `YELKA: восстановление пароля [${hash}]`,
+    subject: `GTLab.Диагностика: восстановление пароля [${hash}]`,
     html:
-      "Доброе время суток!" +
-      "<br>Это <b>Роберт Суровый</b>. Я робот из YELKA.<br>" +
-      "Не надо мне отвечать, я не читаю писем.<br><br>" +
+      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
       "<b>Для восстановления пароля пройдите по ссылке:</b>" +
       ` <a href="http://${conf.get(
         "base_url"
@@ -343,22 +404,25 @@ async function sendPasswordRecoveryMail(hash, email) {
 
 async function sendPasswordChanged(email) {
   let result = await transporter.sendMail({
-    from: '"Роберт Суровый" <no-reply@yelka.ru>',
+    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
     to: email,
-    subject: `YELKA: пароль изменён [${Math.random()}]`,
+    subject: `GTLab.Диагностика: пароль изменён [${Math.random()}]`,
     html:
-      "Доброе время суток!" +
-      "<br>Это <b>Роберт Суровый</b>. Я робот из YELKA.<br>" +
-      "Не надо мне отвечать, я не читаю писем.<br><br>" +
-      "<b>Обращаю ваше внимание на то, что пароль к вашей учетной записи на сайте yelka.ru был изменён.</b>",
+      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
+      "<b>Обращаю ваше внимание на то, что пароль к вашей учетной записи был изменён.</b>",
   });
 }
 
-function check_auth(req, res) {
-  if (req.session.auth != true) {
-    res.redirect("/auth");
-  }
-  return req.session.auth || false;
+function passwordRecoveryGenCodeAndSend(email) {
+  let secret = Math.random();
+  let hash = crypto.createHash("md5").update(secret.toString()).digest("hex");
+  redisClient.set("code:" + hash, email, (redisErr, redisRes) => {
+    // добавим code в redis
+    if (redisErr) console.log(redisErr);
+    redisClient.expire("code", 3600 * 24, () => {});
+    // отправим письмо
+    if (redisRes == "OK") sendPasswordRecoveryMail(hash, email);
+  });
 }
 
 let transporter = nodemailer.createTransport({
@@ -369,21 +433,6 @@ let transporter = nodemailer.createTransport({
     user: conf.get("smtp_user"),
     pass: conf.get("smtp_pass"),
   },
-});
-
-const connection = mysql.createConnection({
-  host: conf.get("db_host"),
-  user: conf.get("db_user"),
-  database: conf.get("db_name"),
-  password: conf.get("db_password"),
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.log(err);
-    throw err;
-  }
-  console.log("mysql connected");
 });
 
 var redisClient = redis.createClient({
@@ -399,4 +448,65 @@ redisClient.on("connect", function (err) {
   console.log("redis connected");
 });
 
+var connection;
+
+function setConnection(con) {
+  connection = con;
+}
+
+async function getUsers(connection, uid) {
+  let request = `select uid, name, second_name, surname, ava, phone, address, email, role from users order by uid`;
+  let param = [];
+
+  if (uid != undefined) {
+    // если мы достаем одного пользователя по UID
+    request = `select uid, name, second_name, surname, ava, phone, address, email, role from users where uid=?`;
+    param = [uid];
+  }
+
+  return new Promise((resolve) =>
+    connection.query(request, param, (err, result) => {
+      if (err != undefined) {
+        console.log(err);
+        resolve({ error: err });
+      } else {
+        resolve(result);
+      }
+    })
+  );
+}
+
+async function updateUserRole(connection, role, uid) {
+  return new Promise((resolve) =>
+    connection.query(
+      `UPDATE users set role=? where uid=? limit 1;`,
+      [role, uid],
+      (err, result) => {
+        if (err != undefined) {
+          resolve({ error: err });
+        } else {
+          resolve(result);
+        }
+      }
+    )
+  );
+}
+
+async function deleteUser(connection, uid) {
+  return new Promise((resolve) =>
+    connection.query(
+      `DELETE from users where uid=? limit 1;`,
+      [uid],
+      (err, result) => {
+        if (err != undefined) {
+          resolve({ error: err });
+        } else {
+          resolve(result);
+        }
+      }
+    )
+  );
+}
+
 module.exports = router;
+module.exports.setConnection = setConnection;

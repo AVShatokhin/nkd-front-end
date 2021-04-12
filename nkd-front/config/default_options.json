@@ -1,0 +1,20 @@
+{
+    "diagnostics_collection" : { 
+        "start_time" : 6,
+        "fail_behavior": "repeat" 
+    },
+
+    "active_gear_collection" : 
+        {
+            "active_gear" : {
+                "default" : 0,
+                "name" : "Активный редуктор",
+                "values" : ["Редуктор №1","Редуктор №2"]
+            }
+        }
+    ,
+    
+    "monitoring_collection" : {
+        "periodik_id" : 1
+    }
+}

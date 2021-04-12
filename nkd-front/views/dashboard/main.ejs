@@ -18,41 +18,66 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th style="width:50%;">Имя датчика</th>
-                                    <th style="width:10%"></th>
+                                    <th style="width:35%;">Наименование параметра</th>
+                                    <th style="width:15%">ГОСТ 10816</th>
+                                    <th style="width:20%">Ручная настройка</th>
                                     <th style="width:15%">Значение</th>
-                                    <th class="d-none d-md-table-cell" style="width:25%">Единицы измерения</th>
+                                    <th class="d-md-table-cell" style="width:15%">Единицы измерения</th>
                                 </tr>    
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>Наработка редуктора 1 <span id="active_gear_0" class="badge bg-primary p-2 d-none">Активный</span></td>
+                                    <td></td>                            
+                                    <td></td>                            
+                                    <td><span source="signals" id="moto1"></span></td>
+                                    <td>моточасы</td>    
+                                </tr>
+                                <tr>
+                                    <td>Наработка редуктора 2 <span id="active_gear_1" class="badge bg-primary p-2 d-none">Активный</span></td>
+                                    <td></td>                            
+                                    <td></td>                            
+                                    <td><span source="signals" id="moto2"></span></td>
+                                    <td>моточасы</td>    
+                                </tr>
+                                <tr>
                                     <td>Частота вращения первичного вала</td>
-                                    <td><span class="badge bg-primary p-2">норма</span></td>                            
-                                    <td>70</td>
-                                    <td class="d-none d-md-table-cell">об./мин.</td>    
+                                    <td></td>                            
+                                    <td></td>                            
+                                    <td><span source="signals" id="tacho"></span></td>
+                                    <td class="d-none d-md-table-cell">об/мин</td>    
                                 </tr>
                                 <tr>
-                                    <td>СКЗ область 1</td>
+                                    <td>Расчетная скорость кабинок</td>
+                                    <td></td>                            
+                                    <td></td>                            
+                                    <td><span source="signals" id="speed"></span></td>
+                                    <td class="d-none d-md-table-cell">м/с</td>    
+                                </tr>
+                                <tr>
+                                    <td>Датчик вибрации первая ступень (СКЗ)</td>
+                                    <td><span source="badges" id="signal1" class="badge p-2"></span></td>                            
                                     <td><span class="badge bg-warning p-2">превышено</span></td>                           
-                                    <td>2</td>
-                                    <td class="d-none d-md-table-cell">м/с<sup>2</sup></td>    
+                                    <td><span source="signals" id="signal1"></span></td>
+                                    <td class="d-none d-md-table-cell">мм/с</td>    
                                 </tr>
                                 <tr>
-                                    <td>СКЗ область 2</td>
+                                    <td>Датчик вибрации вторая ступень (СКЗ)</td>
+                                    <td><span source="badges" id="signal2" class="badge p-2"></span></td>                            
                                     <td><span class="badge bg-danger p-2">критично</span></td>                           
-                                    <td>3</td>
-                                    <td class="d-none d-md-table-cell">м/с<sup>2</sup></td>    
+                                    <td><span source="signals" id="signal2"></span></td>
+                                    <td class="d-none d-md-table-cell">мм/с</td>    
                                 </tr>
                                 <tr>
-                                    <td>СКЗ область 3</td>
+                                    <td>Датчик вибрации третья ступень (СКЗ)</td>
+                                    <td><span source="badges" id="signal3" class="badge p-2"></span></td>                            
                                     <td><span class="badge bg-primary p-2">норма</span></td>                            
-                                    <td>1</td>
-                                    <td class="d-none d-md-table-cell">м/с<sup>2</sup></td>    
+                                    <td><span source="signals" id="signal3"></span></td>
+                                    <td class="d-none d-md-table-cell">мм/с</td>    
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -107,4 +132,7 @@
 
 
 </div>
+<script>
+    getAllClient();
+</script>
 

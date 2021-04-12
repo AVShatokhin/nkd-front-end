@@ -1,0 +1,154 @@
+<div class="container-fluid p-0">
+
+    <div class="row col-12 mb-3">
+
+        <div class="col-12">
+            <div class="card m-0">
+                <div class="card-body  p-0">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="width:5%;">UID</th>
+                                <th style="width:25%">Email</th>
+                                <th style="width:20%">ФИО</th>
+                                <th style="width:20%">Уровень доступа</th>                                
+                                <th style="width:30%">Действие</th>                                
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <% for (var i = 0; i < users.length; i ++ ) { %>
+                                <tr id="tr__<%=users[i].uid%>">
+                                    <td><%=users[i].uid%></td>
+                                    <td><%=users[i].email%></td>                            
+                                    <td><%=users[i].surname + " " +  users[i].name + " " + users[i].second_name%></td>                            
+                                    <td>
+                                        <div class="row col-12">
+                                            <div class="col-12 px-1" id="div__select_dostup_<%=users[i].uid%>">
+                                                <form id="form__dostup_<%=users[i].uid%>">
+                                                    <input type="hidden" name="uid" value="<%=users[i].uid%>">
+                                                    <select name="role" class="form-control select_dostup" form="form__dostup_<%=users[i].uid%>" uid="<%=users[i].uid%>">
+                                                        <% if (users[i].role == "") {%>
+                                                            <option value="" selected>Нет</option>
+                                                        <%} else {%>
+                                                            <option value="" selected>Нет</option>
+                                                        <%}%>
+
+                                                        <% if (users[i].role == "user") { %>
+                                                            <option value="user" selected>Оператор</option>
+                                                        <% } else { %>
+                                                            <option value="user">Оператор</option>
+                                                        <%}%>
+
+                                                        <% if (users[i].role == "admin") {%>
+                                                            <option value="admin" selected>Полный</option>
+                                                        <%} else {%>
+                                                            <option value="admin">Полный</option>
+                                                        <%}%>
+                                                    </select>    
+                                                </form>
+                                            </div>
+
+                                            <div class="col-6 d-none px-1" id="div__btn_dostup_apply_<%=users[i].uid%>" >
+                                                <button type="button" class="col-12 btn btn-primary"                                                         
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#window__dostup_change_<%=users[i].uid%>">
+                                                    Применить
+                                                </button>                                             
+                                            </div>
+
+                                            <div class="modal fade" id="window__dostup_change_<%=users[i].uid%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Изменение уровня доступа</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body m-3">
+                                                            Принять изменение уровня доступа для пользователя: <%=users[i].email%> ?<br><br> 
+                                                            Изменения вступят в силу после следующей авторизации пользователя.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary btn__dostup_change" uid="<%=users[i].uid%>" data-bs-dismiss="modal">Принять изменения</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <form id="form__reset_pwd_<%=users[i].uid%>">
+                                            <input type="hidden" name="uid" value="<%=users[i].uid%>">
+                                        </form>    
+
+                                        <button type="button" class="btn btn-primary" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#window__reset_pwd_req_<%=users[i].uid%>">
+                                            Сброс пароля
+                                        </button>      
+
+                                        <div class="modal fade" id="window__reset_pwd_req_<%=users[i].uid%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Сбросить пароль</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body m-3">
+                                                        Сбросить пароль пользователя: <%=users[i].email%> ?<br><br> 
+                                                        На почтовый ящик пользователя будет отправлено сообщение с приглашением изменить пароль.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary btn__reset_pwd" uid="<%=users[i].uid%>" data-bs-dismiss="modal">Сбросить пароль</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#window__delete_user_<%=users[i].uid%>">
+                                            Удалить пользователя
+                                        </button>      
+
+                                        <form id="form__delete_user_<%=users[i].uid%>">
+                                            <input type="hidden" name="uid" value="<%=users[i].uid%>">
+                                        </form> 
+
+                                        <div class="modal fade" id="window__delete_user_<%=users[i].uid%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Удаление пользователя</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body m-3">
+                                                        Удалить пользователя <%=users[i].email%> ?<br><br> 
+                                                        Пользователя нельзя будет восстановить.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary btn__delete_user" uid="<%=users[i].uid%>" data-bs-dismiss="modal">Удалить</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/f_users.js"></script>

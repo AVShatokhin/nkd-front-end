@@ -1,40 +1,89 @@
 var express = require("express");
 var router = express.Router();
-const mysql = require("mysql");
-var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
-var fs = require("fs");
-let users = JSON.parse(fs.readFileSync("./config/users.json"));
 var api = require("../libs/nkd.js");
-
-function check_auth(req, res) {
-  if (req.session.auth != true) {
-    res.redirect("/auth");
-  }
-  return req.session.auth || false;
-}
+var options = require("../libs/config.js");
+var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
 
 router.get("/", function (req, res, next) {
-  if (!check_auth(req, res)) return;
+  if (!api.check_role(req, "")) {
+    res.redirect("/auth");
+    return;
+  }
+
   res.render("dashboard/dashboard", {
     email: req.session.email,
     avatar: req.session.ava,
+    ws_url: conf.get("ws_url"),
+    build: conf.get("build"),
   });
 });
 
 router.get("/get_left_menu", function (req, res, next) {
-  if (!check_auth(req, res)) return;
+  if (!api.check_role(req, "user")) {
+    res.render("security/noauthreq");
+    return;
+  }
 
-  res.render("dashboard/menu__left");
+  res.render("dashboard/menu__left", { role: req.session.role });
 });
 
 router.get("/get_main", function (req, res, next) {
-  if (!check_auth(req, res)) return;
+  if (!api.check_role(req, "user")) {
+    res.render("security/noauthreq");
+    return;
+  }
 
   res.render("dashboard/main");
 });
 
+router.get("/get_control", function (req, res, next) {
+  if (!api.check_role(req, "admin")) {
+    res.render("security/noauthreq");
+    return;
+  }
+  res.render("dashboard/control");
+});
+
+router.get("/get_statistics", function (req, res, next) {
+  if (!api.check_role(req, "user")) {
+    res.render("security/noauthreq");
+    return;
+  }
+
+  res.render("dashboard/statistics");
+});
+
+router.get("/get_monitoring", function (req, res, next) {
+  if (!api.check_role(req, "user")) {
+    res.render("security/noauthreq");
+    return;
+  }
+
+  res.render("dashboard/monitoring");
+});
+
+router.get("/get_redchange", async function (req, res, next) {
+  if (!api.check_role(req, "admin")) {
+    res.render("security/noauthreq");
+    return;
+  }
+
+  let gearStat = await api.getGearHistory(connection);
+  let opt = await options.getOptionsByLink(connection, [
+    "active_gear_collection",
+  ]);
+
+  res.render("dashboard/redchange", {
+    stat: gearStat,
+    active_gear_collection: opt.active_gear_collection,
+  });
+});
+
 router.get("/get_mnemo", function (req, res, next) {
-  if (!check_auth(req, res)) return;
+  if (!api.check_role(req, "user")) {
+    res.render("security/noauthreq");
+    return;
+  }
 
   res.render("mnemo/mnemo");
 });
@@ -43,19 +92,11 @@ router.get("/test", function (req, res, next) {
   res.render("test");
 });
 
-const connection = mysql.createConnection({
-  host: conf.get("db_host"),
-  user: conf.get("db_user"),
-  database: conf.get("db_name"),
-  password: conf.get("db_password"),
-});
+let connection;
 
-connection.connect((err) => {
-  if (err) {
-    console.log(err);
-    throw err;
-  }
-  console.log("mysql connected");
-});
+function setConnection(con) {
+  connection = con;
+}
 
 module.exports = router;
+module.exports.setConnection = setConnection;

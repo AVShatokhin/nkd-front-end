@@ -1,10 +1,11 @@
 $(function () {
   get_left_menu();
-  get_main();
 
   initPasswordDialogs(); // в f_common.js
   initProfile(); // в f_common.js
-  initClient(); // в f_client.js
+
+  let ws_url = $("body").attr("ws_url");
+  if (ws_url != undefined) initClient(ws_url);
 
   function get_left_menu() {
     sendAjaxGet(
@@ -12,18 +13,42 @@ $(function () {
       (res) => {
         $("ul#menu__left").append(res);
 
-        $(".my_bnt__left_menu").click((e) => {
-          var mid = $(e.currentTarget).attr("mid");
-          get_tab_options(mid);
-        });
+        get_end_point("dashboard/get_main", get_mnemo);
+        set_active("btn__show_main");
 
         $("#btn__show_main").click((e) => {
-          get_main();
+          get_end_point("dashboard/get_main", get_mnemo);
+          set_active("btn__show_main");
         });
 
-        $("#btn__test").click((e) => {
-          $("svg#o_1 > rect#back").attr("fill", "#00ff00");
-          $("svg#o_2 > rect#back").attr("fill", "#ff0000");
+        $("#btn__show_monitoring").click((e) => {
+          get_end_point("dashboard/get_monitoring", get_mnemo);
+          set_active("btn__show_monitoring");
+        });
+
+        $("#btn__show_redchange").click((e) => {
+          get_end_point("dashboard/get_redchange");
+          set_active("btn__show_redchange");
+        });
+
+        $("#btn__show_options").click((e) => {
+          get_end_point("options/get_options");
+          set_active("btn__show_options");
+        });
+
+        $("#btn__show_statistics").click((e) => {
+          get_end_point("dashboard/get_statistics");
+          set_active("btn__show_statistics");
+        });
+
+        $("#btn__show_users").click((e) => {
+          get_end_point("get_users");
+          set_active("btn__show_users");
+        });
+
+        $("#btn__show_control").click((e) => {
+          get_end_point("dashboard/get_control");
+          set_active("btn__show_control");
         });
       },
       () => {
@@ -32,14 +57,16 @@ $(function () {
     );
   }
 
-  function get_main() {
+  function get_end_point(end_point, callback) {
     sendAjaxGet(
-      `dashboard/get_main/`,
+      `${end_point}/`,
       (res) => {
         $("#dashboard_main_content").empty();
         $("#dashboard_main_content").html(res);
-
-        get_mnemo();
+        // если загрузка энд-поинта завершилась удачно, то тогда
+        if (callback != undefined) {
+          callback();
+        }
       },
       () => {
         showMessage("Ошибка загрузки приложения!", "danger");
@@ -53,14 +80,15 @@ $(function () {
       (res) => {
         $("#mnemo_container").empty();
         $("#mnemo_container").html(res);
-
-        $("#svg_2").click((e) => {
-          alert(1);
-        });
       },
       () => {
         showMessage("Ошибка загрузки приложения!", "danger");
       }
     );
+  }
+
+  function set_active(active) {
+    $(".sidebar-item").removeClass("active");
+    $(`#${active}`).parent().addClass("active");
   }
 });

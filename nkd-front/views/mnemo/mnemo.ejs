@@ -1,34 +1,27 @@
 <svg class="col-12" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" id="mnemo">
-    <!-- Created with SVG Editor - http://github.com/mzalive/SVG Editor/ -->
     <g>
         <title>background</title>
-        
         <rect fill="#b2b2b2" id="canvas_background" height="602" width="602" y="-1" x="-1"/>        
-        
         <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
-                <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+            <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
         </g>
     </g>
     
     <g>
-        <title>Layer 1</title>
-    
-        <rect stroke="#000" id="svg_2" height="150" width="300" y="75.953125" x="149" stroke-opacity="null" stroke-width="5" fill="#aaffff"/>
-        
-        <svg x="100" y="100" id="o_1">
-            <%- include("rect2.ejs") %>
+        <title>Редуктор НКД</title>
+
+        <svg x="10" y="10" id="o_1">
+            <%- include("gear_transmission_stage1.ejs") %>
         </svg>
 
-        <svg x="220" y="130" id="o_2">
-            <%- include("rect2.ejs") %>
+        <svg x="10" y="150" id="o_2">
+            <%- include("planetary_gear_stage2.ejs") %>
         </svg>
 
-        <!-- <%- include("d:/projects/nkd-front/views/mnemo/rect2.ejs") %> -->
-    
-        <!-- <rect stroke="#000" id="svg_3" height="120" width="170" y="253.453125" x="215" stroke-opacity="null" stroke-width="5" fill="#00ff00"/> -->
-        <rect stroke="#000" id="svg_4" height="100" width="150" y="411.453125" x="224" stroke-opacity="null" stroke-width="5" fill="#ff0000"/>
-        <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_5" y="105.453125" x="243.640625" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">Ступень 1</text>
-        <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_6" y="278.453125" x="243.640625" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">Ступень 2</text>
-        <text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_7" y="447.453125" x="243.640625" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="#000000">Ступень 3</text>
+        <svg x="10" y="230" id="o_3">
+            <%- include("planetary_gear_stage3.ejs") %>
+        </svg>
+
+
     </g>
 </svg>
