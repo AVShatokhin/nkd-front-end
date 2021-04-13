@@ -1,10 +1,14 @@
 #!/usr/bin/env node
+if (process.env.NKD_PATH == undefined) {
+  process.env.NKD_PATH = "";
+}
+
 var config = require("nconf")
   .argv()
   .env()
-  .file({ file: "./config/config.json" });
+  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
-const local_port = config.get("local_port") || "3001";
+const local_port = config.get("local_port") || "3000";
 
 var app = require("../app");
 

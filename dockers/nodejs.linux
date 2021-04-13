@@ -1,6 +1,7 @@
 docker stop nkd
 docker rm nkd
-docker run -it -d --restart=always --name valera-back-end -v /home/webmaster/nkd-front-end/nkd-front:/home/webmaster/nkd-front-end/nkd-front \
+docker run -it -d --restart=always -e NKD_PATH=/home/webmaster/nkd-front-end/nkd-front/ --name nkd \
+					   -v /home/webmaster/nkd-front-end/nkd-front:/home/webmaster/nkd-front-end/nkd-front \
 					   --link nkd-db \
 					   --link nkd-redis \
-                                           -w /home/webmaster/nkd-front-end/nkd-front/ -p 80:3000 node:latest node bin/www
+                                           -w /home/webmaster/nkd-front-end/nkd-front/ -p 3000:3000 node:latest node bin/www

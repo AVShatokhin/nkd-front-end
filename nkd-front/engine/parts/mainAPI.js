@@ -16,11 +16,6 @@ router.get("/get_config", async function (req, res, next) {
     data: await config.openMainConfig(connection),
   };
 
-  let now = new Date();
-  console.log(now);
-
-  // ans.data = 1;
-
   res.json(ans);
 });
 

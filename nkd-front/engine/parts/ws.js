@@ -1,4 +1,7 @@
-var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
+var conf = require("nconf")
+  .argv()
+  .env()
+  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}

@@ -2,7 +2,10 @@ var express = require("express");
 var router = express.Router();
 var api = require("../libs/nkd.js");
 var options = require("../libs/config.js");
-var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
+var conf = require("nconf")
+  .argv()
+  .env()
+  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 router.get("/", function (req, res, next) {
   if (!api.check_role(req, "")) {

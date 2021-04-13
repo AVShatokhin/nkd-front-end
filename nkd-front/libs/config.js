@@ -2,17 +2,23 @@ var parser = require("xml2json");
 const fs = require("fs");
 
 function getDefaultOptions() {
-  let rawdata = fs.readFileSync("config/default_options.json");
+  let rawdata = fs.readFileSync(
+    process.env.NKD_PATH + "./config/default_options.json"
+  );
   let result = JSON.parse(rawdata);
   return result;
 }
 
 function openSignalsConfig() {
-  return JSON.parse(fs.readFileSync("config/signals.json"));
+  return JSON.parse(
+    fs.readFileSync(process.env.NKD_PATH + "./config/signals.json")
+  );
 }
 
 async function openMainConfig(connection) {
-  let object = JSON.parse(parser.toJson(fs.readFileSync("config/object.xml")));
+  let object = JSON.parse(
+    parser.toJson(fs.readFileSync(process.env.NKD_PATH + "./config/object.xml"))
+  );
   object.signals = openSignalsConfig();
   object.options = await getOptionsByLink(connection, [
     "active_gear_collection",
