@@ -125,8 +125,16 @@ router.post("/email_verif_req", function (req, res, next) {
                 // отправим письмо и создадим пользователя
                 sendAuthMail(hash, email);
                 let new_user = connection.query(
-                  "insert into users set email = ?, pass_hash=?;",
-                  [email, hash],
+                  "insert into users set email=?, pass_hash=?, name=?, surname=?, second_name=?, phone=?, address=?;",
+                  [
+                    email,
+                    hash,
+                    "Имя",
+                    "Фамилия",
+                    "Отчество",
+                    "+7",
+                    "Не заполнено",
+                  ],
                   (sql2Err, sql2Res) => {
                     // создали пользователя
                     if (sql2Err) {
