@@ -8,7 +8,6 @@ const mysql = require("mysql");
 const session = require("express-session");
 const redisStorage = require("connect-redis")(session);
 const redis = require("redis");
-const client = redis.createClient();
 const engineRouter = require("./engine/engine");
 const authRouter = require("./routes/auth");
 const dashboardRouter = require("./routes/dashboard");
@@ -29,10 +28,13 @@ function init(conf) {
   app.use(express.urlencoded({ extended: false }));
   app.use(favicon(path.join(__dirname, "public/img", "favicon.ico")));
 
+  const client = redis.createClient({
+    host: conf.get("redis_host"),
+    port: conf.get("redis_port"),
+  });
+
   const sessionOpts = {
     store: new redisStorage({
-      host: conf.get("redis_host"),
-      port: conf.get("redis_port"),
       client: client,
     }),
     secret: conf.get("redis_secret"),
@@ -61,7 +63,10 @@ function init(conf) {
   });
 }
 
-var conf = require("nconf").argv().env().file({ file: "./config/config.json" });
+var conf = require("nconf")
+  .argv()
+  .env()
+  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 const connection = mysql.createConnection({
   host: conf.get("db_host"),

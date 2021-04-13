@@ -1,7 +1,7 @@
 docker stop nkd
 docker rm nkd
 docker run -it -d --restart=always -e NKD_PATH=/home/webmaster/nkd-front-end/nkd-front/ --name nkd \
-					   -v /home/webmaster/nkd-front-end/nkd-front:/home/webmaster/nkd-front-end/nkd-front \
-					   --link nkd-db \
-					   --link nkd-redis \
-                                           -w /home/webmaster/nkd-front-end/nkd-front/ -p 3000:3000 node:latest node bin/www
+                                           -v /home/webmaster/nkd-front-end/nkd-front:/home/webmaster/nkd-front-end/nkd-front \
+                                           --link nkd-db \
+                                           --link nkd-redis \
+                                           -w /home/webmaster/nkd-front-end/nkd-front/ -p 80:3000 -p 3001:3001 node:14.16.1 node bin/www

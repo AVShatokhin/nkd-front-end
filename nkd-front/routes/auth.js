@@ -58,12 +58,16 @@ router.post("/login", function (req, res, next) {
         req.session.role = result[0].role;
         req.session.email = result[0].email;
         req.session.auth = true;
+
+        if (api.check_role(req, "")) {
+          res.redirect("/dashboard");
+        } else {
+          req.session.auth = false;
+          res.redirect("/auth");
+        }
       } else {
         req.session.auth = false;
-      }
-
-      if (api.check_role(req, "")) {
-        res.redirect("/dashboard");
+        res.redirect("/auth");
       }
     }
   });
