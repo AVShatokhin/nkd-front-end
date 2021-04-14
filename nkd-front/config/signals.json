@@ -1,49 +1,49 @@
 {
-    "tacho" : { 
+    "taho" : { 
         "name": "Частота вращения первичного вала",        
+        "signal_type" : "freq",
         "device_type": "d001", 
         "device_id": 0,
-        "default_value": 0,
-        "channel" : 0       
-    },
-    "moto1" : { 
-        "name": "Наработка редуктора 1",        
+        "channel" : 0,       
         "default_value": 0
     },
-    "moto2" : { 
-        "name": "Наработка редуктора 2",        
-        "default_value": 0
-    },    
-    "speed" : { 
-        "name": "Расчетная скорость кабинок",        
+    "cnt" : { 
+        "name": "Счетчик импульсов",        
+        "signal_type" : "counter",
+        "device_type": "d001", 
+        "device_id": 0,
+        "channel" : 0,       
         "default_value": 0
     },
     "signal1" : { 
         "name": "Ступень 1",
+        "signal_type" : "rms",
         "device_type": "d001", 
+        "device_id": 0,
+        "channel" : 1,       
         "limit_normal": 10,
         "limit_warning": 20,
-        "device_id": 0,
-        "default_value": 0,
-        "channel" : 1       
+        "default_value": 0
     },
     "signal2" : { 
         "name": "Ступень 2",
+        "signal_type" : "rms",
         "device_type": "d001", 
-        "limit_normal": 10,
-        "limit_warning": 20,
         "device_id": 0,
-        "default_value": 0,
-        "channel" : 2       
+        "channel" : 2,
+        "limit_normal": 10,
+        "limit_warning": 20,       
+        "default_value": 0
     },
     "signal3" : { 
         "name": "Ступень 3",
+        "signal_type" : "rms",
         "device_type": "d001", 
-        "limit_normal": 10,
-        "limit_warning": 20,
         "device_id": 0,
-        "default_value": 0,
-        "channel" : 3       
+        "channel" : 3,
+        "limit_normal": 10,
+        "limit_warning": 20,       
+        "default_value": 0
     }
 }
 
