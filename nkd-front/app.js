@@ -31,6 +31,7 @@ function init(conf) {
   const client = redis.createClient({
     host: conf.get("redis_host"),
     port: conf.get("redis_port"),
+    password: conf.get("redis_password"),
   });
 
   const sessionOpts = {

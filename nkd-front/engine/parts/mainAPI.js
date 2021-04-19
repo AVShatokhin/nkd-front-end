@@ -8,6 +8,46 @@ const myEmitter = new MyEmitter();
 
 const signals_config = config.openSignalsConfig();
 
+router.get("/generate", async function (req, res, next) {
+  // let ts = 1618659044;
+
+  // let a = [];
+
+  // for (let i = 0; i < 365 * 60 * 24; i = i + 5) {
+  //   a.push(
+  //     `(FROM_UNIXTIME(${ts + 60 * i}), 0, 1, ${i}, ${i * 0.5}, ${i * 0.2}, ${
+  //       i * 0.1
+  //     })`
+  //   );
+  // a.push(`(${ts + 60 * (i + 1)}, 0, 2, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  // a.push(`(${ts + 60 * (i + 2)}, 0, 3, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  // a.push(`(${ts + 60 * (i + 3)}, 0, 4, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  // a.push(`(${ts + 60 * (i + 4)}, 0, 5, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  // }
+
+  // ts = ts + 365 * 60 * 24;
+
+  // for (let i = 0; i < 365 * 60 * 24; i = i + 5) {
+  //   a.push(`(${ts + 60 * i}, 1, 1, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  //   a.push(`(${ts + 60 * (i + 1)}, 1, 2, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  //   a.push(`(${ts + 60 * (i + 2)}, 1, 3, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  //   a.push(`(${ts + 60 * (i + 3)}, 1, 4, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  //   a.push(`(${ts + 60 * (i + 4)}, 1, 5, ${i * 0.5}, ${i * 0.2}, ${i * 0.1})`);
+  // }
+
+  // connection.query(
+  //   `insert into signals_history (ts, active_gear, speed, tacho, signal1, signal2, signal3) values ${a.join(
+  //     ","
+  //   )};`,
+  //   [],
+  //   (err, res) => {
+  //     console.log(err);
+  //     console.log(res);
+  //   }
+  // );
+  res.json({ ok: "ok" });
+});
+
 router.get("/get_config", async function (req, res, next) {
   let ans = {
     status: {
