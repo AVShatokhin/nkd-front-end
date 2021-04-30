@@ -15,14 +15,32 @@ function openSignalsConfig() {
   );
 }
 
+function openRecordsConfig() {
+  return JSON.parse(
+    fs.readFileSync(process.env.NKD_PATH + "./config/records.json")
+  );
+}
+
 async function openMainConfig(connection) {
   let object = JSON.parse(
     parser.toJson(fs.readFileSync(process.env.NKD_PATH + "./config/object.xml"))
   );
   object.signals = openSignalsConfig();
+  object.records = openRecordsConfig();
+
   object.options = await getOptionsByLink(connection, [
     "active_gear_collection",
   ]);
+
+  return object;
+}
+
+function openRollingFromXML() {
+  let object = JSON.parse(
+    parser.toJson(
+      fs.readFileSync(process.env.NKD_PATH + "./config/rolling.xml")
+    )
+  );
 
   return object;
 }
@@ -131,6 +149,7 @@ async function setOptionsByLink(connection, req) {
   });
 }
 
+module.exports.openRollingFromXML = openRollingFromXML;
 module.exports.getDefaultOptions = getDefaultOptions;
 module.exports.getOptionsByLink = getOptionsByLink;
 module.exports.setOptionsByLink = setOptionsByLink;

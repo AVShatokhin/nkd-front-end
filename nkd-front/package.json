@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "clickhouse": "^2.4.0",
     "connect-redis": "^5.0.0",
     "crypto": "^1.0.1",
     "debug": "~2.6.9",

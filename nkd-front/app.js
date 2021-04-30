@@ -13,6 +13,7 @@ const authRouter = require("./routes/auth");
 const dashboardRouter = require("./routes/dashboard");
 const optionsRouter = require("./routes/options");
 const debugRouter = require("./routes/debug");
+const monitoringRouter = require("./routes/monitoring");
 const { allowedNodeEnvironmentFlags } = require("process");
 const app = express();
 
@@ -51,6 +52,7 @@ function init(conf) {
   app.use("/debug", debugRouter);
   app.use("/options", optionsRouter);
   app.use("/api", engineRouter);
+  app.use("/monitoring", monitoringRouter);
 
   app.use(function (req, res, next) {
     next(createError(404));

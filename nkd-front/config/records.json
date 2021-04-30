@@ -1,0 +1,34 @@
+[
+   {
+    "guid" : "{6e665fe4-3d53-4d19-bbee-f80a023677f4}",
+    "periods" : ["08:00", "10:00", "14:00", "16:00","18:00"],
+    "record_name" : "Имя записи",
+    "channels" : {    
+        "tacho" : { 
+                "name": "Датчик оборотов",
+                "device_type": "d001", 
+                "device_id": 0,
+                "channel" : 0       
+            },
+        "signal1" : { 
+                "name": "Ступень 1",
+                "device_type": "d001", 
+                "device_id": 0,
+                "channel" : 1       
+            },
+        "signal2" : { 
+                "name": "Ступень 2",
+                "device_type": "d001", 
+                "device_id": 0,
+                "channel" : 2
+            },
+        "signal3" : { 
+                "name": "Ступень 3",
+                "device_type": "d001", 
+                "device_id": 0,
+                "channel" : 3
+            }
+        }
+    }
+]
+

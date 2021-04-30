@@ -1,1 +1,387 @@
-Сатистика по данным монитринга
+<div class="row">
+    <div class="col-8 px-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Настройка выборки</h5>
+            </div>
+
+            <div class="card-body px-3">
+                <div class="input-group">
+                    <div class="input-group-prepend col-4">
+                        <span class="input-group-text">Выбор периода</span>
+                    </div>                            
+                    <input id="input__request_dateTimeRange" class="form-control col-8" type="text" name="datetimes" />
+                </div>
+            </div>
+
+            <div class="px-0">
+                <hr class="mt-0 mb-3">
+            </div>
+    
+            <div class="container-fluid px-3 pb-3">
+                <div class="d-flex justify-content-begin">
+                    <button id="btn__request" type="button" class="btn btn-primary">Выполнить запрос</button>                                
+                </div>                                    
+            </div>
+        </div>        
+    </div>
+
+    <div class="col-4 px-2">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Сводка по запросу</h5>
+            </div>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:60%;">Параметр</th>
+                        <th style="width:40%">Значение</th>
+                    </tr>    
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Общее время обработки запроса</td>                            
+                        <td><span id="walltime"></span></td>                            
+                    </tr>
+                    <tr>
+                        <td>Время СУБД</td>                            
+                        <td><span id="sqltime"></span></td>                            
+                    </tr>
+                    <tr>
+                        <td>Выбрано точек</td>                            
+                        <td><span id="count"></span></td>                            
+                    </tr>
+                    <tr>
+                        <td>Агрегация</td>                            
+                        <td><span id="currentAgregation"></span></td>                            
+                    </tr>
+                    <tr>
+                        <td>Объём данных</td>                            
+                        <td><span id="size"></span></td>                            
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 px-2">
+        <div class="card">
+            <div class="card-body p-1">
+                <div id="graph" style="width:100%; height: 480px;">
+
+                </div>
+            </div>
+        </div>    
+    </div>
+</div>
+
+<!-- <div class="col-12 d-flex p-3">
+
+    <div class="row">
+        <div class="row col-12">
+
+
+        </div>
+
+
+        <div class="card flex-fill col-6">
+
+            <div class="card-header pb-2 px-2 mx-0">
+                <h5 class="card-title">Настройки фильтра выборки</h5>            
+            </div>
+
+            
+    
+            
+        </div>
+
+        
+        <div class="card flex-fill col-6">
+            <div class="card-header pb-2 px-2 mx-0">
+                <h5 class="card-title">Сводка по запросу</h5>            
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card flex-fill">
+        <div class="card-header pb-2 px-2 mx-0">
+            <h5 class="card-title">Сатистика по данным мониторинга</h5>            
+        </div>
+        
+    </div>   
+
+</div>
+
+ -->
+
+<script>
+    $(function () {      
+        Highcharts.setOptions({
+    time: {
+        timezoneOffset: -3 * 60
+    }
+});
+
+        
+        // https://www.daterangepicker.com/
+        $("input[name=\"datetimes\"]").daterangepicker({
+            timePicker24Hour: true,
+            showDropdowns: true,
+            linkedCalendars: false,
+            timePicker: true,
+            opens: "center",
+            startDate: moment().startOf("hour").subtract(24, "hour"),
+            endDate: moment().startOf("hour"),
+            locale: {
+                format: "YYYY-MM-DD HH:mm:00",
+                applyLabel: "Принять",
+                cancelLabel: "Отмена",
+                fromLabel: "с",
+                toLabel: "до",
+                firstDay: 1,
+                "daysOfWeek": [
+                    "Вс",
+                    "Пн",
+                    "Вт",
+                    "Ср",
+                    "Чт",
+                    "Пт",
+                    "Сб"
+                ],
+                "monthNames": [
+                    "Январь",
+                    "Февраль",
+                    "Март",
+                    "Апрель",
+                    "Май",
+                    "Июнь",
+                    "Июль",
+                    "Август",
+                    "Сентябрь",
+                    "Октябрь",
+                    "Ноябрь",
+                    "Декабрь"
+                ],
+            }
+        });
+        
+        $("#btn__request").on('click', () => { getGraph();  });
+
+        getGraph();
+    });
+
+    function getGraph() {
+
+        let startTimeStamp = new Date().getTime();
+
+        $.get("/monitoring/get_stat/", 
+                { input__request_dateTimeRange : $("#input__request_dateTimeRange").val()}
+            ).done((income) => { dataProcceed(income, startTimeStamp) });
+    }
+
+    function dataProcceed(income, startTimeStamp) {
+        let dd = [];
+        if (income.currentAgregation == 1) {
+            dd = [
+                    {
+                        name: "signal1", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: "signal2", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        } 
+                    },
+                    {
+                        name: "signal3", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        } 
+                    }
+                ];
+            let startTS = income.startTS * 1000;    
+            income.data.forEach(e => {
+                let date = startTS + e[0] * 1000;
+                dd[0].data.push([date, e[1]]);
+                dd[1].data.push([date, e[2]]); 
+                dd[2].data.push([date, e[3]]); 
+            });
+        } else {            
+            dd = [
+                    {
+                        name: "signal1", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        events: { click: bulletClick } 
+                    },
+                    {
+                        name: "signal1 (min; max)", 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },
+                        events: { click: bulletClick }                        
+                    }, 
+                    {
+                        name: "signal2", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        events: { click: bulletClick } 
+                    },
+                    {
+                        name: "signal2 (min; max)", 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },                        
+                    }, 
+                    {
+                        name: "signal3", 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        events: { click: bulletClick }
+                    },
+                    {
+                        name: "signal3 (min; max)", 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },                        
+                    }
+                ];
+
+            let startTS = income.startTS * 1000;    
+            income.data.forEach(e => {
+                let date = startTS + e[0] * 1000;
+                dd[0].data.push([date, e[1]]);
+                dd[1].data.push([date, e[2], e[3]]);
+                dd[2].data.push([date, e[4]]); 
+                dd[3].data.push([date, e[5], e[6]]);                
+                dd[4].data.push([date, e[7]]);
+                dd[5].data.push([date, e[8], e[9]]);                 
+            });
+        }
+
+        const chart = Highcharts.chart('graph', {
+            chart: {
+                zoomType: 'x',
+            },
+            title: {
+                text: 'Простая выборка по дате'
+            },
+            subtitle: {
+                text: 'Дополнительная строка'
+            },
+            tooltip: {
+                crosshairs: true,
+                shared: true,
+                valueSuffix: ' UNITS',
+                distance: 50
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            series: dd
+        });
+
+        statictic_write(startTimeStamp, income);        
+    }
+
+    function bulletClick(e) {
+        let currentAgregation = $("#graph").attr("current_agregation");
+        if (currentAgregation == 1) return;        
+        if (!e.target.classList.contains('highcharts-point')) return;
+        $("input[name=\"datetimes\"]").data('daterangepicker').setStartDate(new Date(e.point.x - currentAgregation * 60 * 1000));
+        $("input[name=\"datetimes\"]").data('daterangepicker').setEndDate(new Date(e.point.x + currentAgregation * 60 * 1000));
+        // $("input[name=\"datetimes\"]").data('daterangepicker').setStartDate(new Date(e.point.x - currentAgregation * 60 * 1000).toLocaleString("en-US", { timeZone: 'GMT+3', timeZoneName: 'short' }));
+        // $("input[name=\"datetimes\"]").data('daterangepicker').setEndDate(new Date(e.point.x + currentAgregation * 60 * 1000).toLocaleString("en-US", { timeZone: 'GMT+3', timeZoneName: 'short' }));
+
+        getGraph();
+        // console.log(e);
+        // console.log(e.target);
+        // console.log(e.point.index);
+        // console.log(e.point.index);
+        // console.log(e.point.x);
+        console.log(new Date(e.point.x).toLocaleString());
+        console.log(new Date(e.point.x));
+        console.log(e.point.x);
+    }
+
+
+    function statictic_write(startTimeStamp, income) {
+        let stopTime = new Date().getTime();
+        $("#walltime").html(stopTime - startTimeStamp + " мс") ;
+        $("#sqltime").html(income.stopTime - income.startTime + " мс") ;
+        $("#size").html((income.size / 1024 / 1024).toFixed(2) + " МБайт");
+        $("#count").html(income.count + " шт");
+        if (income.currentAgregation == 1) {
+            $("#currentAgregation").html("без агрегации")
+        } else if (income.currentAgregation == 60) {
+            $("#currentAgregation").html("1 час");
+        } else if (income.currentAgregation == 24 * 60) 
+        {            
+            $("#currentAgregation").html("1 день");      
+        } else if (income.currentAgregation == 12 * 24 * 60) {
+            $("#currentAgregation").html("1 месяц");      
+        } else {
+            $("#currentAgregation").html("не стандартная");      
+        }
+
+        $("#graph").attr("current_agregation", income.currentAgregation);
+    }
+
+</script>
+
+
