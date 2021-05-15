@@ -54,29 +54,60 @@ router.post("/income/", function (req, res, next) {
     data: [],
   };
 
+  //console.log(req.body.signals);
+
   if ("signals" in req.body) {
-    let signals_data = {};
-    let badges_data = {};
-    // console.log(signals_config);
-    for (element in req.body.signals) {
-      if (element in signals_config) {
-        value = req.body.signals[element];
+    ans.status.success = true;
 
-        signals_data[element] = value;
-        badges_data[element] = "normal";
+    if (req.body.signals.length > 0) {
+      let income = req.body.signals[req.body.signals.length - 1];
+      let signals_data = {};
+      let badges_data = {};
 
-        if (value - signals_config[element].limit_normal > 0) {
-          badges_data[element] = "warning";
-        }
-
-        if (value - signals_config[element].limit_warning > 0) {
-          badges_data[element] = "danger";
+      for (element in income.data) {
+        if (element in signals_config) {
+          value = income.data[element];
+          signals_data[element] = value;
+          badges_data[element] = "normal";
+          if (value - signals_config[element].limit_normal > 0) {
+            badges_data[element] = "warning";
+          }
+          if (value - signals_config[element].limit_warning > 0) {
+            badges_data[element] = "danger";
+          }
         }
       }
+      ans.status.success = true;
+      myEmitter.emit("signals", signals_data);
+      myEmitter.emit("badges", badges_data);
     }
+
+    // req.body.signals.forEach((element) => {
+    //   console.log(element);
+    // });
+  }
+
+  res.json(ans);
+});
+
+router.get("/current/", function (req, res, next) {
+  let c = current.getAllData();
+
+  let ans = {
+    status: {
+      success: false,
+    },
+    data: [],
+  };
+
+  if (req.query.link != undefined) {
+    if (req.query.link in c) {
+      ans.status.success = true;
+      ans.data = [c[req.query.link]];
+    }
+  } else {
     ans.status.success = true;
-    myEmitter.emit("signals", signals_data);
-    myEmitter.emit("badges", badges_data);
+    ans.data = [c];
   }
 
   res.json(ans);
@@ -87,11 +118,16 @@ function bindEvent(event, handler) {
 }
 
 let connection;
-
 function setConnection(con) {
   connection = con;
 }
 
+let current;
+function setCurrent(cur) {
+  current = cur;
+}
+
 module.exports.router = router;
 module.exports.setConnection = setConnection;
+module.exports.setCurrent = setCurrent;
 module.exports.on = bindEvent;

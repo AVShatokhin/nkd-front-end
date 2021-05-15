@@ -40,6 +40,7 @@ router.get("/logout", function (req, res, next) {
 
 router.post("/login", function (req, res, next) {
   let sql_data = [req.body.email, req.body.password];
+
   let sql =
     "SELECT uid, email, ava, address, phone, name, second_name, surname, role from users where email = ? and pass_hash=md5(?);";
   let query = connection.query(sql, sql_data, (err, result) => {
@@ -117,10 +118,11 @@ router.post("/email_verif_req", function (req, res, next) {
               .createHash("md5")
               .update(secret.toString())
               .digest("hex");
+
             redisClient.set("code:" + hash, email, (redisErr, redisRes) => {
               // добавим code в redis
               if (redisErr) console.log(redisErr);
-              redisClient.expire("code", 3600 * 24, () => {});
+              redisClient.expire("code:" + hash, 3600 * 24, () => {});
               if (redisRes == "OK") {
                 // отправим письмо и создадим пользователя
                 sendAuthMail(hash, email);
@@ -401,6 +403,7 @@ async function sendAuthMail(hash, email) {
         "base_url"
       )}/email_confirm/${hash}">подтверждение почтового ящика</a>`,
   });
+  // console.log(result);
 }
 
 async function sendPasswordRecoveryMail(hash, email) {
@@ -453,6 +456,7 @@ let transporter = nodemailer.createTransport({
 var redisClient = redis.createClient({
   host: conf.get("redis_host"),
   port: conf.get("redis_port"),
+  password: conf.get("redis_password"),
 });
 
 redisClient.on("error", function (err) {

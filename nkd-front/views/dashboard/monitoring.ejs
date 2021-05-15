@@ -1,82 +1,142 @@
-<div class="row">
-    <div class="col-8 px-2">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Настройка выборки</h5>
-            </div>
+<div class="tab">
+    <ul class="nav nav-pills mb-3" id="monitoringTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="diagn-tab" data-bs-toggle="tab" data-bs-target="#tabDate" type="button" role="tab" aria-controls="tabDate" aria-selected="true">Выборка по дате</a>
+        </li>
 
-            <div class="card-body px-3">
-                <div class="input-group">
-                    <div class="input-group-prepend col-4">
-                        <span class="input-group-text">Выбор периода</span>
-                    </div>                            
-                    <input id="input__request_dateTimeRange" class="form-control col-8" type="text" name="datetimes" />
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="diagn-tab" data-bs-toggle="tab" data-bs-target="#tabMoto" type="button" role="tab" aria-controls="tabMoto" aria-selected="false">Выборка по наработке</a>
+        </li>
+    </ul>
+
+    <div class="tab-content bg-transparent p-0" id="monitoringTabContent">
+        <div class="tab-pane fade show active" id="tabDate" role="tabpanel" aria-labelledby="tabDate">
+            
+            <div class="row">
+                <div class="col-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Настройка выборки</h5>
+                        </div>
+            
+                        <div class="card-body px-3">
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Выбор периода</span>
+                                </div>                            
+                                <input id="input__request_dateTimeRange" class="form-control col-8" type="text" name="datetimes" />
+                            </div>
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Редуктор</span>
+                                </div>
+                                <select class="form-control mb-1" name="active_gear">
+                                    <option value="0">Редуктор №1</option>
+                                    <option value="1">Редуктор №2</option>
+                                    <option value="2" selected>Оба редуктора</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Скорость кабинок</span>
+                                </div>
+                                <select class="form-control mb-1" name="active_gear">
+                                    <option value="0" selected>Любая</option>
+                                    <option value="1">1 м/с</option>
+                                    <option value="2.4">2.4 м/с</option>
+                                    <option value="4">4 м/с</option>
+                                    <option value="5">5 м/с</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-0 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Режим отображения</span>
+                                </div>
+                                <select class="form-control mb-1" name="active_gear">
+                                    <option value="0">На одном графике</option>
+                                    <option value="1">На разных графиках</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="px-0">
+                            <hr class="mt-0 mb-3">
+                        </div>
+
+                        <div class="container-fluid px-3 pb-3">
+                            <div class="d-flex justify-content-begin">
+                                <button id="btn__request" type="button" class="btn btn-primary">Выполнить запрос</button>                                
+                            </div>                                    
+                        </div>
+                    </div>        
+                </div>
+            
+                <div class="col-4 px-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Сводка по запросу</h5>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:60%;">Параметр</th>
+                                    <th style="width:40%">Значение</th>
+                                </tr>    
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Общее время обработки запроса</td>                            
+                                    <td><span id="walltime"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Время СУБД</td>                            
+                                    <td><span id="sqltime"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Выбрано точек</td>                            
+                                    <td><span id="count"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Агрегация</td>                            
+                                    <td><span id="currentAgregation"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Объём данных</td>                            
+                                    <td><span id="size"></span></td>                            
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
                 </div>
             </div>
-
-            <div class="px-0">
-                <hr class="mt-0 mb-3">
-            </div>
+            
+            <div class="row">
+                <div class="col-12 px-2">
+                    <div class="card">
+                        <div class="card-body p-1">
+                            <div id="graph" style="width:100%; height: 480px;">
+            
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>            
+        </div>
     
-            <div class="container-fluid px-3 pb-3">
-                <div class="d-flex justify-content-begin">
-                    <button id="btn__request" type="button" class="btn btn-primary">Выполнить запрос</button>                                
-                </div>                                    
-            </div>
-        </div>        
-    </div>
-
-    <div class="col-4 px-2">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Сводка по запросу</h5>
-            </div>
-
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th style="width:60%;">Параметр</th>
-                        <th style="width:40%">Значение</th>
-                    </tr>    
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Общее время обработки запроса</td>                            
-                        <td><span id="walltime"></span></td>                            
-                    </tr>
-                    <tr>
-                        <td>Время СУБД</td>                            
-                        <td><span id="sqltime"></span></td>                            
-                    </tr>
-                    <tr>
-                        <td>Выбрано точек</td>                            
-                        <td><span id="count"></span></td>                            
-                    </tr>
-                    <tr>
-                        <td>Агрегация</td>                            
-                        <td><span id="currentAgregation"></span></td>                            
-                    </tr>
-                    <tr>
-                        <td>Объём данных</td>                            
-                        <td><span id="size"></span></td>                            
-                    </tr>
-                </tbody>
-            </table>
-        </div>    
+        <div class="tab-pane fade show" id="tabMoto" role="tabpanel" aria-labelledby="tabDate">
+            dsfgdfg111
+        </div>
+    
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12 px-2">
-        <div class="card">
-            <div class="card-body p-1">
-                <div id="graph" style="width:100%; height: 480px;">
 
-                </div>
-            </div>
-        </div>    
-    </div>
-</div>
+
+
 
 <!-- <div class="col-12 d-flex p-3">
 

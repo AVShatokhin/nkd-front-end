@@ -56,7 +56,7 @@ router.get("/get_statistics", function (req, res, next) {
   res.render("dashboard/statistics");
 });
 
-router.get("/get_monitoring", function (req, res, next) {
+router.get("/get_monitoring", async function (req, res, next) {
   if (!api.check_role(req, "user")) {
     res.render("security/noauthreq");
     return;

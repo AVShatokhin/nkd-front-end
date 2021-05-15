@@ -33,15 +33,16 @@ wsocket.on("connection", (ws) => {
 
 function send(data, id) {
   if (id != undefined) {
-    // Сообщение предназначено для какого-то конкретногоклиента
+    // Сообщение предназначено для какого-то конкретного клиента
     if (id in wsClients) {
       wsClients[id].send(data);
     }
-  } else {
-    // Сообщение предназначено для всех
-    for (id in wsClients) {
-      wsClients[id].send(data);
-    }
+    return;
+  }
+
+  // Сообщение предназначено для всех
+  for (id in wsClients) {
+    wsClients[id].send(data);
   }
 }
 
