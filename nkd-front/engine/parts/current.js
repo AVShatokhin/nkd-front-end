@@ -80,7 +80,9 @@ async function setConnection(con) {
     "signals",
     "active_gear_collection",
     "badges",
+    "moto",
   ]);
+  // console.log(current);
 }
 
 module.exports.updateData = updateData;

@@ -27,6 +27,9 @@ function bindHandlers() {
       for (element in data) {
         //console.log(element);
         switch (element) {
+          case "moto":
+            processMoto(data);
+            break;
           case "signals":
             processSignals(data);
             break;
@@ -55,7 +58,8 @@ function bindHandlers() {
 }
 
 function getAllClient() {
-  resetSignals();
+  resetTarget("signals");
+  resetTarget("moto");
   resetActiveGear();
   resetBadges();
   socket.send("get_all");
@@ -94,14 +98,21 @@ function setServerState(state) {
 }
 
 function processSignals(data) {
-  resetSignals();
+  resetTarget("signals");
   for (signal in data.signals) {
     $(`span#${signal}[source=signals]`).html(data.signals[signal]);
   }
 }
 
-function resetSignals() {
-  $("span[source=signals]").html("-");
+function resetTarget(target) {
+  $(`span[source=${target}]`).html("-");
+}
+
+function processMoto(data) {
+  resetTarget("moto");
+  for (motoNum in data.moto) {
+    $(`span#${motoNum}[source=moto]`).html(data.moto[motoNum]);
+  }
 }
 
 function processActiveGear(data) {

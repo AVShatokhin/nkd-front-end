@@ -9,6 +9,11 @@ mainApi.on("signals", (data) => {
   ws.send(JSON.stringify({ signals: data }));
 });
 
+mainApi.on("moto", (moto) => {
+  current.updateData("moto", moto);
+  ws.send(JSON.stringify({ moto }));
+});
+
 mainApi.on("badges", (data) => {
   current.updateData("badges", data);
   ws.send(JSON.stringify({ badges: data }));
