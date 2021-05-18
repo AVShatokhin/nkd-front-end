@@ -77,8 +77,6 @@ router.post("/income/", function (req, res, next) {
     data: [],
   };
 
-  console.log(req.connection.remoteAddress);
-
   if ("signals" in req.body) {
     ans.status.success = true;
     dataSeriesProcceed(req);
@@ -91,12 +89,19 @@ router.post("/income/", function (req, res, next) {
 function dataSeriesProcceed(req) {
   let income = req.body.signals;
   let cur = current.getAllData();
-  let moto = { moto_0: 0, moto_1: 0 };
-  let active_gear = 0;
+
+  let moto = {
+    moto_0: 0,
+    moto_1: 0,
+    moto_factor: signals_config.cnt.moto_factor,
+  };
 
   if ("moto" in cur) {
-    moto = cur.moto;
+    moto.moto_0 = cur.moto.moto_0;
+    moto.moto_1 = cur.moto.moto_1;
   }
+
+  let active_gear = 0;
 
   if ("active_gear_collection" in cur) {
     if ("active_gear" in cur.active_gear_collection) {

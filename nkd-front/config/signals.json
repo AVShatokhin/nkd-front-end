@@ -6,6 +6,7 @@
         "device_id": 0,
         "channel" : 0,
         "speed_zones" : {
+            "0" : { "begin" : -1, "end" : 0 },
             "1" : { "begin" : 0, "end" : 5 },
             "2.4" : { "begin" : 5, "end" : 15 },
             "4" : { "begin" : 15, "end" : 19 },
@@ -18,7 +19,7 @@
         "device_type": "d001", 
         "device_id": 0,
         "channel" : 0,
-        "moto_factor" : 1       
+        "moto_factor" : 0.051546       
     },
     "signal1" : { 
         "name": "Ступень 1",

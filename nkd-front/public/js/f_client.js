@@ -125,9 +125,23 @@ function resetTarget(target) {
 
 function processMoto(data) {
   resetTarget("moto");
-  for (motoNum in data.moto) {
-    $(`span#${motoNum}[source=moto]`).html(data.moto[motoNum]);
+
+  $(`span#moto_0[source=moto]`).html(calcMoto(data.moto.moto_0));
+  $(`span#moto_1[source=moto]`).html(calcMoto(data.moto.moto_1));
+}
+
+function calcMoto(moto) {
+  let m_sec = moto * data.moto.moto_factor;
+  let m_min = Math.trunc(m_sec / 60);
+  let m_hour = Math.trunc(m_min / 60);
+
+  m_min = m_min - m_hour * 60;
+
+  if (m_min < 10) {
+    m_min = "0" + m_min;
   }
+
+  return `${m_hour} : ${m_min}`;
 }
 
 function processActiveGear(data) {
