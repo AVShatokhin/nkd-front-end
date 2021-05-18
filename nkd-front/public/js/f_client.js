@@ -97,11 +97,25 @@ function setServerState(state) {
   }
 }
 
-function processSignals(data) {
+function processSignals(income) {
   resetTarget("signals");
-  for (signal in data.signals) {
-    $(`span#${signal}[source=signals]`).html(data.signals[signal]);
+
+  for (signal in income.signals.data) {
+    $(`span#${signal}[source=signals]`).html(income.signals.data[signal]);
   }
+
+  $(`span#ts[source=signals]`).html(
+    new Date(income.signals.ts * 1000).toLocaleString("ru", {
+      timezone: "UTC",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    })
+  );
+  console.log(new Date().getTime());
 }
 
 function resetTarget(target) {

@@ -1,9 +1,4 @@
 {
-    "diagnostics_collection" : { 
-        "start_time" : 6,
-        "fail_behavior": "repeat" 
-    },
-
     "active_gear_collection" : 
         {
             "active_gear" : {
@@ -14,7 +9,11 @@
         }
     ,
     
-    "monitoring_collection" : {
-        "periodik_id" : 1
-    }
+    "update_period_collection" : 
+        {
+            "update_period" : {
+                "default": 10,
+                "name" : "Период обновления данных мониторинга"
+            }
+        }
 }

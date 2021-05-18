@@ -117,18 +117,28 @@ function dataSeriesProcceed(income) {
 
 function lastElementProcceed(income) {
   let signals_data = {};
+  signals_data["data"] = {};
+
   let badges_data = {};
+  let ts = income.ts;
 
   for (element in income.data) {
     if (element in signals_config) {
-      value = income.data[element];
-      signals_data[element] = value;
+      let value = income.data[element];
+
+      signals_data.data[element] = value;
+      signals_data["ts"] = ts;
+
       badges_data[element] = "normal";
       if (value - signals_config[element].limit_normal > 0) {
         badges_data[element] = "warning";
       }
       if (value - signals_config[element].limit_warning > 0) {
         badges_data[element] = "danger";
+      }
+
+      if (element == "taho") {
+        signals_data.data["speed_zone"] = calcSpeedZone(value);
       }
     }
   }
@@ -139,6 +149,16 @@ function lastElementProcceed(income) {
 
 function bindEvent(event, handler) {
   myEmitter.on(event, handler);
+}
+
+function calcSpeedZone(taho) {
+  let speed_zones = signals_config.taho.speed_zones;
+  for (zone_id in speed_zones) {
+    if (taho > speed_zones[zone_id].begin && taho <= speed_zones[zone_id].end) {
+      return zone_id;
+    }
+  }
+  return undefined;
 }
 
 let connection;

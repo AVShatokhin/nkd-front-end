@@ -4,14 +4,21 @@
         "signal_type" : "freq",
         "device_type": "d001", 
         "device_id": 0,
-        "channel" : 0       
+        "channel" : 0,
+        "speed_zones" : {
+            "1" : { "begin" : 0, "end" : 5 },
+            "2.4" : { "begin" : 5, "end" : 15 },
+            "4" : { "begin" : 15, "end" : 19 },
+            "5" : { "begin" : 19, "end" : 21 }
+        }      
     },
     "cnt" : { 
         "name": "Счетчик импульсов",        
         "signal_type" : "delta_counter",
         "device_type": "d001", 
         "device_id": 0,
-        "channel" : 0       
+        "channel" : 0,
+        "moto_factor" : 1       
     },
     "signal1" : { 
         "name": "Ступень 1",

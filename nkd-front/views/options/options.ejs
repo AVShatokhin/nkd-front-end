@@ -12,9 +12,9 @@
             <a class="nav-link" id="monitoring-tab" data-bs-toggle="tab" data-bs-target="#tabMonitoring" type="button" role="tab" aria-controls="tabMonitoring" aria-selected="false">Периодичность<br>мониторинга</a>
         </li>
 
-        <li class="nav-item" role="presentation">
+        <!-- <li class="nav-item" role="presentation">
             <a class="nav-link" id="tresh-tab" data-bs-toggle="tab" data-bs-target="#tabTresh" type="button" role="tab" aria-controls="tabTresh" aria-selected="false">Настройка<br>уровней</a>
-        </li>
+        </li> -->
     </ul>
     
     <div class="tab-content px-0" id="optionsTabContents">
@@ -79,21 +79,34 @@
         </div>
 
         <div class="tab-pane fade" id="tabMonitoring" role="tabpanel" aria-labelledby="tabMonitoring">  
-            <form name="timers_" id="timers_">          
+            <form id="form__update_period">         
+                <input type="hidden" name="link" value="update_period_collection"> 
                 <div class="row px-2">                    
                     <div class="col-12">
                         <div class="mb-3 input-group">
                             <div class="input-group-prepend col-8">
                                 <span class="input-group-text">Период обновления данных мониторинга</span>
                             </div>
-                            <select class="form-control mb-1">
-                                <option selected>2 секунды</option>
-                                <option>10 секунд</option>
-                                <option>1 минута</option>
+                            <select class="form-control mb-1" name="update_period" form="form__update_period">
+                                <% if (update_period_collection.update_period.value == '10') { %>
+                                    <option selected value="10">10 секунд</option>
+                                <% } else { %>
+                                    <option value="10">10 секунд</option>
+                                <% } %>
+
+                                <% if (update_period_collection.update_period.value == '30') { %>
+                                    <option selected value="30">30 секунд</option>
+                                <% } else { %>
+                                    <option value="30">30 секунд</option>
+                                <% } %>
+
+                                <% if (update_period_collection.update_period.value == '60') { %>
+                                    <option selected value="60">60 секунд</option>
+                                <% } else { %>
+                                    <option value="60">60 секунд</option>
+                                <% } %>
+
                             </select>
-                            <!-- <div class="input-group-append">
-                                <span class="input-group-text">сек.</span>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -105,10 +118,30 @@
 
             <div class="container-fluid px-2">
                 <div class="d-flex justify-content-begin">
-                    <div class="btn-group" role="group" aria-label="Сохранить настройки">                                    
-                        <button type="button" class="btn btn-primary my__btn_apply" form_id="timers_" role="single" router="set_timers_options">Применить настройки</button>                                
-                    </div>    
+                    <button type="button" class="btn btn-primary"
+                    data-bs-toggle="modal" 
+                    data-bs-target="#window__update_period_change_confirm">
+                    Применить настройки</button>                                
                 </div>                                    
+            </div>
+
+            <div class="modal fade" id="window__update_period_change_confirm" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Подтверждение операции</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body m-3">
+                            Подтвердите изменение периода отправки данных мониторинга.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn__send_form" form="form__update_period" data-bs-dismiss="modal">Принять изменения</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -172,7 +205,7 @@
 
         </div>
 
-        <div class="tab-pane fade" id="tabTresh" role="tabpanel" aria-labelledby="tabTresh">
+        <!-- <div class="tab-pane fade" id="tabTresh" role="tabpanel" aria-labelledby="tabTresh">
             <form name="timers_" id="timers_">          
                 <table class="table">
                     <thead>
@@ -250,7 +283,7 @@
                     </div>    
                 </div>                                    
             </div>
-        </div>
+        </div> -->
 
     </div>
 </div>

@@ -28,9 +28,12 @@ async function openMainConfig(connection) {
   object.signals = openSignalsConfig();
   object.records = openRecordsConfig();
 
-  object.options = await getOptionsByLink(connection, [
-    "active_gear_collection",
+  let options = await getOptionsByLink(connection, [
+    "update_period_collection",
   ]);
+
+  object.signals["period"] =
+    options.update_period_collection.update_period.value;
 
   return object;
 }
@@ -50,21 +53,28 @@ async function getOptionsByLink(connection, links) {
     let sqlWhere = [];
     let def = getDefaultOptions();
 
+    // console.log(def);
+
     links.forEach((link) => {
       if (def[link] != undefined) {
         // 1) будем запрашивать только те, которые указаны в конфиге
         sqlWhere.push(`link = "${link}"`);
       }
     });
+
+    // console.log(sqlWhere.join(" or "));
+
     if (sqlWhere.length > 0) {
       connection.query(
-        `select link, value from kvs where ${sqlWhere.join(" or ")} limit 1;`,
+        `select link, value from kvs where ${sqlWhere.join(" or ")};`,
         [],
         (err, result) => {
           if (err != undefined) {
             console.log(err);
             resolve(undefined);
           }
+
+          // console.log(result);
 
           if (result != undefined) {
             // 2) если из базы вернулся результат

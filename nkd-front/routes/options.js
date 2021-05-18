@@ -15,9 +15,11 @@ router.get("/get_options", async function (req, res, next) {
 
   let opt = await config.getOptionsByLink(connection, [
     "active_gear_collection",
+    "update_period_collection",
   ]);
 
   res.render("options/options", opt);
+  // console.log(opt);
 });
 
 router.post("/set_options", async function (req, res, next) {
@@ -38,7 +40,6 @@ router.post("/set_options", async function (req, res, next) {
           myEmitter.emit("active_gear", req.body.active_gear);
           ans.success = await config.setOptionsByLink(connection, req);
         }
-
       default:
         ans.success = await config.setOptionsByLink(connection, req);
     }
