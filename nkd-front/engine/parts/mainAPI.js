@@ -77,18 +77,19 @@ router.post("/income/", function (req, res, next) {
     data: [],
   };
 
+  console.log(req.connection.remoteAddress);
+
   if ("signals" in req.body) {
     ans.status.success = true;
-    dataSeriesProcceed(req.body.signals);
-    if (req.body.signals.length > 0)
-      lastElementProcceed(req.body.signals[req.body.signals.length - 1]);
+    dataSeriesProcceed(req);
+    if (req.body.signals.length > 0) lastElementProcceed(req);
   }
 
   res.json(ans);
 });
 
-function dataSeriesProcceed(income) {
-  // let newData = {};
+function dataSeriesProcceed(req) {
+  let income = req.body.signals;
   let cur = current.getAllData();
   let moto = { moto_0: 0, moto_1: 0 };
   let active_gear = 0;
@@ -112,15 +113,16 @@ function dataSeriesProcceed(income) {
   moto[`moto_${active_gear}`] = cnt;
 
   myEmitter.emit("moto", moto);
-  // return newData;
 }
 
-function lastElementProcceed(income) {
+function lastElementProcceed(req) {
+  let income = req.body.signals[req.body.signals.length - 1];
   let signals_data = {};
   signals_data["data"] = {};
 
   let badges_data = {};
   let ts = income.ts;
+  let remoteAddress = req.connection.remoteAddress;
 
   for (element in income.data) {
     if (element in signals_config) {
@@ -128,6 +130,7 @@ function lastElementProcceed(income) {
 
       signals_data.data[element] = value;
       signals_data["ts"] = ts;
+      signals_data["remoteAddress"] = remoteAddress;
 
       badges_data[element] = "normal";
       if (value - signals_config[element].limit_normal > 0) {

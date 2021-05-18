@@ -115,7 +115,8 @@ function processSignals(income) {
       day: "numeric",
     })
   );
-  console.log(new Date().getTime());
+
+  $(`span#remoteAddress[source=signals]`).html(income.signals.remoteAddress);
 }
 
 function resetTarget(target) {
