@@ -5,22 +5,7 @@ const { ClickHouse } = require("clickhouse");
 
 // var config = require("../libs/config.js");
 
-const clickhouse = new ClickHouse({
-  url: "http://localhost",
-  port: 8123,
-  debug: false,
-  basicAuth: null,
-  isUseGzip: false,
-  format: "json", // "json" || "csv" || "tsv"
-  raw: false,
-  config: {
-    session_id: "session_id if neeed",
-    session_timeout: 60,
-    output_format_json_quote_64bit_integers: 0,
-    enable_http_compression: 0,
-    database: "nkd",
-  },
-});
+let clickhouse;
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -168,7 +153,7 @@ router.get("/get_stat", async function (req, res, next) {
   ans.size = JSON.stringify(ans).length;
   ans.count = ans.data.length;
   ans.status.success = true;
-  console.log(ans);
+  // console.log(ans);
   res.json(ans);
 });
 
@@ -213,4 +198,24 @@ async function getCountQuery(sql) {
   });
 }
 
+function setCHConnection(ch_url, ch_port, ch_name) {
+  clickhouse = new ClickHouse({
+    url: ch_url,
+    port: ch_port,
+    debug: false,
+    basicAuth: null,
+    isUseGzip: false,
+    format: "json", // "json" || "csv" || "tsv"
+    raw: false,
+    config: {
+      session_id: "",
+      session_timeout: 60,
+      output_format_json_quote_64bit_integers: 0,
+      enable_http_compression: 0,
+      database: ch_name,
+    },
+  });
+}
+
 module.exports = router;
+module.exports.setCHConnection = setCHConnection;

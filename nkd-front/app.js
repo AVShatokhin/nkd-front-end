@@ -101,5 +101,11 @@ optionsRouter.on("active_gear", (data) => {
   engineRouter.updateActiveGear(data);
 });
 
+monitoringRouter.setCHConnection(
+  conf.get("ch_url"),
+  conf.get("ch_port"),
+  conf.get("ch_name")
+);
+
 module.exports = app;
 module.exports.init = init;
