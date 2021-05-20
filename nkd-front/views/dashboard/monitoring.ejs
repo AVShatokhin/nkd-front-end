@@ -194,8 +194,8 @@
             linkedCalendars: false,
             timePicker: true,
             opens: "center",
-            startDate: moment().startOf("hour").subtract(24, "hour"),
-            endDate: moment().startOf("hour"),
+            startDate: moment().startOf("hour").subtract(23, "hour"),
+            endDate: moment().startOf("hour").add(1, "hour"),
             locale: {
                 format: "YYYY-MM-DD HH:mm:00",
                 applyLabel: "Принять",
