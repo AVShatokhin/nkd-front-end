@@ -35,5 +35,6 @@ function setConnection(con) {
 }
 
 module.exports = mainApi.router;
+module.exports.setCHConnection = mainApi.setCHConnection;
 module.exports.setConnection = setConnection;
 module.exports.updateActiveGear = updateActiveGear;

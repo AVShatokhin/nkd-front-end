@@ -1,5 +1,5 @@
 {
-    "taho" : { 
+    "tacho" : { 
         "name": "Частота вращения первичного вала",        
         "signal_type" : "freq",
         "device_type": "d001", 

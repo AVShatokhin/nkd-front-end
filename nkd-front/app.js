@@ -15,6 +15,8 @@ const optionsRouter = require("./routes/options");
 const debugRouter = require("./routes/debug");
 const monitoringRouter = require("./routes/monitoring");
 const { allowedNodeEnvironmentFlags } = require("process");
+const { ClickHouse } = require("clickhouse");
+
 const app = express();
 
 function init(conf) {
@@ -101,11 +103,25 @@ optionsRouter.on("active_gear", (data) => {
   engineRouter.updateActiveGear(data);
 });
 
-monitoringRouter.setCHConnection(
-  conf.get("ch_url"),
-  conf.get("ch_port"),
-  conf.get("ch_name")
-);
+let clickhouse = new ClickHouse({
+  url: conf.get("ch_url"),
+  port: conf.get("ch_port"),
+  debug: false,
+  basicAuth: null,
+  isUseGzip: false,
+  format: "json", // "json" || "csv" || "tsv"
+  raw: false,
+  config: {
+    session_id: "",
+    session_timeout: 60,
+    output_format_json_quote_64bit_integers: 0,
+    enable_http_compression: 0,
+    database: conf.get("ch_name"),
+  },
+});
+
+monitoringRouter.setCHConnection(clickhouse);
+engineRouter.setCHConnection(clickhouse);
 
 module.exports = app;
 module.exports.init = init;

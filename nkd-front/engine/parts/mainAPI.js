@@ -1,7 +1,6 @@
 var config = require("../../libs/config.js");
 var express = require("express");
 var router = express.Router();
-
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
@@ -79,14 +78,27 @@ router.post("/income/", function (req, res, next) {
 
   if ("signals" in req.body) {
     ans.status.success = true;
-    dataSeriesProcceed(req);
+    insert(dataSeriesProcceed(req));
     if (req.body.signals.length > 0) lastElementProcceed(req);
   }
 
   res.json(ans);
 });
 
+async function insert(data) {
+  const ws = clickhouse
+    .insert(
+      "INSERT INTO signals_by_ts (ts, active_gear, speed, moto, tacho, signal1, signal2, signal3) values "
+    )
+    .stream();
+
+  await ws.writeRow(data);
+  return await ws.exec();
+}
+
 function dataSeriesProcceed(req) {
+  let data = [];
+
   let income = req.body.signals;
   let cur = current.getAllData();
 
@@ -109,15 +121,20 @@ function dataSeriesProcceed(req) {
     }
   }
 
-  let cnt = moto[`moto_${active_gear}`];
-
   income.forEach((e) => {
-    cnt += e.data.cnt;
+    moto[`moto_${active_gear}`] += e.data.cnt;
+    data.push(
+      `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${calcSpeedZone(
+        e.data.tacho
+      )}, ${moto[`moto_${active_gear}`]}, ${e.data.tacho}, ${e.data.signal1}, ${
+        e.data.signal2
+      }, ${e.data.signal3})`
+    );
   });
 
-  moto[`moto_${active_gear}`] = cnt;
-
   myEmitter.emit("moto", moto);
+
+  return data;
 }
 
 function lastElementProcceed(req) {
@@ -145,7 +162,7 @@ function lastElementProcceed(req) {
         badges_data[element] = "danger";
       }
 
-      if (element == "taho") {
+      if (element == "tacho") {
         signals_data.data["speed_zone"] = calcSpeedZone(value);
       }
     }
@@ -159,10 +176,13 @@ function bindEvent(event, handler) {
   myEmitter.on(event, handler);
 }
 
-function calcSpeedZone(taho) {
-  let speed_zones = signals_config.taho.speed_zones;
+function calcSpeedZone(tacho) {
+  let speed_zones = signals_config.tacho.speed_zones;
   for (zone_id in speed_zones) {
-    if (taho > speed_zones[zone_id].begin && taho <= speed_zones[zone_id].end) {
+    if (
+      tacho > speed_zones[zone_id].begin &&
+      tacho <= speed_zones[zone_id].end
+    ) {
       return zone_id;
     }
   }
@@ -179,7 +199,13 @@ function setCurrent(cur) {
   current = cur;
 }
 
+let clickhouse;
+function setCHConnection(con) {
+  clickhouse = con;
+}
+
 module.exports.router = router;
+module.exports.setCHConnection = setCHConnection;
 module.exports.setConnection = setConnection;
 module.exports.setCurrent = setCurrent;
 module.exports.on = bindEvent;

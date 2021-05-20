@@ -1,11 +1,6 @@
 var express = require("express");
 var router = express.Router();
 var nkd = require("../libs/nkd.js");
-const { ClickHouse } = require("clickhouse");
-
-// var config = require("../libs/config.js");
-
-let clickhouse;
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -198,23 +193,9 @@ async function getCountQuery(sql) {
   });
 }
 
-function setCHConnection(ch_url, ch_port, ch_name) {
-  clickhouse = new ClickHouse({
-    url: ch_url,
-    port: ch_port,
-    debug: false,
-    basicAuth: null,
-    isUseGzip: false,
-    format: "json", // "json" || "csv" || "tsv"
-    raw: false,
-    config: {
-      session_id: "",
-      session_timeout: 60,
-      output_format_json_quote_64bit_integers: 0,
-      enable_http_compression: 0,
-      database: ch_name,
-    },
-  });
+let clickhouse;
+function setCHConnection(con) {
+  clickhouse = con;
 }
 
 module.exports = router;
