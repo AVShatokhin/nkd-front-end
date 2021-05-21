@@ -36,24 +36,35 @@ router.get("/get_stat", async function (req, res, next) {
   //   `group by day, h ` +
   //   `order by m;`;
 
+  ans["second_ordinat"] = req.query.second_ordinat;
+  ans["fromRange"] = fromRange;
+  ans["toRange"] = toRange;
+
   let cnt = await getCountQuery(
     `select count(*) as cnt from signals_by_ts where ts between '${fromRange}' and '${toRange}';`
   );
 
-  if (cnt < 3000) {
+  if (cnt < 20000) {
     // Нет агрегации данных, пишем все точки в том виде как они есть без усреднений
     ans.currentAgregation = 1;
 
     let sql =
-      `select toUnixTimestamp(ts) as tst, round(signal1, 4) as s1, round(signal2, 4) as s2, round(signal3, 4) as s3 ` +
+      `select toUnixTimestamp(ts) as tst, round(signal1, 4) as s1, round(signal2, 4) as s2, round(signal3, 4) as s3, round(tacho, 4) as tacho, round(speed, 1) as speed ` +
       `from signals_by_ts ` +
       `where ts between '${fromRange}' and '${toRange}'` +
       `order by ts;`;
 
     await getQuery(sql, ans, (data) => {
-      ans.data.push([data.tst - ans.startTS, data.s1, data.s2, data.s3]);
+      ans.data.push([
+        data.tst - ans.startTS,
+        data.s1,
+        data.s2,
+        data.s3,
+        data.tacho,
+        data.speed,
+      ]);
     });
-  } else if (cnt >= 3000 && cnt <= 500000) {
+  } else if (cnt >= 20000 && cnt <= 500000) {
     // агрегируем по часам
     ans.currentAgregation = 60;
 

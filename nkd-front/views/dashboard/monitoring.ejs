@@ -40,6 +40,16 @@
 
                             <div class="mb-3 input-group">
                                 <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Правая ось ординат</span>
+                                </div>
+                                <select class="form-control mb-1" id="second_ordinat">                                    
+                                    <option value="freq" selected>Частота вращения первичного вала</option>
+                                    <option value="speed_zone">Скорость кабинок</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
                                     <span class="input-group-text">Скорость кабинок</span>
                                 </div>
                                 <select class="form-control mb-1" name="active_gear">
@@ -51,7 +61,7 @@
                                 </select>
                             </div>
 
-                            <div class="mb-0 input-group">
+                            <!-- <div class="mb-0 input-group">
                                 <div class="input-group-prepend col-4">
                                     <span class="input-group-text">Режим отображения</span>
                                 </div>
@@ -59,7 +69,7 @@
                                     <option value="0">На одном графике</option>
                                     <option value="1">На разных графиках</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="px-0">
@@ -239,11 +249,33 @@
         let startTimeStamp = new Date().getTime();
 
         $.get("/monitoring/get_stat/", 
-                { input__request_dateTimeRange : $("#input__request_dateTimeRange").val()}
-            ).done((income) => { dataProcceed(income, startTimeStamp) });
+                { 
+                    input__request_dateTimeRange : $("#input__request_dateTimeRange").val(),
+                    second_ordinat : $("#second_ordinat").val()
+                }
+            ).done((income) => { 
+                dataProcceed(income, startTimeStamp);
+                statictic_write(income, startTimeStamp); 
+            });
     }
 
     function dataProcceed(income, startTimeStamp) {
+        let second_ordinat;
+        let second_ordinat_max;
+        let second_ordinat_yxis;
+
+        if (income.second_ordinat == "freq") {
+            second_ordinat = "Частота вращения";
+            second_ordinat_yxis = "Частота вращения, Гц";
+            second_ordinat_max = 20;
+        } else if (income.second_ordinat == "speed_zone") {
+            second_ordinat = "Скорость кабинок";
+            second_ordinat_yxis = "Скорость кабинок, м/с";
+            second_ordinat_max = 5;
+        }
+
+        let range = `c ${income.fromRange} по ${income.toRange}`;
+
         let dd = [];
         if (income.currentAgregation == 1) {
             dd = [
@@ -275,15 +307,47 @@
                             fillColor: 'white',
                             lineWidth: 2,
                             lineColor: Highcharts.getOptions().colors[0]
-                        } 
+                        },
+                    },
+                    {
+                        name: second_ordinat, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
                     }
                 ];
-            let startTS = income.startTS * 1000;    
+            let startTS = income.startTS * 1000;  
+            let prevTS = startTS;  
             income.data.forEach(e => {
+                
                 let date = startTS + e[0] * 1000;
+                if (prevTS + 60000 < date) {
+                    dd[0].data.push([prevTS + 1000, undefined]);
+                    dd[1].data.push([prevTS + 1000, undefined]); 
+                    dd[2].data.push([prevTS + 1000, undefined]); 
+                    dd[3].data.push([prevTS + 1000, undefined]); 
+                    
+                    dd[0].data.push([date - 1000, undefined]);
+                    dd[1].data.push([date - 1000, undefined]); 
+                    dd[2].data.push([date - 1000, undefined]); 
+                    dd[3].data.push([date - 1000, undefined]);
+                } 
+                
                 dd[0].data.push([date, e[1]]);
                 dd[1].data.push([date, e[2]]); 
-                dd[2].data.push([date, e[3]]); 
+                dd[2].data.push([date, e[3]]);
+                if (income.second_ordinat == 'freq') {
+                    dd[3].data.push([date, e[4]]); 
+                } else if (income.second_ordinat == 'speed_zone') {
+                    dd[3].data.push([date, e[5]]); 
+                }
+                
+                prevTS = date;
             });
         } else {            
             dd = [
@@ -362,15 +426,35 @@
                     }
                 ];
 
-            let startTS = income.startTS * 1000;    
+            let startTS = income.startTS * 1000;
+            let prevTS = startTS;     
             income.data.forEach(e => {
                 let date = startTS + e[0] * 1000;
+                if (prevTS + 60000 * income.currentAgregation < date) {
+                    console.log("prevTS = " + prevTS);
+                    console.log("date = " + date);
+                    dd[0].data.push([prevTS + 1000, undefined]);
+                    dd[1].data.push([prevTS + 1000, undefined, undefined]); 
+                    dd[2].data.push([prevTS + 1000, undefined]); 
+                    dd[3].data.push([prevTS + 1000, undefined, undefined]);
+                    dd[4].data.push([prevTS + 1000, undefined]); 
+                    dd[5].data.push([prevTS + 1000, undefined, undefined]); 
+                    dd[0].data.push([date - 1000, undefined]);
+                    dd[1].data.push([date - 1000, undefined, undefined]); 
+                    dd[2].data.push([date - 1000, undefined]); 
+                    dd[3].data.push([date - 1000, undefined, undefined]);
+                    dd[4].data.push([date - 1000, undefined]); 
+                    dd[5].data.push([date - 1000, undefined, undefined]); 
+                }
+                
+
                 dd[0].data.push([date, e[1]]);
                 dd[1].data.push([date, e[2], e[3]]);
                 dd[2].data.push([date, e[4]]); 
                 dd[3].data.push([date, e[5], e[6]]);                
                 dd[4].data.push([date, e[7]]);
-                dd[5].data.push([date, e[8], e[9]]);                 
+                dd[5].data.push([date, e[8], e[9]]);  
+                prevTS = date;               
             });
         }
 
@@ -382,21 +466,32 @@
                 text: 'Простая выборка по дате'
             },
             subtitle: {
-                text: 'Дополнительная строка'
+                text: range
             },
             tooltip: {
                 crosshairs: true,
-                shared: true,
-                valueSuffix: ' UNITS',
+                shared: true,                
                 distance: 50
             },
             xAxis: {
                 type: 'datetime'
             },
+            yAxis: [                    
+                    {
+                    title: {
+                            text: 'Виброскорость, мм/с'
+                            }
+                    }, 
+                    {
+                        max: second_ordinat_max,
+                        title: {
+                            text: second_ordinat_yxis
+                    },
+                    opposite: true
+                    }
+            ],
             series: dd
         });
-
-        statictic_write(startTimeStamp, income);        
     }
 
     function bulletClick(e) {
@@ -420,7 +515,7 @@
     }
 
 
-    function statictic_write(startTimeStamp, income) {
+    function statictic_write(income, startTimeStamp) {
         let stopTime = new Date().getTime();
         $("#walltime").html(stopTime - startTimeStamp + " мс") ;
         $("#sqltime").html(income.stopTime - income.startTime + " мс") ;
