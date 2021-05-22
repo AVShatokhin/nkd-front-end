@@ -131,7 +131,7 @@ function dataSeriesProcceed(req) {
       }, ${e.data.signal3})`
     );
   });
-
+  console.log(moto);
   myEmitter.emit("moto", moto);
 
   return data;
