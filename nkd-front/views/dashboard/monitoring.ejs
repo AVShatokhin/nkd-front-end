@@ -31,7 +31,7 @@
                                 <div class="input-group-prepend col-4">
                                     <span class="input-group-text">Редуктор</span>
                                 </div>
-                                <select class="form-control mb-1" name="active_gear">
+                                <select class="form-control mb-1" id="active_gear">
                                     <option value="0">Редуктор №1</option>
                                     <option value="1">Редуктор №2</option>
                                     <option value="2" selected>Оба редуктора</option>
@@ -52,7 +52,7 @@
                                 <div class="input-group-prepend col-4">
                                     <span class="input-group-text">Скорость кабинок</span>
                                 </div>
-                                <select class="form-control mb-1" name="active_gear">
+                                <select class="form-control mb-1" id="speed_zone">
                                     <option value="0" selected>Любая</option>
                                     <option value="1">1 м/с</option>
                                     <option value="2.4">2.4 м/с</option>
@@ -251,7 +251,9 @@
         $.get("/monitoring/get_stat/", 
                 { 
                     input__request_dateTimeRange : $("#input__request_dateTimeRange").val(),
-                    second_ordinat : $("#second_ordinat").val()
+                    second_ordinat : $("#second_ordinat").val(),
+                    speed_zone : $("#speed_zone").val(),
+                    active_gear : $("#active_gear").val()
                 }
             ).done((income) => { 
                 dataProcceed(income, startTimeStamp);
@@ -273,6 +275,8 @@
             second_ordinat_yxis = "Скорость кабинок, м/с";
             second_ordinat_max = 5;
         }
+
+        let title = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
 
         let range = `c ${income.fromRange} по ${income.toRange}`;
 
@@ -463,7 +467,7 @@
                 zoomType: 'x',
             },
             title: {
-                text: 'Простая выборка по дате'
+                text: title
             },
             subtitle: {
                 text: range

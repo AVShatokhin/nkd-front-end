@@ -1,6 +1,11 @@
 var express = require("express");
 var router = express.Router();
 var nkd = require("../libs/nkd.js");
+const { ClickHouse } = require("clickhouse");
+var conf = require("nconf")
+  .argv()
+  .env()
+  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -37,6 +42,8 @@ router.get("/get_stat", async function (req, res, next) {
   //   `order by m;`;
 
   ans["second_ordinat"] = req.query.second_ordinat;
+  ans["active_gear"] = req.query.active_gear;
+  ans["speed_zone"] = req.query.speed_zone;
   ans["fromRange"] = fromRange;
   ans["toRange"] = toRange;
 
@@ -206,7 +213,24 @@ async function getCountQuery(sql) {
 
 let clickhouse;
 function setCHConnection(con) {
-  clickhouse = con;
+  // clickhouse = con;
+  // let
+  clickhouse = new ClickHouse({
+    url: conf.get("ch_url"),
+    port: conf.get("ch_port"),
+    debug: false,
+    basicAuth: null,
+    isUseGzip: false,
+    format: "json", // "json" || "csv" || "tsv"
+    raw: false,
+    config: {
+      session_id: "2",
+      session_timeout: 60,
+      output_format_json_quote_64bit_integers: 0,
+      enable_http_compression: 0,
+      database: conf.get("ch_name"),
+    },
+  });
 }
 
 module.exports = router;

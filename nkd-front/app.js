@@ -1,4 +1,4 @@
-// `use strict`;
+`use strict`;
 
 const createError = require("http-errors");
 const express = require("express");
@@ -114,7 +114,7 @@ let clickhouse = new ClickHouse({
   format: "json", // "json" || "csv" || "tsv"
   raw: false,
   config: {
-    session_id: "",
+    session_id: "1",
     session_timeout: 60,
     output_format_json_quote_64bit_integers: 0,
     enable_http_compression: 0,
