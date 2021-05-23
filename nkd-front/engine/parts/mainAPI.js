@@ -1,3 +1,5 @@
+// `use strict`;
+
 var config = require("../../libs/config.js");
 var express = require("express");
 var router = express.Router();
@@ -92,8 +94,15 @@ async function insert(data) {
     )
     .stream();
 
-  await ws.writeRow(data);
-  return await ws.exec();
+  await ws.writeRow(data).catch((err) => {
+    console.log("ERROR writeRow err: " + err);
+    console.log("ERROR writeRow data: " + data);
+  });
+
+  return await ws.exec().catch((err) => {
+    console.log("ERROR exec err: " + err);
+    console.log("ERROR exec data: " + data);
+  });
 }
 
 function dataSeriesProcceed(req) {
@@ -122,7 +131,11 @@ function dataSeriesProcceed(req) {
   }
 
   income.forEach((e) => {
-    moto[`moto_${active_gear}`] += e.data.cnt;
+    // moto[`moto_${active_gear}`] += e.data.cnt;
+
+    moto[`moto_${active_gear}`] ==
+      Number(moto[`moto_${active_gear}`]) + Number(e.data.cnt);
+
     data.push(
       `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${calcSpeedZone(
         e.data.tacho
@@ -131,7 +144,7 @@ function dataSeriesProcceed(req) {
       }, ${e.data.signal3})`
     );
   });
-  console.log(moto);
+
   myEmitter.emit("moto", moto);
 
   return data;
