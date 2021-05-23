@@ -131,10 +131,15 @@ function dataSeriesProcceed(req) {
   }
 
   income.forEach((e) => {
-    // moto[`moto_${active_gear}`] += e.data.cnt;
+    moto[`moto_${active_gear}`] = +moto[`moto_${active_gear}`] + +e.data.cnt;
 
-    moto[`moto_${active_gear}`] ==
-      Number(moto[`moto_${active_gear}`]) + Number(e.data.cnt);
+    // let ts = e.ts || 0;
+    // let tacho = e.data.tacho || 0;
+    // let speed = calcSpeedZone(tacho);
+    // let moto?? = moto[`moto_${active_gear}`];
+    // let signal1,
+    // let signal2,
+    // let signal3
 
     data.push(
       `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${calcSpeedZone(
