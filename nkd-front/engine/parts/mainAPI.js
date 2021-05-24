@@ -204,6 +204,7 @@ function calcSpeedZone(tacho) {
       return zone_id;
     }
   }
+  console.log("RANGE ERROR = " + tacho);
   return undefined;
 }
 
