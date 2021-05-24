@@ -205,7 +205,8 @@ function calcSpeedZone(tacho) {
     }
   }
   console.log("RANGE ERROR = " + tacho);
-  return undefined;
+  // return undefined;
+  return 0;
 }
 
 let connection;
