@@ -9,8 +9,10 @@ mainApi.on("signals", (data) => {
   ws.send(JSON.stringify({ signals: data }));
 });
 
-mainApi.on("moto", (moto) => {
-  current.updateData("moto", moto);
+mainApi.on("moto", () => {
+  let moto = current.getDataByLink("moto");
+  if (moto === undefined) return;
+
   ws.send(JSON.stringify({ moto }));
 });
 
@@ -34,7 +36,12 @@ function setConnection(con) {
   mainApi.setConnection(con);
 }
 
+function setConfig(c) {
+  mainApi.setConfig(c);
+  ws.init(c);
+}
+
 module.exports = mainApi.router;
-module.exports.setCHConnection = mainApi.setCHConnection;
+module.exports.setConfig = setConfig;
 module.exports.setConnection = setConnection;
 module.exports.updateActiveGear = updateActiveGear;

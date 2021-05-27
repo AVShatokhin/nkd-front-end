@@ -1,5 +1,3 @@
-`use strict`;
-
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -17,7 +15,6 @@ const optionsRouter = require("./routes/options");
 const debugRouter = require("./routes/debug");
 const monitoringRouter = require("./routes/monitoring");
 const { allowedNodeEnvironmentFlags } = require("process");
-const { ClickHouse } = require("clickhouse");
 
 const app = express();
 
@@ -68,62 +65,40 @@ function init(conf) {
     res.status(err.status || 500);
     res.render("error");
   });
-}
 
-var conf = require("nconf")
-  .argv()
-  .env()
-  .file({ file: process.env.NKD_PATH + "./config/config.json" });
-
-const connection = mysql.createConnection({
-  host: conf.get("db_host"),
-  user: conf.get("db_user"),
-  database: conf.get("db_name"),
-  password: conf.get("db_password"),
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.log(err);
-    throw err;
-  }
-
-  connection.query("SET time_zone='+3:00';", function (err, result) {
-    if (err) {
-      throw err;
-    } else {
-      console.log("mysql connected");
-      authRouter.setConnection(connection);
-      dashboardRouter.setConnection(connection);
-      optionsRouter.setConnection(connection);
-      engineRouter.setConnection(connection);
-    }
+  const connection = mysql.createConnection({
+    host: conf.get("db_host"),
+    user: conf.get("db_user"),
+    database: conf.get("db_name"),
+    password: conf.get("db_password"),
   });
-});
 
-optionsRouter.on("active_gear", (data) => {
-  engineRouter.updateActiveGear(data);
-});
+  connection.connect((err) => {
+    if (err) {
+      console.log(err);
+      throw err;
+    }
 
-let clickhouse = new ClickHouse({
-  url: conf.get("ch_url"),
-  port: conf.get("ch_port"),
-  debug: false,
-  basicAuth: null,
-  isUseGzip: false,
-  format: "json", // "json" || "csv" || "tsv"
-  raw: false,
-  config: {
-    session_id: "1",
-    session_timeout: 60,
-    output_format_json_quote_64bit_integers: 0,
-    enable_http_compression: 0,
-    database: conf.get("ch_name"),
-  },
-});
+    connection.query("SET time_zone='+3:00';", function (err, result) {
+      if (err) {
+        throw err;
+      } else {
+        console.log("mysql connected");
+        authRouter.setConnection(connection);
+        dashboardRouter.setConnection(connection);
+        optionsRouter.setConnection(connection);
+        engineRouter.setConnection(connection);
+      }
+    });
+  });
 
-monitoringRouter.setCHConnection(clickhouse);
-engineRouter.setCHConnection(clickhouse);
+  optionsRouter.on("active_gear", (data) => {
+    engineRouter.updateActiveGear(data);
+  });
+
+  monitoringRouter.setConfig(conf);
+  engineRouter.setConfig(conf);
+}
 
 module.exports = app;
 module.exports.init = init;

@@ -1,11 +1,10 @@
-// `use strict`;
-
 var config = require("../../libs/config.js");
 var express = require("express");
 var router = express.Router();
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
+const { ClickHouse } = require("clickhouse");
 
 const signals_config = config.openSignalsConfig();
 
@@ -88,6 +87,7 @@ router.post("/income/", function (req, res, next) {
 });
 
 async function insert(data) {
+  let clickhouse = connectClickhouse("income");
   const ws = clickhouse
     .insert(
       "INSERT INTO signals_by_ts (ts, active_gear, speed, moto, tacho, signal1, signal2, signal3) values "
@@ -109,48 +109,23 @@ function dataSeriesProcceed(req) {
   let data = [];
 
   let income = req.body.signals;
-  let cur = current.getAllData();
-
-  let moto = {
-    moto_0: 0,
-    moto_1: 0,
-    moto_factor: signals_config.cnt.moto_factor,
-  };
-
-  if ("moto" in cur) {
-    moto.moto_0 = cur.moto.moto_0;
-    moto.moto_1 = cur.moto.moto_1;
-  }
-
-  let active_gear = 0;
-
-  if ("active_gear_collection" in cur) {
-    if ("active_gear" in cur.active_gear_collection) {
-      active_gear = cur.active_gear_collection.active_gear;
-    }
-  }
+  let active_gear = current.getActiveGear() || 0;
+  let current_moto = current.getMoto(active_gear) || 0;
+  let add_moto = 0;
 
   income.forEach((e) => {
-    moto[`moto_${active_gear}`] = +moto[`moto_${active_gear}`] + +e.data.cnt;
-
-    // let ts = e.ts || 0;
-    // let tacho = e.data.tacho || 0;
-    // let speed = calcSpeedZone(tacho);
-    // let moto?? = moto[`moto_${active_gear}`];
-    // let signal1,
-    // let signal2,
-    // let signal3
-
+    add_moto += +e.data.cnt;
+    let speed_zone = calcSpeedZone(e.data.tacho);
+    let new_moto = current_moto + add_moto;
     data.push(
-      `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${calcSpeedZone(
-        e.data.tacho
-      )}, ${moto[`moto_${active_gear}`]}, ${e.data.tacho}, ${e.data.signal1}, ${
-        e.data.signal2
-      }, ${e.data.signal3})`
+      `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${speed_zone}, ${new_moto}, ${e.data.tacho}, ${e.data.signal1}, ${e.data.signal2}, ${e.data.signal3})`
     );
   });
 
-  myEmitter.emit("moto", moto);
+  if (add_moto > 0) {
+    current.updateMoto(active_gear, current_moto + add_moto);
+    myEmitter.emit("moto");
+  }
 
   return data;
 }
@@ -219,13 +194,32 @@ function setCurrent(cur) {
   current = cur;
 }
 
-let clickhouse;
-function setCHConnection(con) {
-  clickhouse = con;
+function connectClickhouse(session_id) {
+  return new ClickHouse({
+    url: conf.get("ch_url"),
+    port: conf.get("ch_port"),
+    debug: false,
+    basicAuth: null,
+    isUseGzip: false,
+    format: "json", // "json" || "csv" || "tsv"
+    raw: false,
+    config: {
+      session_id: session_id,
+      session_timeout: 60,
+      output_format_json_quote_64bit_integers: 0,
+      enable_http_compression: 0,
+      database: conf.get("ch_name"),
+    },
+  });
+}
+
+let conf;
+function setConfig(c) {
+  conf = c;
 }
 
 module.exports.router = router;
-module.exports.setCHConnection = setCHConnection;
+module.exports.setConfig = setConfig;
 module.exports.setConnection = setConnection;
 module.exports.setCurrent = setCurrent;
 module.exports.on = bindEvent;

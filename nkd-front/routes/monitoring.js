@@ -2,10 +2,6 @@ var express = require("express");
 var router = express.Router();
 var nkd = require("../libs/nkd.js");
 const { ClickHouse } = require("clickhouse");
-var conf = require("nconf")
-  .argv()
-  .env()
-  .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -172,6 +168,7 @@ router.get("/get_stat", async function (req, res, next) {
 
 async function getQuery(sql, ans, dataProcced) {
   return new Promise((resolve) => {
+    let clickhouse = connectClickhouse(2);
     clickhouse
       .query(sql)
       .stream()
@@ -195,6 +192,7 @@ async function getQuery(sql, ans, dataProcced) {
 async function getCountQuery(sql) {
   let cnt;
   return new Promise((resolve) => {
+    let clickhouse = connectClickhouse(3);
     clickhouse
       .query(sql)
       .stream()
@@ -211,11 +209,8 @@ async function getCountQuery(sql) {
   });
 }
 
-let clickhouse;
-function setCHConnection(con) {
-  // clickhouse = con;
-  // let
-  clickhouse = new ClickHouse({
+function connectClickhouse(session_id) {
+  return new ClickHouse({
     url: conf.get("ch_url"),
     port: conf.get("ch_port"),
     debug: false,
@@ -224,7 +219,7 @@ function setCHConnection(con) {
     format: "json", // "json" || "csv" || "tsv"
     raw: false,
     config: {
-      session_id: "2",
+      session_id: session_id,
       session_timeout: 60,
       output_format_json_quote_64bit_integers: 0,
       enable_http_compression: 0,
@@ -233,5 +228,10 @@ function setCHConnection(con) {
   });
 }
 
+let conf;
+function setConfig(c) {
+  conf = c;
+}
+
 module.exports = router;
-module.exports.setCHConnection = setCHConnection;
+module.exports.setConfig = setConfig;

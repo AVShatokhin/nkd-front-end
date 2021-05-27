@@ -72,6 +72,10 @@ function getAllData() {
   return current;
 }
 
+function getDataByLink(link) {
+  if (link in current) return current[link];
+}
+
 let connection;
 
 async function setConnection(con) {
@@ -85,6 +89,39 @@ async function setConnection(con) {
   // console.log(current);
 }
 
-module.exports.updateData = updateData;
+function getActiveGear() {
+  if ("active_gear_collection" in current) {
+    if ("active_gear" in current.active_gear_collection) {
+      return current.active_gear_collection.active_gear;
+    }
+  }
+}
+
+function updateMoto(active_gear, new_moto) {
+  if (active_gear == 0) {
+    current.moto.moto_0 = +new_moto;
+  } else if (active_gear == 1) {
+    current.moto.moto_1 = +new_moto;
+  } else {
+    console.log("ERROR: updateMoto: active_gear = " + active_gear);
+    return;
+  }
+
+  updateCurrentBackUP("moto");
+}
+
+function getMoto(active_gear) {
+  let moto = getDataByLink("moto");
+  if (moto === undefined) return;
+
+  if (active_gear == 0) return moto.moto_0;
+  else if (active_gear == 1) return moto.moto_1;
+}
+
 module.exports.setConnection = setConnection;
+module.exports.updateData = updateData;
+module.exports.updateMoto = updateMoto;
+module.exports.getMoto = getMoto;
+module.exports.getActiveGear = getActiveGear;
 module.exports.getAllData = getAllData;
+module.exports.getDataByLink = getDataByLink;
