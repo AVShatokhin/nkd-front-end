@@ -118,10 +118,12 @@ function dataSeriesProcceed(req) {
   income.forEach((e) => {
     add_moto += +e.data.cnt;
     let speed_zone = calcSpeedZone(e.data.tacho);
-    let new_moto = current_moto + add_moto;
-    data.push(
-      `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${speed_zone}, ${new_moto}, ${e.data.tacho}, ${e.data.signal1}, ${e.data.signal2}, ${e.data.signal3})`
-    );
+    if (speed_zone != undefined) {
+      let new_moto = current_moto + add_moto;
+      data.push(
+        `(fromUnixTimestamp(${e.ts}), ${active_gear}, ${speed_zone}, ${new_moto}, ${e.data.tacho}, ${e.data.signal1}, ${e.data.signal2}, ${e.data.signal3})`
+      );
+    }
   });
 
   if (add_moto > 0) {
@@ -186,8 +188,8 @@ function calcSpeedZone(tacho) {
     }
   }
   console.log("RANGE ERROR = " + tacho);
-  // return undefined;
-  return 0;
+  return undefined;
+  // return 0;
 }
 
 let connection;

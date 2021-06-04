@@ -11,9 +11,6 @@ function getDefaultOptions() {
 
 function openSignalsConfig() {
   return openConfigFile(signals);
-  // JSON.parse(
-  //   fs.readFileSync(process.env.NKD_PATH + "./config/signals.json")
-  // );
 }
 
 function openConfigFile(fileName) {
