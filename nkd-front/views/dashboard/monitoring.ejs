@@ -50,6 +50,16 @@
 
                             <div class="mb-3 input-group">
                                 <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Левая ось ординат</span>
+                                </div>
+                                <select class="form-control mb-1" id="first_ordinat">                                    
+                                    <option value="signals" selected>Масштабирование по уровню сигналов</option>
+                                    <option value="gost">Масштабирование по уровням ГОСТ 10816</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
                                     <span class="input-group-text">Скорость кабинок</span>
                                 </div>
                                 <select class="form-control mb-1" id="speed_zone">
@@ -61,15 +71,6 @@
                                 </select>
                             </div>
 
-                            <!-- <div class="mb-0 input-group">
-                                <div class="input-group-prepend col-4">
-                                    <span class="input-group-text">Режим отображения</span>
-                                </div>
-                                <select class="form-control mb-1" name="active_gear">
-                                    <option value="0">На одном графике</option>
-                                    <option value="1">На разных графиках</option>
-                                </select>
-                            </div> -->
                         </div>
 
                         <div class="px-0">
@@ -251,6 +252,7 @@
         $.get("/monitoring/get_stat/", 
                 { 
                     input__request_dateTimeRange : $("#input__request_dateTimeRange").val(),
+                    first_ordinat : $("#first_ordinat").val(),
                     second_ordinat : $("#second_ordinat").val(),
                     speed_zone : $("#speed_zone").val(),
                     active_gear : $("#active_gear").val()
@@ -274,6 +276,14 @@
             second_ordinat = "Скорость кабинок";
             second_ordinat_yxis = "Скорость кабинок, м/с";
             second_ordinat_max = 5;
+        }
+
+        let first_ordinat_max;
+
+        if (income.first_ordinat == "signals") {
+
+        } else if (income.first_ordinat == "gost") {
+            first_ordinat_max=income.gost.c
         }
 
         let title = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
@@ -463,15 +473,9 @@
         }
 
         const chart = Highcharts.chart('graph', {
-            chart: {
-                zoomType: 'x',
-            },
-            title: {
-                text: title
-            },
-            subtitle: {
-                text: range
-            },
+            chart: {   zoomType: 'x' },
+            title: {   text: title   },
+            subtitle: {   text: range  },
             tooltip: {
                 crosshairs: true,
                 shared: true,                
@@ -482,17 +486,59 @@
             },
             yAxis: [                    
                     {
-                    title: {
-                            text: 'Виброскорость, мм/с'
+                    max: first_ordinat_max,
+                    title: {                          
+                        text: 'Виброскорость, мм/с' 
+                    },
+                    minorGridLineWidth: 1,
+                    gridLineWidth: 1,
+                    alternateGridColor: null,
+                    plotBands: [{ 
+                        from: 0,
+                        to: income.gost.a,                        
+                        color: 'rgba(0, 191, 255, 0.09)',
+                        zIndex: 4,                           
+                        label: {                            
+                            text: 'Зона А',
+                            style: {                                
+                                color: '#0'
                             }
-                    }, 
+                        }                    
+                    }, { 
+                        from: income.gost.a,
+                        to: income.gost.b,
+                        color: 'rgba(0, 255, 0, 0.09)',
+                        zIndex: 4,                           
+                        label:{                            
+                                text: 'Зона B',
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.b,
+                        to: income.gost.c,
+                        color: 'rgba(241, 199, 22, 0.09)',
+                        zIndex: 4,                           
+                        label:{                            
+                                text: 'Зона C',
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.c,
+                        to: 10.0,
+                        color: 'rgba(255, 0, 0, 0.09)',
+                        zIndex: 4,                           
+                        label:{                            
+                                text: 'Зона D',
+                                style: { color: '#0' }
+                        }                                                                           
+                    }]}, 
                     {
                         // max: second_ordinat_max,
                         title: {
                             text: second_ordinat_yxis
-                    },
-                    opposite: true
-                    }
+                        },
+                        opposite: true
+                    }                     
             ],
             series: dd
         });

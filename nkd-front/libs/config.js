@@ -10,8 +10,15 @@ function getDefaultOptions() {
 }
 
 function openSignalsConfig() {
+  return openConfigFile(signals);
+  // JSON.parse(
+  //   fs.readFileSync(process.env.NKD_PATH + "./config/signals.json")
+  // );
+}
+
+function openConfigFile(fileName) {
   return JSON.parse(
-    fs.readFileSync(process.env.NKD_PATH + "./config/signals.json")
+    fs.readFileSync(process.env.NKD_PATH + "./config/" + fileName + ".json")
   );
 }
 
@@ -165,3 +172,4 @@ module.exports.getOptionsByLink = getOptionsByLink;
 module.exports.setOptionsByLink = setOptionsByLink;
 module.exports.openMainConfig = openMainConfig;
 module.exports.openSignalsConfig = openSignalsConfig;
+module.exports.openConfigFile = openConfigFile;

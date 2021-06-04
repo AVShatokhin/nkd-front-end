@@ -4,21 +4,10 @@ const current = require("./parts/current");
 
 mainApi.setCurrent(current);
 
-mainApi.on("signals", (data) => {
-  current.updateData("signals", data);
-  ws.send(JSON.stringify({ signals: data }));
-});
-
-mainApi.on("moto", () => {
-  let moto = current.getDataByLink("moto");
-  if (moto === undefined) return;
-
-  ws.send(JSON.stringify({ moto }));
-});
-
-mainApi.on("badges", (data) => {
-  current.updateData("badges", data);
-  ws.send(JSON.stringify({ badges: data }));
+mainApi.on("signals", () => {
+  ws.send(JSON.stringify({ signals: current.getDataByLink("signals") }));
+  ws.send(JSON.stringify({ badges: current.getDataByLink("badges") }));
+  ws.send(JSON.stringify({ moto: current.getDataByLink("moto") }));
 });
 
 ws.on("get_all", (id) => {
@@ -26,9 +15,12 @@ ws.on("get_all", (id) => {
 });
 
 function updateActiveGear(data) {
-  //   console.log(data);
   current.updateData("active_gear_collection", { active_gear: data }, true); // true - это dontsave
-  ws.send(JSON.stringify({ active_gear_collection: { active_gear: data } }));
+  ws.send(
+    JSON.stringify({
+      active_gear_collection: current.getDataByLink("active_gear_collection"),
+    })
+  );
 }
 
 function setConnection(con) {

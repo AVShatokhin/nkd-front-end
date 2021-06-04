@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var nkd = require("../libs/nkd.js");
 const { ClickHouse } = require("clickhouse");
+var config = require("../libs/config.js");
+const gost = config.openConfigFile("gost_iso_10816_1_97");
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -30,21 +32,39 @@ router.get("/get_stat", async function (req, res, next) {
     return;
   }
 
-  // sql =
-  //   `select date(ts) as day, hour(ts) as h, avg(signal1) as as1, min(signal1) as ms1, max(signal1) as mas1, min(moto) as m ` +
-  //   `from signals_by_ts ` +
-  //   `where ts between '${fromRange}' and '${toRange}' ` +
-  //   `group by day, h ` +
-  //   `order by m;`;
-
   ans["second_ordinat"] = req.query.second_ordinat;
+  ans["first_ordinat"] = req.query.first_ordinat;
   ans["active_gear"] = req.query.active_gear;
   ans["speed_zone"] = req.query.speed_zone;
   ans["fromRange"] = fromRange;
   ans["toRange"] = toRange;
+  ans["gost"] = gost;
+  ans["signals"] = gost;
+
+  let active_gear_sql = "";
+
+  if (req.query.active_gear == 0) {
+    active_gear_sql = " and active_gear=0 ";
+  } else if (req.query.active_gear == 1) {
+    active_gear_sql = " and active_gear=1 ";
+  }
+
+  let speed_zone_sql = "";
+
+  if (req.query.speed_zone == 1) {
+    speed_zone_sql = " and speed=1 ";
+  } else if (req.query.speed_zone == 2.4) {
+    speed_zone_sql = " and speed=2.4 ";
+  } else if (req.query.speed_zone == 4) {
+    speed_zone_sql = " and speed=4 ";
+  } else if (req.query.speed_zone == 5) {
+    speed_zone_sql = " and speed=5 ";
+  }
+
+  console.log(speed_zone_sql);
 
   let cnt = await getCountQuery(
-    `select count(*) as cnt from signals_by_ts where ts between '${fromRange}' and '${toRange}';`
+    `select count(*) as cnt from signals_by_ts where ts between '${fromRange}' and '${toRange}' ${active_gear_sql};`
   );
 
   if (cnt < 20000) {
@@ -55,6 +75,8 @@ router.get("/get_stat", async function (req, res, next) {
       `select toUnixTimestamp(ts) as tst, round(signal1, 4) as s1, round(signal2, 4) as s2, round(signal3, 4) as s3, round(tacho, 4) as tacho, round(speed, 1) as speed ` +
       `from signals_by_ts ` +
       `where ts between '${fromRange}' and '${toRange}'` +
+      active_gear_sql +
+      speed_zone_sql +
       `order by ts;`;
 
     await getQuery(sql, ans, (data) => {

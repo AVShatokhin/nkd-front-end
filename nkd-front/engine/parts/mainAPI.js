@@ -6,7 +6,8 @@ class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 const { ClickHouse } = require("clickhouse");
 
-const signals_config = config.openSignalsConfig();
+const signals_config = config.openConfigFile("signals");
+const gost = config.openConfigFile("gost_iso_10816_1_97");
 
 router.get("/get_rolling_csv", async function (req, res, next) {
   let csv = "";
@@ -80,7 +81,8 @@ router.post("/income/", function (req, res, next) {
   if ("signals" in req.body) {
     ans.status.success = true;
     insert(dataSeriesProcceed(req));
-    if (req.body.signals.length > 0) lastElementProcceed(req);
+    lastElementProcceed(req);
+    myEmitter.emit("signals");
   }
 
   res.json(ans);
@@ -131,6 +133,8 @@ function dataSeriesProcceed(req) {
 }
 
 function lastElementProcceed(req) {
+  if (req.body.signals.length < 1) return;
+
   let income = req.body.signals[req.body.signals.length - 1];
   let signals_data = {};
   signals_data["data"] = {};
@@ -147,13 +151,8 @@ function lastElementProcceed(req) {
       signals_data["ts"] = ts;
       signals_data["remoteAddress"] = remoteAddress;
 
-      badges_data[element] = "normal";
-      if (value - signals_config[element].limit_normal > 0) {
-        badges_data[element] = "warning";
-      }
-      if (value - signals_config[element].limit_warning > 0) {
-        badges_data[element] = "danger";
-      }
+      if ("gost" in signals_config[element])
+        badges_data[element] = calcGostZone(value);
 
       if (element == "tacho") {
         signals_data.data["speed_zone"] = calcSpeedZone(value);
@@ -161,8 +160,15 @@ function lastElementProcceed(req) {
     }
   }
 
-  myEmitter.emit("signals", signals_data);
-  myEmitter.emit("badges", badges_data);
+  current.updateData("badges", badges_data);
+  current.updateData("signals", signals_data);
+}
+
+function calcGostZone(value) {
+  if (value > gost.c) return "D";
+  if (value > gost.b) return "C";
+  if (value > gost.a) return "B";
+  return "A";
 }
 
 function bindEvent(event, handler) {

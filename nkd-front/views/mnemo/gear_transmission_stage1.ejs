@@ -1,20 +1,31 @@
-<rect stroke="#000" id="back" height="130" width="320" y="0" x="0" stroke-opacity="null" stroke-width="1" fill="none"/>
-<text xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" 
-        font-size="16" 
-        id="unit_name" x="5" y="20"  
-        fill-opacity="null" 
-        stroke-opacity="null" 
-        stroke-width="0" stroke="#000" 
-        fill="#000000">Зубчатая передача, первая ступень</text>
+<svg id="o_1">
+        <%- include("stage1/gear_wheel_stage1.ejs") %>
+</svg>
 
-        <svg x="10" y="30" id="o_1">
-                <%- include("rolling_bearing_22322CC.ejs") %>
-        </svg>
+<svg id="o_2">
+        <%- include("stage1/rolling_bearing_22322_stage1.ejs") %>
+</svg>
 
-        <svg x="10" y="60" id="o_2">
-                <%- include("rolling_bearing_31320X.ejs") %>
-        </svg>
+<svg id="o_3">
+        <%- include("stage1/rolling_bearing_30230_stage1.ejs") %>
+</svg>
 
-        <svg x="10" y="90" id="o_3">
-                <%- include("rolling_bearing_30230.ejs") %>
-        </svg>
+<svg id="o_4">
+        <%- include("stage1/rolling_bearing_313260_stage1.ejs") %>
+</svg>
+
+<svg id="o_5">
+        <%- include("stage1/val_stage1.ejs") %>
+</svg>
+
+<svg id="o_6">
+        <%- include("stage1/driven_gear_stage1.ejs") %>
+</svg>
+
+<svg id="o_7">
+        <%- include("stage1/driving_gear_stage1.ejs") %>
+</svg>
+
+<svg id="o_8">
+        <%- include("stage1/gear_engagement_wheel_stage1.ejs") %>
+</svg>

@@ -174,15 +174,18 @@ function processBadges(data) {
     $(`span#${badge}[source=badges]`).removeClass("bg-primary");
     $(`span#${badge}[source=badges]`).removeClass("bg-warning");
     $(`span#${badge}[source=badges]`).removeClass("bg-danger");
-    if (data.badges[badge] == "normal") {
+    if (data.badges[badge] == "A") {
       $(`span#${badge}[source=badges]`).addClass("bg-primary");
       $(`span#${badge}[source=badges]`).html("Зона А");
-    } else if (data.badges[badge] == "warning") {
-      $(`span#${badge}[source=badges]`).addClass("bg-warning");
+    } else if (data.badges[badge] == "B") {
+      $(`span#${badge}[source=badges]`).addClass("bg-success");
       $(`span#${badge}[source=badges]`).html("Зона B");
-    } else if (data.badges[badge] == "danger") {
-      $(`span#${badge}[source=badges]`).addClass("bg-danger");
+    } else if (data.badges[badge] == "C") {
+      $(`span#${badge}[source=badges]`).addClass("bg-warning");
       $(`span#${badge}[source=badges]`).html("Зона C");
+    } else if (data.badges[badge] == "D") {
+      $(`span#${badge}[source=badges]`).addClass("bg-danger");
+      $(`span#${badge}[source=badges]`).html("Зона D");
     }
   }
 }
