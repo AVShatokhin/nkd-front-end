@@ -10,7 +10,7 @@ function getDefaultOptions() {
 }
 
 function openSignalsConfig() {
-  return openConfigFile(signals);
+  return openConfigFile("signals");
 }
 
 function openConfigFile(fileName) {
