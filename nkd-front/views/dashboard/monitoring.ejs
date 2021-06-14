@@ -139,7 +139,150 @@
         </div>
     
         <div class="tab-pane fade show" id="tabMoto" role="tabpanel" aria-labelledby="tabDate">
-            dsfgdfg111
+            <div class="row">
+                <div class="col-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Настройка выборки</h5>
+                        </div>
+            
+                        <div class="card-body px-3">
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-6">
+                                    <span class="input-group-text">Начало выборки</span>
+                                </div>                            
+                                <input id="input__moto_begin" class="form-control col-4" type="text"/>
+                                <div class="input-group-append col-2">
+                                    <span class="input-group-text">мото часы</span>
+                                </div>                            
+                            </div>
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-6">
+                                    <span class="input-group-text">Конец выборки</span>
+                                </div>                            
+                                <input id="input__moto_end" class="form-control col-4" type="text"/>
+                                <div class="input-group-append col-2">
+                                    <span class="input-group-text">мото часы</span>
+                                </div>      
+                            </div>
+
+
+                            <!-- <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Редуктор</span>
+                                </div>
+                                <select class="form-control mb-1" id="active_gear_moto">
+                                    <option value="0">Редуктор №1</option>
+                                    <option value="1">Редуктор №2</option>
+                                    <option value="2" selected>Оба редуктора</option>
+                                </select>
+                            </div> -->
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Правая ось ординат</span>
+                                </div>
+                                <select class="form-control mb-1" id="second_ordinat_moto">                                    
+                                    <option value="freq" selected>Частота вращения первичного вала</option>
+                                    <option value="speed_zone">Скорость кабинок</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Левая ось ординат</span>
+                                </div>
+                                <select class="form-control mb-1" id="first_ordinat_moto">                                    
+                                    <option value="signals" selected>Масштабирование по уровню сигналов</option>
+                                    <option value="gost">Масштабирование по уровням ГОСТ 10816</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3 input-group">
+                                <div class="input-group-prepend col-4">
+                                    <span class="input-group-text">Скорость кабинок</span>
+                                </div>
+                                <select class="form-control mb-1" id="speed_zone_moto">
+                                    <option value="0" selected>Любая</option>
+                                    <option value="1">1 м/с</option>
+                                    <option value="2.4">2.4 м/с</option>
+                                    <option value="4">4 м/с</option>
+                                    <option value="5">5 м/с</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="px-0">
+                            <hr class="mt-0 mb-3">
+                        </div>
+
+                        <div class="container-fluid px-3 pb-3">
+                            <div class="d-flex justify-content-begin">
+                                <button id="btn__request_moto" type="button" class="btn btn-primary">Выполнить запрос</button>                                
+                            </div>                                    
+                        </div>
+                    </div>        
+                </div>
+            
+                <div class="col-4 px-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Сводка по запросу</h5>
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:60%;">Параметр</th>
+                                    <th style="width:40%">Значение</th>
+                                </tr>    
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Общее время обработки запроса</td>                            
+                                    <td><span id="walltime_moto"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Время СУБД</td>                            
+                                    <td><span id="sqltime_moto"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Выбрано точек</td>                            
+                                    <td><span id="count_moto"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Агрегация</td>                            
+                                    <td><span id="currentAgregation_moto"></span></td>                            
+                                </tr>
+                                <tr>
+                                    <td>Объём данных</td>                            
+                                    <td><span id="size_moto"></span></td>                            
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 px-2">
+                    <div class="card">
+                        <div class="card-body p-1">
+                            <div id="graph1_moto" style="width:100%; height: 480px;">
+            
+                            </div>
+                            <div id="graph2_moto" style="width:100%; height: 480px;">
+            
+                            </div>
+                            <div id="graph3_moto" style="width:100%; height: 480px;">
+            
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div> 
         </div>
     
     </div>
@@ -148,54 +291,14 @@
 
 
 
-
-<!-- <div class="col-12 d-flex p-3">
-
-    <div class="row">
-        <div class="row col-12">
-
-
-        </div>
-
-
-        <div class="card flex-fill col-6">
-
-            <div class="card-header pb-2 px-2 mx-0">
-                <h5 class="card-title">Настройки фильтра выборки</h5>            
-            </div>
-
-            
-    
-            
-        </div>
-
-        
-        <div class="card flex-fill col-6">
-            <div class="card-header pb-2 px-2 mx-0">
-                <h5 class="card-title">Сводка по запросу</h5>            
-            </div>
-        </div>
-
-    </div>
-
-    <div class="card flex-fill">
-        <div class="card-header pb-2 px-2 mx-0">
-            <h5 class="card-title">Сатистика по данным мониторинга</h5>            
-        </div>
-        
-    </div>   
-
-</div>
-
- -->
 
 <script>
     $(function () {      
         Highcharts.setOptions({
-    time: {
-        timezoneOffset: -3 * 60
-    }
-});
+            time: {
+                    timezoneOffset: -3 * 60
+                    }
+                });
 
         
         // https://www.daterangepicker.com/
@@ -243,6 +346,12 @@
         $("#btn__request").on('click', () => { getGraph();  });
 
         getGraph();
+
+        $("#btn__request_moto").on('click', () => { getGraph_moto();  });
+        $("#input__moto_begin").attr("value", 0);
+        $("#input__moto_end").attr("value", 10);
+
+        getGraph_moto();
     });
 
     function getGraph() {
@@ -263,38 +372,261 @@
             });
     }
 
+    function getGraph_moto() {
+
+        let startTimeStamp = new Date().getTime();
+
+        $.get("/monitoring/get_stat_moto/", 
+                { 
+                    input__moto_begin : $("#input__moto_begin").val(),
+                    input__moto_end : $("#input__moto_end").val(),                    
+                    first_ordinat : $("#first_ordinat_moto").val(),
+                    second_ordinat : $("#second_ordinat_moto").val(),
+                    speed_zone : $("#speed_zone_moto").val(),
+                    active_gear : $("#active_gear_moto").val()
+                }
+            ).done((income) => { 
+                dataProcceed_moto(income, startTimeStamp);
+                statictic_write_moto(income, startTimeStamp); 
+            });
+    }
+
     function dataProcceed(income, startTimeStamp) {
-        let second_ordinat;
-        let second_ordinat_max;
-        let second_ordinat_yxis;
 
         if (income.second_ordinat == "freq") {
-            second_ordinat = "Частота вращения";
-            second_ordinat_yxis = "Частота вращения, Гц";
-            second_ordinat_max = 20;
+            // income["second_ordinat"]= "Частота вращения";
+            income["second_ordinat_yxis"] = "Частота вращения, Гц";
+            income["second_ordinat_max"] = 20;
         } else if (income.second_ordinat == "speed_zone") {
-            second_ordinat = "Скорость кабинок";
-            second_ordinat_yxis = "Скорость кабинок, м/с";
-            second_ordinat_max = 5;
+            // income["second_ordinat"] = "Скорость кабинок";
+            income["second_ordinat_yxis"] = "Скорость кабинок, м/с";
+            income["second_ordinat_max"] = 5;
         }
-
-        let first_ordinat_max;
 
         if (income.first_ordinat == "signals") {
-
+            income["first_ordinat_max"]=undefined;
         } else if (income.first_ordinat == "gost") {
-            first_ordinat_max=income.gost.c
+            income["first_ordinat_max"]=income.gost.c
         }
 
-        let title = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
-
-        let range = `c ${income.fromRange} по ${income.toRange}`;
+        income["title"] = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
+        income["range"] = `c ${income.fromRange} по ${income.toRange}`;
 
         let dd = [];
         if (income.currentAgregation == 1) {
-            dd = [
+            dd = dataNoAgregation(income);
+        } else { 
+            dd = dataWithAgregation(income);           
+        }
+        
+        // console.log(dd);      
+        // console.log(income);
+
+
+        const chart = genGraph(income, dd);
+    }
+    
+    function dataProcceed_moto(income, startTimeStamp) {
+
+        if (income.second_ordinat == "freq") {
+            // income["second_ordinat"]= "Частота вращения";
+            income["second_ordinat_yxis"] = "Частота вращения, Гц";
+            income["second_ordinat_max"] = 20;
+        } else if (income.second_ordinat == "speed_zone") {
+            // income["second_ordinat"] = "Скорость кабинок";
+            income["second_ordinat_yxis"] = "Скорость кабинок, м/с";
+            income["second_ordinat_max"] = 5;
+        }
+
+        if (income.first_ordinat == "signals") {
+            income["first_ordinat_max"]=undefined;
+        } else if (income.first_ordinat == "gost") {
+            income["first_ordinat_max"]=income.gost.c
+        }
+
+        let fromRange = Math.round(income.fromRange * income.signals.cnt.moto_factor / 3600);
+        let toRange = Math.round(income.toRange * income.signals.cnt.moto_factor / 3600);
+
+
+        income["title"] = `Выборка по наработке, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
+        income["range"] = `c ${fromRange} по ${toRange} (мото часы)`;
+
+        let dd = [];
+        if (income.currentAgregation == 1) {
+            dd = dataNoAgregation_moto(income);
+        } else { 
+            dd = dataWithAgregation_moto(income);           
+        }
+
+        // console.log(dd);      
+        // console.log(income);
+
+
+        const chart1 = genGraph_moto(income, dd[0], "graph1_moto");
+        const chart2 = genGraph_moto(income, dd[1], "graph2_moto");
+        const chart3 = genGraph_moto(income, dd[2], "graph3_moto");
+    }
+
+    function genGraph(income, dd) {
+        return Highcharts.chart('graph', {
+            chart: {   zoomType: 'x' },
+            title: {   text: income.title   },
+            subtitle: {   text: income.range  },
+            tooltip: {
+                crosshairs: true,
+                shared: true,                
+                distance: 50
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: [                    
                     {
-                        name: "signal1", 
+                    max: income.first_ordinat_max,
+                    title: {                          
+                        text: 'Виброскорость, мм/с' 
+                    },
+                    minorGridLineWidth: 1,
+                    gridLineWidth: 1,
+                    alternateGridColor: null,
+                    plotBands: [{ 
+                        from: 0,
+                        to: income.gost.a,                        
+                        color: 'rgba(0, 191, 255, 0.09)',
+                        zIndex: 0,                           
+                        label: {                            
+                            text: 'Зона А',
+                            rotation: 270,
+                            style: {                                
+                                color: '#0'
+                            }
+                        }                    
+                    }, { 
+                        from: income.gost.a,
+                        to: income.gost.b,
+                        color: 'rgba(0, 255, 0, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона B',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.b,
+                        to: income.gost.c,
+                        color: 'rgba(241, 199, 22, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона C',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.c,
+                        to: 10.0,
+                        color: 'rgba(255, 0, 0, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона D',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }]
+                    }, 
+                    {
+                        max: income.second_ordinat_max,
+                        title: {
+                            text: income.second_ordinat_yxis
+                        },
+                        opposite: true
+                    }                     
+            ],
+            series: dd
+        });
+    };
+
+    function genGraph_moto(income, dd, target) {
+        return Highcharts.chart(target, {
+            chart: {   zoomType: 'x' },
+            title: {   text: income.title   },
+            subtitle: {   text: income.range  },
+            tooltip: {
+                crosshairs: true,
+                shared: true,                
+                distance: 50
+            },
+            xAxis: {
+                
+            },
+            yAxis: [                    
+                    {
+                    max: income.first_ordinat_max,
+                    title: {                          
+                        text: 'Виброскорость, мм/с' 
+                    },
+                    minorGridLineWidth: 1,
+                    gridLineWidth: 1,
+                    alternateGridColor: null,
+                    plotBands: [{ 
+                        from: 0,
+                        to: income.gost.a,                        
+                        color: 'rgba(0, 191, 255, 0.09)',
+                        zIndex: 0,                           
+                        label: {                            
+                            text: 'Зона А',
+                            rotation: 270,
+                            style: {                                
+                                color: '#0'
+                            }
+                        }                    
+                    }, { 
+                        from: income.gost.a,
+                        to: income.gost.b,
+                        color: 'rgba(0, 255, 0, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона B',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.b,
+                        to: income.gost.c,
+                        color: 'rgba(241, 199, 22, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона C',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }, { 
+                        from: income.gost.c,
+                        to: 10.0,
+                        color: 'rgba(255, 0, 0, 0.09)',
+                        zIndex: 0,                           
+                        label:{                            
+                                text: 'Зона D',
+                                rotation: 270,
+                                style: { color: '#0' }
+                        }                                                                           
+                    }]
+                    }, 
+                    {
+                        max: income.second_ordinat_max,
+                        title: {
+                            text: income.second_ordinat_yxis
+                        },
+                        opposite: true
+                    }                     
+            ],
+            series: dd
+        });
+    };
+
+    function dataNoAgregation(income, second_ordinat) {
+        let dd = [
+                    {
+                        name: income.signals.signal1.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -304,7 +636,7 @@
                         },                                                
                     },
                     {
-                        name: "signal2", 
+                        name: income.signals.signal2.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -314,7 +646,7 @@
                         } 
                     },
                     {
-                        name: "signal3", 
+                        name: income.signals.signal3.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -324,7 +656,7 @@
                         },
                     },
                     {
-                        name: second_ordinat, 
+                        name: income.second_ordinat_yxis, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -340,7 +672,7 @@
             income.data.forEach(e => {
                 
                 let date = startTS + e[0] * 1000;
-                if (prevTS + 60000 < date) {
+                if (prevTS + 60 * 1000 < date) { // если больше на минуту
                     dd[0].data.push([prevTS + 1000, undefined]);
                     dd[1].data.push([prevTS + 1000, undefined]); 
                     dd[2].data.push([prevTS + 1000, undefined]); 
@@ -363,10 +695,192 @@
                 
                 prevTS = date;
             });
-        } else {            
-            dd = [
+        return dd;
+    }
+
+    function dataNoAgregation_moto(income, second_ordinat) {
+        let dd = [
+                    [
                     {
-                        name: "signal1", 
+                        name: income.signals.signal1.name + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    },
+                    {
+                        name: income.signals.signal1.name + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    }
+                ],
+                [
+                    {
+                        name: income.signals.signal2.name + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    },
+                    {
+                        name: income.signals.signal2.name + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    }
+                ],
+                [
+                    {
+                        name: income.signals.signal3.name + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №1]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    },
+                    {
+                        name: income.signals.signal3.name + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },                                                
+                    },
+                    {
+                        name: income.second_ordinat_yxis + ' [Редуктор №2]', 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    }
+                ]
+        ];
+
+            let startMoto = income.startMoto;        
+            
+            income.data.forEach(e => {
+                
+                let moto = startMoto + e[0];
+                
+                if (e[1] == 0) { // редуктор 1
+                    // в dd[первый индекс][второй индекс] 
+                    // первый индекс это индекс графика на странице(у нас три графика настранице)
+                    // второй индекс это индекс графика на графике (у нас 4 графика на одном графике)
+
+                    dd[0][0].data.push([moto, e[2]]);
+                    dd[1][0].data.push([moto, e[3]]);
+                    dd[2][0].data.push([moto, e[4]]);
+                    if (income.second_ordinat == 'freq') {
+                        dd[0][1].data.push([moto, e[5]]); 
+                        dd[1][1].data.push([moto, e[5]]); 
+                        dd[2][1].data.push([moto, e[5]]); 
+                    } else if (income.second_ordinat == 'speed_zone') {
+                        dd[0][1].data.push([moto, e[6]]); 
+                        dd[1][1].data.push([moto, e[6]]); 
+                        dd[2][1].data.push([moto, e[6]]); 
+                    }
+                } else { // редуктор 2
+                    dd[0][2].data.push([moto, e[2]]);
+                    dd[1][2].data.push([moto, e[3]]);
+                    dd[2][2].data.push([moto, e[4]]);
+                    if (income.second_ordinat == 'freq') {
+                        dd[0][3].data.push([moto, e[5]]); 
+                        dd[1][3].data.push([moto, e[5]]); 
+                        dd[2][3].data.push([moto, e[5]]); 
+                    } else if (income.second_ordinat == 'speed_zone') {
+                        dd[0][3].data.push([moto, e[6]]); 
+                        dd[1][3].data.push([moto, e[6]]); 
+                        dd[2][3].data.push([moto, e[6]]); 
+                    }
+                }
+
+                
+            });
+        return dd;
+    }
+
+    function dataWithAgregation(income, second_ordinat) {
+        let dd = [
+                    {
+                        name: income.signals.signal1.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -377,7 +891,7 @@
                         events: { click: bulletClick } 
                     },
                     {
-                        name: "signal1 (min; max)", 
+                        name: `${income.signals.signal1.name} (min; max)`, 
                         type: 'arearange', 
                         lineWidth : 0,
                         linkedTo : ':previous',
@@ -391,7 +905,7 @@
                         events: { click: bulletClick }                        
                     }, 
                     {
-                        name: "signal2", 
+                        name: income.signals.signal2.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -402,7 +916,7 @@
                         events: { click: bulletClick } 
                     },
                     {
-                        name: "signal2 (min; max)", 
+                        name: `${income.signals.signal2.name} (min; max)`, 
                         type: 'arearange', 
                         lineWidth : 0,
                         linkedTo : ':previous',
@@ -415,7 +929,7 @@
                         },                        
                     }, 
                     {
-                        name: "signal3", 
+                        name: income.signals.signal3.name, 
                         zIndex: 1, 
                         data : [],
                         marker: {
@@ -426,7 +940,7 @@
                         events: { click: bulletClick }
                     },
                     {
-                        name: "signal3 (min; max)", 
+                        name: `${income.signals.signal3.name} (min; max)`, 
                         type: 'arearange', 
                         lineWidth : 0,
                         linkedTo : ':previous',
@@ -437,6 +951,31 @@
                         marker: {
                             enabled: false
                         },                        
+                    },
+                    {
+                        name: income.second_ordinat_yxis, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    },
+                    {
+                        name: "freq (min; max)", 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        }, 
+                        yAxis: 1                        
                     }
                 ];
 
@@ -444,126 +983,230 @@
             let prevTS = startTS;     
             income.data.forEach(e => {
                 let date = startTS + e[0] * 1000;
-                if (prevTS + 60000 * income.currentAgregation < date) {
-                    console.log("prevTS = " + prevTS);
-                    console.log("date = " + date);
+                if (prevTS + 1.1 * income.currentAgregation * 60 * 1000 < date) { // накидываем ещё 10%, 1000 - это перевод в секунды, 60 в часы (параметр агрегации указан в минутах)
+                    console.log(income.currentAgregation);
+                    // console.log("prevTS = " + prevTS);
+                    // console.log("date = " + date);
                     dd[0].data.push([prevTS + 1000, undefined]);
                     dd[1].data.push([prevTS + 1000, undefined, undefined]); 
                     dd[2].data.push([prevTS + 1000, undefined]); 
                     dd[3].data.push([prevTS + 1000, undefined, undefined]);
                     dd[4].data.push([prevTS + 1000, undefined]); 
                     dd[5].data.push([prevTS + 1000, undefined, undefined]); 
+                    dd[6].data.push([prevTS + 1000, undefined]); 
+                    dd[7].data.push([prevTS + 1000, undefined, undefined]); 
+                    
                     dd[0].data.push([date - 1000, undefined]);
                     dd[1].data.push([date - 1000, undefined, undefined]); 
                     dd[2].data.push([date - 1000, undefined]); 
                     dd[3].data.push([date - 1000, undefined, undefined]);
                     dd[4].data.push([date - 1000, undefined]); 
                     dd[5].data.push([date - 1000, undefined, undefined]); 
+                    dd[6].data.push([date - 1000, undefined]); 
+                    dd[7].data.push([date - 1000, undefined, undefined]); 
                 }
-                
 
                 dd[0].data.push([date, e[1]]);
                 dd[1].data.push([date, e[2], e[3]]);
                 dd[2].data.push([date, e[4]]); 
                 dd[3].data.push([date, e[5], e[6]]);                
                 dd[4].data.push([date, e[7]]);
-                dd[5].data.push([date, e[8], e[9]]);  
+                dd[5].data.push([date, e[8], e[9]]);
+                
+                if (income.second_ordinat == 'freq') {
+                    dd[6].data.push([date, e[10]]); 
+                    dd[7].data.push([date, e[11], e[12]]);
+
+                } else if (income.second_ordinat == 'speed_zone') {
+                    dd[6].data.push([date, e[13]]); 
+                    dd[7].data.push([date, e[14], e[15]]);
+                }  
                 prevTS = date;               
             });
-        }
+        // console.log(dd);
+        return dd;
 
-        const chart = Highcharts.chart('graph', {
-            chart: {   zoomType: 'x' },
-            title: {   text: title   },
-            subtitle: {   text: range  },
-            tooltip: {
-                crosshairs: true,
-                shared: true,                
-                distance: 50
-            },
-            xAxis: {
-                type: 'datetime'
-            },
-            yAxis: [                    
+    }
+
+    function dataWithAgregation_moto(income, second_ordinat) {
+        let dd = [
                     {
-                    max: first_ordinat_max,
-                    title: {                          
-                        text: 'Виброскорость, мм/с' 
-                    },
-                    minorGridLineWidth: 1,
-                    gridLineWidth: 1,
-                    alternateGridColor: null,
-                    plotBands: [{ 
-                        from: 0,
-                        to: income.gost.a,                        
-                        color: 'rgba(0, 191, 255, 0.09)',
-                        zIndex: 4,                           
-                        label: {                            
-                            text: 'Зона А',
-                            style: {                                
-                                color: '#0'
-                            }
-                        }                    
-                    }, { 
-                        from: income.gost.a,
-                        to: income.gost.b,
-                        color: 'rgba(0, 255, 0, 0.09)',
-                        zIndex: 4,                           
-                        label:{                            
-                                text: 'Зона B',
-                                style: { color: '#0' }
-                        }                                                                           
-                    }, { 
-                        from: income.gost.b,
-                        to: income.gost.c,
-                        color: 'rgba(241, 199, 22, 0.09)',
-                        zIndex: 4,                           
-                        label:{                            
-                                text: 'Зона C',
-                                style: { color: '#0' }
-                        }                                                                           
-                    }, { 
-                        from: income.gost.c,
-                        to: 10.0,
-                        color: 'rgba(255, 0, 0, 0.09)',
-                        zIndex: 4,                           
-                        label:{                            
-                                text: 'Зона D',
-                                style: { color: '#0' }
-                        }                                                                           
-                    }]}, 
-                    {
-                        max: second_ordinat_max,
-                        title: {
-                            text: second_ordinat_yxis
+                        name: income.signals.signal1.name, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
                         },
-                        opposite: true
-                    }                     
-            ],
-            series: dd
-        });
+                        events: { click: bulletClick } 
+                    },
+                    {
+                        name: `${income.signals.signal1.name} (min; max)`, 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },
+                        events: { click: bulletClick }                        
+                    }, 
+                    {
+                        name: income.signals.signal2.name, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        events: { click: bulletClick } 
+                    },
+                    {
+                        name: `${income.signals.signal2.name} (min; max)`, 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },                        
+                    }, 
+                    {
+                        name: income.signals.signal3.name, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        events: { click: bulletClick }
+                    },
+                    {
+                        name: `${income.signals.signal3.name} (min; max)`, 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        },                        
+                    },
+                    {
+                        name: income.second_ordinat_yxis, 
+                        zIndex: 1, 
+                        data : [],
+                        marker: {
+                            fillColor: 'white',
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[0]
+                        },
+                        yAxis: 1 
+                    },
+                    {
+                        name: "freq (min; max)", 
+                        type: 'arearange', 
+                        lineWidth : 0,
+                        linkedTo : ':previous',
+                        fillOpacity: 0.3,
+                        zIndex : 0,
+                        color: Highcharts.getOptions().colors[0],
+                        data:[],
+                        marker: {
+                            enabled: false
+                        }, 
+                        yAxis: 1                        
+                    }
+                ];
+
+            let startTS = income.startTS * 1000;
+            let prevTS = startTS;     
+            income.data.forEach(e => {
+                let date = startTS + e[0] * 1000;
+                if (prevTS + income.currentAgregation * 1000 < date) {
+                    // console.log("prevTS = " + prevTS);
+                    // console.log("date = " + date);
+                    dd[0].data.push([prevTS + 1000, undefined]);
+                    dd[1].data.push([prevTS + 1000, undefined, undefined]); 
+                    dd[2].data.push([prevTS + 1000, undefined]); 
+                    dd[3].data.push([prevTS + 1000, undefined, undefined]);
+                    dd[4].data.push([prevTS + 1000, undefined]); 
+                    dd[5].data.push([prevTS + 1000, undefined, undefined]); 
+                    dd[6].data.push([prevTS + 1000, undefined]); 
+                    dd[7].data.push([prevTS + 1000, undefined, undefined]); 
+                    
+                    dd[0].data.push([date - 1000, undefined]);
+                    dd[1].data.push([date - 1000, undefined, undefined]); 
+                    dd[2].data.push([date - 1000, undefined]); 
+                    dd[3].data.push([date - 1000, undefined, undefined]);
+                    dd[4].data.push([date - 1000, undefined]); 
+                    dd[5].data.push([date - 1000, undefined, undefined]); 
+                    dd[6].data.push([date - 1000, undefined]); 
+                    dd[7].data.push([date - 1000, undefined, undefined]); 
+                }
+
+                dd[0].data.push([date, e[1]]);
+                dd[1].data.push([date, e[2], e[3]]);
+                dd[2].data.push([date, e[4]]); 
+                dd[3].data.push([date, e[5], e[6]]);                
+                dd[4].data.push([date, e[7]]);
+                dd[5].data.push([date, e[8], e[9]]);
+                
+                if (income.second_ordinat == 'freq') {
+                    dd[6].data.push([date, e[10]]); 
+                    dd[7].data.push([date, e[11], e[12]]);
+
+                } else if (income.second_ordinat == 'speed_zone') {
+                    dd[6].data.push([date, e[13]]); 
+                    dd[7].data.push([date, e[14], e[15]]);
+                }  
+                prevTS = date;               
+            });
+        // console.log(dd);
+        return dd;
+
     }
 
     function bulletClick(e) {
         let currentAgregation = $("#graph").attr("current_agregation");
+        
         if (currentAgregation == 1) return;        
         if (!e.target.classList.contains('highcharts-point')) return;
         $("input[name=\"datetimes\"]").data('daterangepicker').setStartDate(new Date(e.point.x - currentAgregation * 60 * 1000));
         $("input[name=\"datetimes\"]").data('daterangepicker').setEndDate(new Date(e.point.x + currentAgregation * 60 * 1000));
-        // $("input[name=\"datetimes\"]").data('daterangepicker').setStartDate(new Date(e.point.x - currentAgregation * 60 * 1000).toLocaleString("en-US", { timeZone: 'GMT+3', timeZoneName: 'short' }));
-        // $("input[name=\"datetimes\"]").data('daterangepicker').setEndDate(new Date(e.point.x + currentAgregation * 60 * 1000).toLocaleString("en-US", { timeZone: 'GMT+3', timeZoneName: 'short' }));
 
         getGraph();
-        // console.log(e);
-        // console.log(e.target);
-        // console.log(e.point.index);
-        // console.log(e.point.index);
+        // console.log(currentAgregation);
+        // console.log(new Date(e.point.x).toLocaleString());
+        // console.log(new Date(e.point.x));
         // console.log(e.point.x);
-        console.log(new Date(e.point.x).toLocaleString());
-        console.log(new Date(e.point.x));
-        console.log(e.point.x);
     }
 
+    function bulletClick_moto(e) {
+        let currentAgregation = $("#graph").attr("current_agregation");
+        
+        if (currentAgregation == 1) return;        
+        if (!e.target.classList.contains('highcharts-point')) return;
+        $("input[name=\"datetimes\"]").data('daterangepicker').setStartDate(new Date(e.point.x - currentAgregation * 60 * 1000));
+        $("input[name=\"datetimes\"]").data('daterangepicker').setEndDate(new Date(e.point.x + currentAgregation * 60 * 1000));
+
+        getGraph_moto();
+        // console.log(currentAgregation);
+        // console.log(new Date(e.point.x).toLocaleString());
+        // console.log(new Date(e.point.x));
+        // console.log(e.point.x);
+    }
 
     function statictic_write(income, startTimeStamp) {
         let stopTime = new Date().getTime();
@@ -578,7 +1221,7 @@
         } else if (income.currentAgregation == 24 * 60) 
         {            
             $("#currentAgregation").html("1 день");      
-        } else if (income.currentAgregation == 12 * 24 * 60) {
+        } else if (income.currentAgregation == 43790) {
             $("#currentAgregation").html("1 месяц");      
         } else {
             $("#currentAgregation").html("не стандартная");      
@@ -587,6 +1230,27 @@
         $("#graph").attr("current_agregation", income.currentAgregation);
     }
 
+    function statictic_write_moto(income, startTimeStamp) {
+        let stopTime = new Date().getTime();
+        $("#walltime_moto").html(stopTime - startTimeStamp + " мс") ;
+        $("#sqltime_moto").html(income.stopTime - income.startTime + " мс") ;
+        $("#size_moto").html((income.size / 1024 / 1024).toFixed(2) + " МБайт");
+        $("#count_moto").html(income.count + " шт");
+        if (income.currentAgregation == 1) {
+            $("#currentAgregation_moto").html("без агрегации")
+        } else if (income.currentAgregation == 60) {
+            $("#currentAgregation_moto").html("1 час");
+        } else if (income.currentAgregation == 24 * 60) 
+        {            
+            $("#currentAgregation_moto").html("1 день");      
+        } else if (income.currentAgregation == 43790) {
+            $("#currentAgregation_moto").html("1 месяц");      
+        } else {
+            $("#currentAgregation_moto").html("не стандартная");      
+        }
+
+        $("#graph_moto").attr("current_agregation", income.currentAgregation);
+    }
 </script>
 
 

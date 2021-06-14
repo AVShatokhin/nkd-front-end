@@ -1,0 +1,21 @@
+create database nkd
+
+use nkd
+
+SHOW CREATE TABLE signals_by_ts;
+CREATE TABLE nkd.signals_by_ts
+(
+    `ts` DateTime,
+    `active_gear` UInt8,
+    `speed` float,
+    `moto` UInt64,
+    `tacho` double,
+    `signal1` double,
+    `signal2` double,
+    `signal3` double
+)
+ENGINE = MergeTree
+ORDER BY (ts, active_gear, moto)
+SETTINGS index_granularity = 8192
+
+alter table signals_by_ts delete where 1;
