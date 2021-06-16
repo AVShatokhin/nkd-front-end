@@ -63,7 +63,7 @@ router.get("/get_stat", async function (req, res, next) {
   }
 
   let cnt = await getCountQuery(
-    `select count(*) as cnt from signals_by_ts where ts between '${fromRange}' and '${toRange}' ${active_gear_sql} ${active_gear_sql} ${speed_zone_sql};`
+    `select count(*) as cnt from signals_by_ts where ts between '${fromRange}' and '${toRange}' ${active_gear_sql} ${speed_zone_sql};`
   );
 
   // console.log(cnt);
@@ -278,15 +278,14 @@ router.get("/get_stat_moto", async function (req, res, next) {
     `select count(*) as cnt from signals_by_ts where moto between '${fromRange}' and '${toRange}' ${speed_zone_sql};`
   );
 
-  console.log(cnt);
+  // console.log(" Before = " + cnt);
 
-  if (cnt > 0 && cnt <= 2 * 8640) {
-    // сутки при минимальном периоде 6 * 60 * 24 = 8640
+  if (cnt > 0 && cnt <= 5000) {
     // Нет агрегации данных, пишем все точки в том виде как они есть без усреднений
     ans.currentAgregation = 1;
 
     let sql =
-      `select moto, active_gear, round(signal1, 4) as s1, round(signal2, 4) as s2, round(signal3, 4) as s3, round(tacho, 1) as tacho, round(speed, 1) as speed ` +
+      `select moto as avgm, active_gear, round(signal1, 4) as s1, round(signal2, 4) as s2, round(signal3, 4) as s3, round(tacho, 1) as tacho, round(speed, 1) as speed ` +
       `from signals_by_ts ` +
       `where moto between '${fromRange}' and '${toRange}' ` +
       // active_gear_sql +
@@ -295,7 +294,7 @@ router.get("/get_stat_moto", async function (req, res, next) {
 
     await getQuery(sql, ans, (data) => {
       ans.data.push([
-        calcMoto(data.moto) - ans.startMoto,
+        Number((calcMoto(data.avgm) - ans.startMoto).toFixed(4)),
         data.active_gear,
         data.s1,
         data.s2,
@@ -304,132 +303,65 @@ router.get("/get_stat_moto", async function (req, res, next) {
         data.speed,
       ]);
     });
-  } else if (cnt > 2 * 8640 && cnt <= 100000) {
-    // агрегируем по часам
-    ans.currentAgregation = 60;
-
-    let sql =
-      `select date(ts) as day, hour(ts) as h, round(avg(toUnixTimestamp(ts)),0) as tst, ` +
-      `round(avg(signal1), 4) as s1, round(avg(signal2), 4) as s2, round(avg(signal3), 4) as s3, ` +
-      `round(min(signal1), 4) as mn1, round(min(signal2), 4) as mn2, round(min(signal3), 4) as mn3, ` +
-      `round(max(signal1), 4) as mx1, round(max(signal2), 4) as mx2, round(max(signal3), 4) as mx3, ` +
-      `round(max(tacho), 1) as mxf, round(min(tacho), 1) as mnf, round(avg(tacho), 1) as t, ` +
-      `round(max(speed), 1) as mxs, round(min(speed), 1) as mns, round(avg(speed), 1) as s ` +
-      `from signals_by_ts ` +
-      `where ts between '${fromRange}' and '${toRange}' ` +
-      active_gear_sql +
-      speed_zone_sql +
-      `group by day, h ` +
-      `order by tst;`;
-
+  } else if (cnt > 5000) {
+    ans.currentAgregation = 10000;
+    if (cnt > 50000) ans.currentAgregation = 100000;
+    if (cnt > 150000) ans.currentAgregation = 1000000;
+    if (cnt > 3500000) ans.currentAgregation = 10000000;
+    let sql = genSqlForMoto(ans, fromRange, toRange, speed_zone_sql);
     // console.log(sql);
-
     await getQuery(sql, ans, (data) => {
-      ans.data.push([
-        data.tst - ans.startTS,
-        data.s1,
-        data.mn1,
-        data.mx1,
-        data.s2,
-        data.mn2,
-        data.mx2,
-        data.s3,
-        data.mn3,
-        data.mx3,
-        data.t,
-        data.mnf,
-        data.mxf,
-        data.s,
-        data.mns,
-        data.mxs,
-      ]);
-    });
-  } else if (cnt > 100000 && cnt <= 2500000) {
-    // агрегируем по дням
-
-    ans.currentAgregation = 24 * 60;
-
-    let sql =
-      `select date(ts) as day, round(avg(toUnixTimestamp(ts)),0) as tst, ` +
-      `round(avg(signal1), 4) as s1, round(avg(signal2), 4) as s2, round(avg(signal3), 4) as s3, ` +
-      `round(min(signal1), 4) as mn1, round(min(signal2), 4) as mn2, round(min(signal3), 4) as mn3, ` +
-      `round(max(signal1), 4) as mx1, round(max(signal2), 4) as mx2, round(max(signal3), 4) as mx3, ` +
-      `round(max(tacho), 1) as mxf, round(min(tacho), 1) as mnf, round(avg(tacho), 1) as t, ` +
-      `round(max(speed), 1) as mxs, round(min(speed), 1) as mns, round(avg(speed), 1) as s ` +
-      `from signals_by_ts ` +
-      `where ts between '${fromRange}' and '${toRange}' ` +
-      active_gear_sql +
-      speed_zone_sql +
-      `group by day ` +
-      `order by tst;`;
-
-    await getQuery(sql, ans, (data) => {
-      ans.data.push([
-        data.tst - ans.startTS,
-        data.s1,
-        data.mn1,
-        data.mx1,
-        data.s2,
-        data.mn2,
-        data.mx2,
-        data.s3,
-        data.mn3,
-        data.mx3,
-        data.t,
-        data.mnf,
-        data.mxf,
-        data.s,
-        data.mns,
-        data.mxs,
-      ]);
-    });
-  } else if (cnt > 2500000) {
-    // агрегируем по месяцам
-
-    ans.currentAgregation = Math.round(24 * 60 * 30.41);
-
-    let sql =
-      `select year(ts) as year, month(ts) as month, round(avg(toUnixTimestamp(ts)),0) as tst, ` +
-      `round(avg(signal1), 4) as s1, round(avg(signal2), 4) as s2, round(avg(signal3), 4) as s3, ` +
-      `round(min(signal1), 4) as mn1, round(min(signal2), 4) as mn2, round(min(signal3), 4) as mn3, ` +
-      `round(max(signal1), 4) as mx1, round(max(signal2), 4) as mx2, round(max(signal3), 4) as mx3, ` +
-      `round(max(tacho), 1) as mxf, round(min(tacho), 1) as mnf, round(avg(tacho), 1) as t, ` +
-      `round(max(speed), 1) as mxs, round(min(speed), 1) as mns, round(avg(speed), 1) as s ` +
-      `from signals_by_ts ` +
-      `where ts between '${fromRange}' and '${toRange}' ` +
-      active_gear_sql +
-      speed_zone_sql +
-      `group by year, month ` +
-      `order by tst;`;
-
-    await getQuery(sql, ans, (data) => {
-      ans.data.push([
-        data.tst - ans.startTS,
-        data.s1,
-        data.mn1,
-        data.mx1,
-        data.s2,
-        data.mn2,
-        data.mx2,
-        data.s3,
-        data.mn3,
-        data.mx3,
-        data.t,
-        data.mnf,
-        data.mxf,
-        data.s,
-        data.mns,
-        data.mxs,
-      ]);
+      packMotoData(ans, data);
     });
   }
 
   ans.stopTime = new Date().getTime();
   ans.size = JSON.stringify(ans).length;
   ans.count = ans.data.length;
+
+  // console.log(" After = " + ans.count);
+
   ans.status.success = true;
   res.json(ans);
 });
+
+function genSqlForMoto(ans, fromRange, toRange, speed_zone_sql, active_gear) {
+  return (
+    `select active_gear, round(moto/${ans.currentAgregation}) as m, round(avg(moto), 0) as avgm, ` +
+    `round(avg(signal1), 4) as s1, round(avg(signal2), 4) as s2, round(avg(signal3), 4) as s3, ` +
+    `round(min(signal1), 4) as mn1, round(min(signal2), 4) as mn2, round(min(signal3), 4) as mn3, ` +
+    `round(max(signal1), 4) as mx1, round(max(signal2), 4) as mx2, round(max(signal3), 4) as mx3, ` +
+    `round(max(tacho), 1) as mxf, round(min(tacho), 1) as mnf, round(avg(tacho), 1) as t, ` +
+    `round(max(speed), 1) as mxs, round(min(speed), 1) as mns, round(avg(speed), 1) as s ` +
+    `from signals_by_ts ` +
+    `where moto between '${fromRange}' and '${toRange}' ` +
+    speed_zone_sql +
+    `group by active_gear, m ` +
+    `order by m;`
+  );
+}
+
+function packMotoData(ans, data) {
+  ans.data.push([
+    Number((calcMoto(data.avgm) - ans.startMoto).toFixed(2)),
+    data.active_gear,
+    data.s1,
+    data.mn1,
+    data.mx1,
+    data.s2,
+    data.mn2,
+    data.mx2,
+    data.s3,
+    data.mn3,
+    data.mx3,
+    data.t,
+    data.mnf,
+    data.mxf,
+    data.s,
+    data.mns,
+    data.mxs,
+  ]);
+}
 
 function calcMoto(moto_impulse) {
   return (signals.cnt.moto_factor * moto_impulse) / 3600; // выдаём мото часы
@@ -447,7 +379,7 @@ async function getQuery(sql, ans, dataProcced) {
         }
 
         if (ans.startMoto == undefined) {
-          ans.startMoto = calcMoto(data.moto);
+          ans.startMoto = calcMoto(data.avgm); // m = moto
         }
 
         dataProcced(data);
