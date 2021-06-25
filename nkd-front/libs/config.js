@@ -25,10 +25,14 @@ function openRecordsConfig() {
   );
 }
 
-async function openMainConfig(connection) {
-  let object = JSON.parse(
+function openObjectXML() {
+  return JSON.parse(
     parser.toJson(fs.readFileSync(process.env.NKD_PATH + "./config/object.xml"))
   );
+}
+
+async function openMainConfig(connection) {
+  let object = openObjectXML();
   object.signals = openSignalsConfig();
   object.records = openRecordsConfig();
 
@@ -170,3 +174,4 @@ module.exports.setOptionsByLink = setOptionsByLink;
 module.exports.openMainConfig = openMainConfig;
 module.exports.openSignalsConfig = openSignalsConfig;
 module.exports.openConfigFile = openConfigFile;
+module.exports.openObjectXML = openObjectXML;

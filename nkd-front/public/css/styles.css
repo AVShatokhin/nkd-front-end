@@ -11,3 +11,13 @@ button#btn__search_card {
   padding-left: 6px;
   padding-right: 6px;
 }
+
+.div__treetable_content {
+  text-align: center;
+  width: 100%;
+}
+
+.div__treetable_header {
+  text-align: center;
+  width: 100%;
+}

@@ -1,0 +1,97 @@
+{
+    "diagn" : {
+        "calc_ts" : 123456789,
+        "record_ts" : 12344444,
+        "record_url" : "/file/name/directory/record.wav",
+        "content" : {
+            "{f109a595-6410-4304-9a80-22a1a5ea5893}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "yes",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "yes",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "yes",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{9afcd1fa-3085-45fd-a548-9478e1686809}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "yes",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "suspicion",
+                        "integral" : 0
+                    }
+                }
+            }
+        }
+    }
+}

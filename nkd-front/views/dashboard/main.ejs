@@ -1,152 +1,95 @@
-
 <div class="container-fluid p-0">
+    <div class="row col-12 mb-3">
 
-        <div class="row col-12 mb-3">
+        <div class="col-6">
+            <div class="card m-0">
+                <div class="card-body  p-0" id="mnemo_container">
+                </div>
+            </div>    
+        </div>
 
-            <div class="col-6">
-                <div class="card m-0">
-                    <div class="card-body  p-0" id="mnemo_container">
-
-                    </div>
-                </div>    
-            </div>
-
-            <div class="col-6">
-                <div class="card m-0">
-                    <div class="card-body  p-0">
-
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width:35%;">Наименование параметра</th>
-                                    <th style="width:15%">ГОСТ 10816</th>
-                                    <!-- <th style="width:20%">Ручная настройка</th> -->
-                                    <th style="width:15%">Значение</th>
-                                    <th class="d-md-table-cell" style="width:15%">Единицы измерения</th>
-                                </tr>    
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Наработка редуктора 1 <span id="active_gear_0" class="badge bg-primary p-2 d-none">Активный</span></td>
-                                    <td></td>                            
-                                    <!-- <td></td>                             -->
-                                    <td><span source="moto" id="moto_0"></span></td>
-                                    <td>мото [часы : минуты]</td>    
-                                </tr>
-                                <tr>
-                                    <td>Наработка редуктора 2 <span id="active_gear_1" class="badge bg-primary p-2 d-none">Активный</span></td>
-                                    <td></td>                            
-                                    <!-- <td></td>                             -->
-                                    <td><span source="moto" id="moto_1"></span></td>
-                                    <td>мото [часы : минуты]</td>    
-                                </tr>
-                                <tr>
-                                    <td>Частота вращения первичного вала</td>
-                                    <td></td>                            
-                                    <!-- <td></td>                             -->
-                                    <td><span source="signals" id="tacho"></span></td>
-                                    <td class="d-none d-md-table-cell">Гц</td>    
-                                </tr>
-                                <tr>
-                                    <td>Расчетная скорость кабинок</td>
-                                    <td></td>                            
-                                    <!-- <td></td>                             -->
-                                    <td><span source="signals" id="speed_zone"></span></td>
-                                    <td class="d-none d-md-table-cell">м/с</td>    
-                                </tr>
-                                <tr>
-                                    <td>Датчик вибрации первая ступень (СКЗ)</td>
-                                    <td><span source="badges" id="signal1" class="badge p-2"></span></td>                            
-                                    <!-- <td><span class="badge bg-warning p-2">превышено</span></td>                            -->
-                                    <td><span source="signals" id="signal1"></span></td>
-                                    <td class="d-none d-md-table-cell">мм/с</td>    
-                                </tr>
-                                <tr>
-                                    <td>Датчик вибрации вторая ступень (СКЗ)</td>
-                                    <td><span source="badges" id="signal2" class="badge p-2"></span></td>                            
-                                    <!-- <td><span class="badge bg-danger p-2">критично</span></td>                            -->
-                                    <td><span source="signals" id="signal2"></span></td>
-                                    <td class="d-none d-md-table-cell">мм/с</td>    
-                                </tr>
-                                <tr>
-                                    <td>Датчик вибрации третья ступень (СКЗ)</td>
-                                    <td><span source="badges" id="signal3" class="badge p-2"></span></td>                            
-                                    <!-- <td><span class="badge bg-primary p-2">норма</span></td>                             -->
-                                    <td><span source="signals" id="signal3"></span></td>
-                                    <td class="d-none d-md-table-cell">мм/с</td>    
-                                </tr>
-                                <tr>
-                                    <td>Время последнего обновления</td>
-                                    <td></td>                            
-                                    <!-- <td><span class="badge bg-primary p-2">норма</span></td>                             -->
-                                    <td><span source="signals" id="ts"></span></td>
-                                    <td></td>    
-                                </tr>
-                                <tr>
-                                    <td>Адрес источника</td>
-                                    <td></td>                            
-                                    <!-- <td><span class="badge bg-primary p-2">норма</span></td>                             -->
-                                    <td><span source="signals" id="remoteAddress"></span></td>
-                                    <td></td>    
-                                </tr>
-
-                            </tbody>
-
-                        </table>
-                    </div>
+        <div class="col-6">
+            <div class="card m-0">
+                <div class="card-body  p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width:35%;">Наименование параметра</th>
+                                <th style="width:15%">ГОСТ 10816</th>
+                                <th style="width:15%">Значение</th>
+                                <th class="d-md-table-cell" style="width:15%">Единицы измерения</th>
+                            </tr>    
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Наработка редуктора 1 <span id="active_gear_0" class="badge bg-primary p-2 d-none">Активный</span></td>
+                                <td></td>                            
+                                <td><span source="moto" id="moto_0"></span></td>
+                                <td>мото [часы : минуты]</td>    
+                            </tr>
+                            <tr>
+                                <td>Наработка редуктора 2 <span id="active_gear_1" class="badge bg-primary p-2 d-none">Активный</span></td>
+                                <td></td>                            
+                                <td><span source="moto" id="moto_1"></span></td>
+                                <td>мото [часы : минуты]</td>    
+                            </tr>
+                            <tr>
+                                <td>Частота вращения первичного вала</td>
+                                <td></td>                            
+                                <td><span source="signals" id="tacho"></span></td>
+                                <td class="d-none d-md-table-cell">Гц</td>    
+                            </tr>
+                            <tr>
+                                <td>Расчетная скорость кабинок</td>
+                                <td></td>                            
+                                <td><span source="signals" id="speed_zone"></span></td>
+                                <td class="d-none d-md-table-cell">м/с</td>    
+                            </tr>
+                            <tr>
+                                <td>Датчик вибрации первая ступень (СКЗ)</td>
+                                <td><span source="badges" id="signal1" class="badge p-2"></span></td>                            
+                                <td><span source="signals" id="signal1"></span></td>
+                                <td class="d-none d-md-table-cell">мм/с</td>    
+                            </tr>
+                            <tr>
+                                <td>Датчик вибрации вторая ступень (СКЗ)</td>
+                                <td><span source="badges" id="signal2" class="badge p-2"></span></td>                            
+                                <td><span source="signals" id="signal2"></span></td>
+                                <td class="d-none d-md-table-cell">мм/с</td>    
+                            </tr>
+                            <tr>
+                                <td>Датчик вибрации третья ступень (СКЗ)</td>
+                                <td><span source="badges" id="signal3" class="badge p-2"></span></td>                            
+                                <td><span source="signals" id="signal3"></span></td>
+                                <td class="d-none d-md-table-cell">мм/с</td>    
+                            </tr>
+                            <tr>
+                                <td>Время последнего обновления</td>
+                                <td></td>                            
+                                <td><span source="signals" id="ts"></span></td>
+                                <td></td>    
+                            </tr>
+                            <tr>
+                                <td>Адрес источника</td>
+                                <td></td>                            
+                                <td><span source="signals" id="remoteAddress"></span></td>
+                                <td></td>    
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        
-        <div class="row col-12">
-            <div class="col-sm col-12">
-                <div class="card col-12">
-                    <!-- <div class="card-header">
-                        <h2>Рузультат диагностики</h2>
-                    </div> -->
-                    <div class="card-body p-0">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th style="width:30%;">Объект</th>
-                                    <th style="width:40%;">Диагноз</th>
-                                    <th style="width:30%;">Комментарий</th>
-                                </tr>    
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Подшипник качения 1</td>
-                                    <td>
-                                        <span class="badge bg-danger p-2">Дефект сепаратора [01]</span>
-                                        <span class="badge bg-warning p-2">Износ тел качения [05]</span>
-                                    </td>
-                                    <td class="d-none d-md-table-cell"></td>    
-                                </tr>
-                                <tr>
-                                    <td>Ступень 1</td>
-                                    <td><span class="badge bg-success p-2">Дефект не обнаружен</span></td>
-                                    <td class="d-none d-md-table-cell"></td>    
-                                </tr>
-                                <tr>
-                                    <td>Ступень 2</td>
-                                    <td><span class="badge bg-success p-2">Дефект не обнаружен</span></td>
-                                    <td class="d-none d-md-table-cell"></td>    
-                                </tr>
-                                <tr>
-                                    <td>Супень 3</td>
-                                    <td><span class="badge bg-success p-2">Дефект не обнаружен</span></td>
-                                    <td class="d-none d-md-table-cell"></td>    
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
+    </div>
+    
+    <div class="row col-12">
+        <div class="col-sm col-12">
+            <div class="card col-12">
+                <div class="card-body p-0" id="treetable__currentResult">
                 </div>
             </div>
-
         </div>
-
-
+    </div>
 </div>
 <script>
     getAllClient();

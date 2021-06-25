@@ -85,6 +85,7 @@ async function setConnection(con) {
     "active_gear_collection",
     "badges",
     "moto",
+    "diagn",
   ]);
   // console.log(current);
 }

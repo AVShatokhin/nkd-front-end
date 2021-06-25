@@ -1,7 +1,7 @@
 var socket;
 var timer;
-
 let url;
+let treetable__currentResult_model;
 
 function bindHandlers() {
   socket.onopen = function () {
@@ -21,12 +21,25 @@ function bindHandlers() {
   };
 
   socket.onmessage = function (event) {
-    console.log("Получены данные " + event.data);
+    // console.log("Получены данные " + event.data);
     data = JSON.parse(event.data);
     if (data != undefined) {
       for (element in data) {
         //console.log(element);
         switch (element) {
+          case "configs":
+            treetable__currentResult_model = new dresult_model(
+              data.configs.savedNode,
+              data.configs.yellow_table,
+              data.configs.signals,
+              new treetable("treetable__currentResult")
+            );
+            break;
+          case "diagn":
+            treetable__currentResult_model.update(data.diagn);
+            break;
+          case "result":
+            break;
           case "moto":
             processMoto(data);
             break;

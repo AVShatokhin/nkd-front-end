@@ -1,6 +1,11 @@
 const mainApi = require("./parts/mainAPI");
 const ws = require("./parts/ws");
 const current = require("./parts/current");
+var config = require("../libs/config.js");
+
+let object = config.openObjectXML();
+let yellow_table = config.openConfigFile("yellow_table");
+let signals = config.openSignalsConfig();
 
 mainApi.setCurrent(current);
 
@@ -10,8 +15,21 @@ mainApi.on("signals", () => {
   ws.send(JSON.stringify({ moto: current.getDataByLink("moto") }));
 });
 
+mainApi.on("diagn", () => {
+  ws.send(JSON.stringify({ diagn: current.getDataByLink("diagn") }));
+});
+
 ws.on("get_all", (id) => {
-  ws.send(JSON.stringify(current.getAllData()), id);
+  ws.send(
+    JSON.stringify({
+      configs: {
+        savedNode: object.savedNode,
+        yellow_table: yellow_table,
+        signals: signals,
+      },
+    })
+  );
+  ws.send(JSON.stringify(current.getAllData()), id); // current посылаем после того как послали конфиг - модель должна успеть проинициализироваться
 });
 
 function updateActiveGear(data) {
