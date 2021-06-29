@@ -49,15 +49,6 @@ class dresult_model {
     return 40;
   }
 
-  // setData(sid, uuid, value) {
-  //   this._data[sid][uuid] = value;
-  // }
-
-  // setSubListData(uuid, sid, slid, object) {
-  //   // уид объекта, уид сигнала, уид дефекта
-  //   this._subList[uuid][sid][slid] = object;
-  // }
-
   getData(uuid, sid) {
     if (this._subListData?.[`{${uuid}}`]?.[sid]) {
       let __cell = this._subListData?.[`{${uuid}}`]?.[sid];
@@ -105,4 +96,6 @@ class dresult_model {
   _header_container(content) {
     return `<div class="div__treetable_header">${content}</div>`;
   }
+
+  _badge(content, type) {}
 }
