@@ -87,8 +87,6 @@ router.post("/income/", function (req, res, next) {
 
   if ("diagn" in req.body) {
     ans.status.success = true;
-    // insert(dataSeriesProcceed(req));
-    // lastElementProcceed(req);
     current.updateData("diagn", req.body.diagn);
     myEmitter.emit("diagn");
   }

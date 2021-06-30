@@ -1,3 +1,6 @@
+let mnemo_ready = false;
+let model_ready = false;
+
 $(function () {
   get_left_menu();
 
@@ -80,6 +83,12 @@ $(function () {
       (res) => {
         $("#mnemo_container").empty();
         $("#mnemo_container").html(res);
+
+        mnemo_ready = true;
+
+        if (model_ready) {
+          treetable__currentResult_model.mnemoPlot();
+        }
       },
       () => {
         showMessage("Ошибка загрузки приложения!", "danger");

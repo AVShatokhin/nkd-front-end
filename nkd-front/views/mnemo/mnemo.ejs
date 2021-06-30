@@ -1,18 +1,20 @@
 <svg class="col-12" viewBox="0 0 602.7 574.1" xmlns="http://www.w3.org/2000/svg" id="mnemo">
     <g>
-        <title>background</title>
-        <rect fill="#b2b2b2" id="canvas_background" height="574.1" width="602.7" y="-1" x="-1"/>        
+        <rect fill="none" id="canvas_background" height="574.1" width="602.7" y="-1" x="-1"/>        
         <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
             <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
         </g>
     </g>
     <g>
-        <title>Редуктор НКД</title>
-
+       
         <svg id="s">
             <%- include("style.ejs") %>
         </svg>
         
+        <svg id="back">
+            <%- include("background.ejs") %>
+        </svg>
+
         <svg id="o_1">
             <%- include("gear_transmission_stage1.ejs") %>
         </svg>
@@ -29,6 +31,7 @@
             <%- include("reducer.ejs") %>
         </svg>
 
+        
         
     </g>
 </svg>

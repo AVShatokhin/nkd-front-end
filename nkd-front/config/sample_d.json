@@ -4,18 +4,18 @@
         "record_ts" : 12344444,
         "record_url" : "/file/name/directory/record.wav",
         "content" : {
-            "{f109a595-6410-4304-9a80-22a1a5ea5893}" : {
+            "{4dfafc27-cb3e-40c0-9a0b-18bab82121c9}" : {
                 "signal1" : {
                     "1" : {
                         "main" : "no",
                         "integral" : 0
                     },
                     "2" : {
-                        "main" : "yes",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "3" : {
-                        "main" : "suspicion",
+                        "main" : "no",
                         "integral" : 0
                     }
                 },
@@ -25,11 +25,11 @@
                         "integral" : 0
                     },
                     "2" : {
-                        "main" : "yes",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "3" : {
-                        "main" : "suspicion",
+                        "main" : "no",
                         "integral" : 0
                     }
                 },
@@ -39,11 +39,319 @@
                         "integral" : 0
                     },
                     "2" : {
-                        "main" : "yes",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "3" : {
-                        "main" : "suspicion",
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{f109a595-6410-4304-9a80-22a1a5ea5893}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{b9d6e0ea-8d71-4df7-9fda-3b96c6a49bbf}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{99d715f3-98fc-43fb-9713-e389d9f2a5bc}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },            
+            "{254ed2c7-c0ab-4c49-8fd0-86813fc7b01d}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{cad95252-aa93-408b-a640-227f98c823ad}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{0818f0ac-847d-43c2-a6f9-fb05d7656969}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                }
+            },
+            "{261d672f-1625-4759-b9da-08c039570b74}" : {
+                "signal1" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal2" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
+                        "integral" : 0
+                    }
+                },
+                "signal3" : {
+                    "1" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "2" : {
+                        "main" : "no",
+                        "integral" : 0
+                    },
+                    "3" : {
+                        "main" : "no",
                         "integral" : 0
                     }
                 }
@@ -55,7 +363,7 @@
                         "integral" : 0
                     },
                     "2" : {
-                        "main" : "yes",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "3" : {
@@ -79,15 +387,15 @@
                 },
                 "signal3" : {
                     "1" : {
-                        "main" : "suspicion",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "2" : {
-                        "main" : "suspicion",
+                        "main" : "no",
                         "integral" : 0
                     },
                     "3" : {
-                        "main" : "suspicion",
+                        "main" : "no",
                         "integral" : 0
                     }
                 }

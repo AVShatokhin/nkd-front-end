@@ -5,6 +5,7 @@ var config = require("../libs/config.js");
 
 let object = config.openObjectXML();
 let yellow_table = config.openConfigFile("yellow_table");
+let mnemo_config = config.openConfigFile("mnemo_config");
 let signals = config.openSignalsConfig();
 
 mainApi.setCurrent(current);
@@ -24,10 +25,12 @@ ws.on("get_all", (id) => {
     JSON.stringify({
       configs: {
         savedNode: object.savedNode,
-        yellow_table: yellow_table,
-        signals: signals,
+        yellow_table,
+        signals,
+        mnemo_config,
       },
-    })
+    }),
+    id
   );
   ws.send(JSON.stringify(current.getAllData()), id); // current посылаем после того как послали конфиг - модель должна успеть проинициализироваться
 });

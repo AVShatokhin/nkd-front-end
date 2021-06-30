@@ -1,6 +1,12 @@
 class dresult_model {
   // ===================== PUBLIC
-  constructor(savedNode, yellow_table, signals, treetable__currentResult) {
+  constructor(
+    savedNode,
+    yellow_table,
+    signals,
+    treetable__currentResult,
+    mnemo
+  ) {
     this._signals = signals;
     this._names = [];
     this._sids = [];
@@ -18,6 +24,13 @@ class dresult_model {
     treetable__currentResult.model = this;
     treetable__currentResult.render();
     treetable__currentResult.plot();
+
+    this._mnemo = mnemo;
+    mnemo.model = this;
+
+    if (mnemo_ready) mnemo.plot();
+
+    model_ready = true;
   }
 
   get savedNode() {
@@ -57,12 +70,19 @@ class dresult_model {
       let __suspicion = 0;
 
       for (let __slid in __cell) {
-        if (__cell[__slid].main == "yes") __yes = __yes + 1;
+        if (__cell[__slid].main == "yes") __yes++;
         if (__cell[__slid].main == "suspicion") __suspicion++;
       }
 
+      let __badge_type = "bg-success";
+      if (__suspicion > 0) __badge_type = "bg-warning";
+      if (__yes > 0) __badge_type = "bg-danger";
+
       return this._container(
-        `Обнаружено : ${__yes}; Под подозрением : ${__suspicion}`
+        this._badge(
+          `Обнаружено : ${__yes}; Под подозрением : ${__suspicion}`,
+          __badge_type
+        )
       );
     } else {
       return this._container("Нет данных");
@@ -83,9 +103,37 @@ class dresult_model {
     return this._yellow_table?.[node.objectType]?.deffects;
   }
 
+  getMnemoData(uuid) {
+    if (this._subListData[uuid]) {
+      let __cellList = this._subListData[uuid];
+      let __yes = 0;
+      let __suspicion = 0;
+
+      for (let __sid in __cellList) {
+        let __cell = __cellList[__sid];
+
+        for (let __slid in __cell) {
+          if (__cell[__slid].main == "yes") __yes++;
+          if (__cell[__slid].main == "suspicion") __suspicion++;
+        }
+      }
+
+      if (__yes > 0) return "critical";
+      if (__suspicion > 0) return "warning";
+      return "ok";
+    }
+
+    return "default";
+  }
+
+  mnemoPlot() {
+    this._mnemo.plot();
+  }
+
   update(diagn) {
     this._subListData = diagn.content;
     this._treetable__currentResult.plot();
+    this._mnemo.plot();
   }
 
   // private
@@ -97,5 +145,7 @@ class dresult_model {
     return `<div class="div__treetable_header">${content}</div>`;
   }
 
-  _badge(content, type) {}
+  _badge(content, type) {
+    return `<span class="badge ${type} p-2">${content}</span>`;
+  }
 }

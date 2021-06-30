@@ -1,7 +1,6 @@
 var socket;
 var timer;
 let url;
-let treetable__currentResult_model;
 
 function bindHandlers() {
   socket.onopen = function () {
@@ -32,7 +31,8 @@ function bindHandlers() {
               data.configs.savedNode,
               data.configs.yellow_table,
               data.configs.signals,
-              new treetable("treetable__currentResult")
+              new treetable("treetable__currentResult"),
+              new mnemo(data.configs.mnemo_config, "div__mnemo")
             );
             break;
           case "diagn":
