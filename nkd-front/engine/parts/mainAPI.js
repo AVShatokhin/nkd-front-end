@@ -159,7 +159,7 @@ function lastElementProcceed(req) {
       signals_data["ts"] = ts;
       signals_data["remoteAddress"] = remoteAddress;
 
-      if ("gost" in signals_config[element])
+      if (signals_config[element]?.gost === true)
         badges_data[element] = calcGostZone(value);
 
       if (element == "tacho") {

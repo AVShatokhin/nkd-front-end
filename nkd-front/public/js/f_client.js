@@ -28,9 +28,7 @@ function bindHandlers() {
         switch (element) {
           case "configs":
             treetable__currentResult_model = new dresult_model(
-              data.configs.savedNode,
-              data.configs.yellow_table,
-              data.configs.signals,
+              data.configs,
               new treetable("treetable__currentResult"),
               new mnemo(data.configs.mnemo_config, "div__mnemo")
             );

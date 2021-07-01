@@ -7,6 +7,8 @@ let object = config.openObjectXML();
 let yellow_table = config.openConfigFile("yellow_table");
 let mnemo_config = config.openConfigFile("mnemo_config");
 let signals = config.openSignalsConfig();
+let records = config.openConfigFile("records");
+let hardware = config.openConfigFile("hardware");
 
 mainApi.setCurrent(current);
 
@@ -28,6 +30,8 @@ ws.on("get_all", (id) => {
         yellow_table,
         signals,
         mnemo_config,
+        records,
+        hardware,
       },
     }),
     id

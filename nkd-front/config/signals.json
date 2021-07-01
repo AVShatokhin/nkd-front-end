@@ -1,12 +1,8 @@
 {
     "tacho" : { 
+        "hardware_id" : "device0_channel0",
         "name": "Частота вращения первичного вала",        
         "signal_type" : "freq",
-        "device_type": "d001", 
-        "device_id": 0,
-        "channel" : 0,
-        "gain": 0.95,
-        "iepe": true,        
         "speed_zones" : {
             "0" : { "begin" : -1, "end" : 0 },
             "1" : { "begin" : 0, "end" : 5 },
@@ -16,58 +12,28 @@
         }      
     },
     "cnt" : { 
+        "hardware_id" : "device0_channel0",
         "name": "Счетчик импульсов",        
         "signal_type" : "delta_counter",
-        "device_type": "d001", 
-        "device_id": 0,
-        "channel" : 0, 
-        "iepe": true,               
         "moto_factor" : 0.051546       
     },
     "signal1" : { 
+        "hardware_id" : "device0_channel1",
         "name": "Сверху_02",
         "signal_type" : "rms",
-        "device_type": "d001", 
-        "device_id": 0,
-        "channel" : 1,
-        "iepe": true,        
-        "unit": "m/s",
-        "sensitivity" : 0.01088,
-        "reference": 1,
-        "offset": 0,
-        "gain": 1,
-        "gost": "yes",
-        "diagn": true       
+        "gost": true
     },
     "signal2" : { 
+        "hardware_id" : "device0_channel2",
         "name": "Середина_03",
         "signal_type" : "rms",
-        "device_type": "d001", 
-        "device_id": 0,
-        "channel" : 2,
-        "iepe": true,        
-        "unit": "m/s",
-        "sensitivity" : 0.01094,
-        "reference": 1,
-        "offset": 0,
-        "gain": 1,
-        "gost": "yes",
-        "diagn": true      
+        "gost": true
     },
     "signal3" : { 
+        "hardware_id" : "device0_channel3",
         "name": "Входной",
         "signal_type" : "rms",
-        "device_type": "d001", 
-        "device_id": 0,
-        "channel" : 3,
-        "iepe": true,        
-        "unit": "m/s",
-        "sensitivity" : 0.01055,
-        "reference": 1,
-        "offset": 0,
-        "gain": 1,
-        "gost": "yes",
-        "diagn": true       
+        "gost": true
     }
 }
 

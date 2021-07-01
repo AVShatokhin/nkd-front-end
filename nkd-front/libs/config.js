@@ -35,6 +35,7 @@ async function openMainConfig(connection) {
   let object = openObjectXML();
   object.signals = openSignalsConfig();
   object.records = openRecordsConfig();
+  object.hardware = openConfigFile("hardware");
 
   let options = await getOptionsByLink(connection, [
     "update_period_collection",

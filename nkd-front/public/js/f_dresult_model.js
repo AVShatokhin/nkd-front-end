@@ -1,24 +1,28 @@
 class dresult_model {
   // ===================== PUBLIC
-  constructor(
-    savedNode,
-    yellow_table,
-    signals,
-    treetable__currentResult,
-    mnemo
-  ) {
-    this._signals = signals;
+  constructor(configs, treetable__currentResult, mnemo) {
+    this._hardware = configs.hardware;
+    this._yellow_table = configs.yellow_table;
+    this._savedNode = configs.savedNode;
+    this._records = configs.records;
+
+    console.log(configs.records);
+
+    this._signals = {};
+
+    this._records[0].channels.forEach((__sid) => {
+      if (this._hardware[__sid]?.diagn == true) {
+        this._signals[__sid] = this._hardware[__sid];
+      }
+    });
+
     this._names = [];
     this._sids = [];
-    this._yellow_table = yellow_table;
-    this._savedNode = savedNode;
     this._subListData = {};
 
     for (let __sid in this._signals) {
-      if (this._signals[__sid]?.diagn) {
-        this._names.push(this._signals[__sid].name);
-        this._sids.push(__sid);
-      }
+      this._names.push(this._signals[__sid].name);
+      this._sids.push(__sid);
     }
     this._treetable__currentResult = treetable__currentResult;
     treetable__currentResult.model = this;
