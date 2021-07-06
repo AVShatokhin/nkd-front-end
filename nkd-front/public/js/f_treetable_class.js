@@ -1,7 +1,8 @@
 class treetable {
   // ===================== PUBLIC
-  constructor(target) {
+  constructor(target, minimized) {
     this.target = target;
+    this.minimized = minimized == "minimized" ? true : false;
   }
 
   set target(value) {
@@ -35,14 +36,14 @@ class treetable {
       let __sublist = this._mySubList[__uuid];
 
       for (let i = 0; i < this._model.ColCount; i++) {
-        $(`#span__cols_${__uuid}_${this._model.ColIDs[i]}`).html(
-          this._model.getData(__uuid, this._model.ColIDs[i])
-        ); // строка - столбец
+        $(
+          `#span__${this._target}_cols_${__uuid}_${this._model.ColIDs[i]}`
+        ).html(this._model.getData(__uuid, this._model.ColIDs[i])); // строка - столбец
 
         if (this._hasSublist[__uuid]) {
           for (let __slid in __sublist) {
             $(
-              `#span__cols_${__uuid}_${this._model.ColIDs[i]}_sublist_${__slid}`
+              `#span__${this._target}_cols_${__uuid}_${this._model.ColIDs[i]}_sublist_${__slid}`
             ).html(
               this._model.getSubListData(__uuid, this._model.ColIDs[i], __slid)
             );
@@ -65,7 +66,7 @@ class treetable {
     }
 
     $("#" + this._target).append(
-      `<table class="table"><thead><tr><th width="${this._model.TreeWidth}%">${this._model.TreeHeader}</th>${__header}</tr></thead><tbody id="tbody__result"></tbody></table>`
+      `<table class="table"><thead><tr><th width="${this._model.TreeWidth}%">${this._model.TreeHeader}</th>${__header}</tr></thead><tbody id="tbody__${this._target}_result"></tbody></table>`
     );
   }
 
@@ -100,7 +101,11 @@ class treetable {
   _createClement(node, index, hasChildren, parentUUID) {
     if (hasChildren) {
       // можно вынести за пределы
-      this._parentStates[node.uuid] = "maximized";
+      if (this.minimized) {
+        this._parentStates[node.uuid] = "minimized";
+      } else {
+        this._parentStates[node.uuid] = "maximized";
+      }
     }
 
     this._hasChildren[node.uuid] = hasChildren;
@@ -123,20 +128,25 @@ class treetable {
       this._subListStates[node.uuid] = "minimized_list";
     }
 
-    let __tableBody = $("#tbody__result");
+    let __tableBody = $(`#tbody__${this._target}_result`);
 
     let __tableNode_TDs = "";
 
     for (let i = 0; i < this._model.ColCount; i++) {
-      __tableNode_TDs += `<td style="padding: 0px;"><span id="span__cols_${node.uuid}_${this._model.ColIDs[i]}"><span></td>`;
+      __tableNode_TDs += `<td style="padding: 0px;"><span id="span__${this._target}_cols_${node.uuid}_${this._model.ColIDs[i]}"><span></td>`;
+    }
+
+    let __visibility;
+    if (this._parentStates[parentUUID] == "minimized") {
+      __visibility = `style="display: none;"`;
     }
 
     __tableBody.append(
-      `<tr id="tr__treetable_${node.uuid}">` +
+      `<tr id="tr__${this._target}_treetable_${node.uuid}" ${__visibility}>` +
         `<td style="padding: 0px;">` +
-        `<span id="span__treetable_spacer_${node.uuid}"></span>` +
+        `<span id="span__${this._target}_treetable_spacer_${node.uuid}"></span>` +
         `<span style="padding-left:.75rem; padding-right:.75rem">${__name}</span>` +
-        `<span id="span__treetable_suffix_${node.uuid}"></span>` +
+        `<span id="span__${this._target}_treetable_suffix_${node.uuid}"></span>` +
         `</td>${__tableNode_TDs}</tr>`
     );
 
@@ -144,12 +154,12 @@ class treetable {
       let __tableSublist_TDs = "";
 
       for (let i = 0; i < this._model.ColCount; i++) {
-        __tableSublist_TDs += `<td style="padding: 0px;"><span id="span__cols_${node.uuid}_${this._model.ColIDs[i]}_sublist_${__slid}"></span></td>`;
+        __tableSublist_TDs += `<td style="padding: 0px;"><span id="span__${this._target}_cols_${node.uuid}_${this._model.ColIDs[i]}_sublist_${__slid}"></span></td>`;
       }
       __tableBody.append(
-        `<tr id="tr__treetable_${node.uuid}_sublist_${__slid}" style="display: none;">` +
+        `<tr id="tr__${this._target}_treetable_${node.uuid}_sublist_${__slid}" style="display: none;">` +
           `<td style="padding: 0px;">` +
-          `<span id="span__treetable_spacer_${node.uuid}_sublist_${__slid}" style="padding-right:.25rem;"></span>` +
+          `<span id="span__${this._target}_treetable_spacer_${node.uuid}_sublist_${__slid}" style="padding-right:.25rem;"></span>` +
           `<span style="padding-left:.75rem;">${__sublist[__slid]}</span>` +
           `</td>${__tableSublist_TDs}</tr>`
       );
@@ -162,7 +172,9 @@ class treetable {
     for (let i = this._uuids.length; i >= 0; i--) {
       __spacers = this._spacerCalc(this._trace[i], __spacers);
 
-      let __span = $(`#span__treetable_spacer_${this._uuids[i]}`);
+      let __span = $(
+        `#span__${this._target}_treetable_spacer_${this._uuids[i]}`
+      );
 
       for (let __sp in __spacers) {
         __span.append(this._spanWrap(this._icons(__spacers[__sp])));
@@ -177,7 +189,7 @@ class treetable {
       }
 
       if (this._hasSublist[this._uuids[i]]) {
-        $(`#span__treetable_suffix_${this._uuids[i]}`).append(
+        $(`#span__${this._target}_treetable_suffix_${this._uuids[i]}`).append(
           this._spanWrap(
             this._icons(
               this._subListStates[this._uuids[i]],
@@ -190,7 +202,7 @@ class treetable {
       if (this._hasSublist[this._uuids[i]]) {
         for (let __slid in this._mySubList[this._uuids[i]]) {
           let __span_sublist = $(
-            `#span__treetable_spacer_${this._uuids[i]}_sublist_${__slid}`
+            `#span__${this._target}_treetable_spacer_${this._uuids[i]}_sublist_${__slid}`
           );
 
           let __sublist_spacers = this._sublistSpacersCalc(__spacers);
@@ -254,13 +266,13 @@ class treetable {
 
   _bindButtons() {
     for (let __uuid in this._parentStates) {
-      $(`#svg__button_${__uuid}`).click(() => {
+      $(`#svg__${this._target}_button_${__uuid}`).click(() => {
         this._buttonClick(__uuid);
       });
     }
 
     for (let __uuid in this._subListStates) {
-      $(`#svg__button_sublist_${__uuid}`).click(() => {
+      $(`#svg__${this._target}_button_sublist_${__uuid}`).click(() => {
         this._buttonSublistClick(__uuid);
       });
     }
@@ -276,11 +288,11 @@ class treetable {
       this._showSubList(__uuid);
     }
 
-    $(`#svg__button_sublist_${__uuid}`).replaceWith(
+    $(`#svg__${this._target}_button_sublist_${__uuid}`).replaceWith(
       this._icons(this._subListStates[__uuid], "sublist_" + __uuid)
     );
 
-    $(`#svg__button_sublist_${__uuid}`).click(() => {
+    $(`#svg__${this._target}_button_sublist_${__uuid}`).click(() => {
       this._buttonSublistClick(__uuid);
     });
   }
@@ -295,24 +307,24 @@ class treetable {
       this._showNode(__uuid);
     }
 
-    $(`#svg__button_${__uuid}`).replaceWith(
+    $(`#svg__${this._target}_button_${__uuid}`).replaceWith(
       this._icons(this._parentStates[__uuid], __uuid)
     );
 
-    $(`#svg__button_${__uuid}`).click(() => {
+    $(`#svg__${this._target}_button_${__uuid}`).click(() => {
       this._buttonClick(__uuid);
     });
   }
 
   _hideSubList(uuid) {
     for (let __slid in this._mySubList[uuid]) {
-      $(`#tr__treetable_${uuid}_sublist_${__slid}`).hide();
+      $(`#tr__${this._target}_treetable_${uuid}_sublist_${__slid}`).hide();
     }
   }
 
   _showSubList(uuid) {
     for (let __slid in this._mySubList[uuid]) {
-      $(`#tr__treetable_${uuid}_sublist_${__slid}`).show();
+      $(`#tr__${this._target}_treetable_${uuid}_sublist_${__slid}`).show();
     }
   }
 
@@ -322,11 +334,11 @@ class treetable {
         this._hideNode(e, true);
       });
       if (selfHide) {
-        $(`#tr__treetable_${__uuid}`).hide();
+        $(`#tr__${this._target}_treetable_${__uuid}`).hide();
         if (this._hasSublist[__uuid]) this._hideSubList(__uuid);
       }
     } else {
-      $(`#tr__treetable_${__uuid}`).hide();
+      $(`#tr__${this._target}_treetable_${__uuid}`).hide();
       if (this._hasSublist[__uuid]) this._hideSubList(__uuid);
     }
   }
@@ -338,14 +350,14 @@ class treetable {
           this._showNode(e);
         }
       });
-      $(`#tr__treetable_${__uuid}`).show();
+      $(`#tr__${this._target}_treetable_${__uuid}`).show();
       if (
         this._hasSublist[__uuid] &
         (this._subListStates[__uuid] == "maximized_list")
       )
         this._showSubList(__uuid);
     } else {
-      $(`#tr__treetable_${__uuid}`).show();
+      $(`#tr__${this._target}_treetable_${__uuid}`).show();
       if (
         this._hasSublist[__uuid] &
         (this._subListStates[__uuid] == "maximized_list")
@@ -355,12 +367,12 @@ class treetable {
   }
 
   _icons(type, uuid) {
-    let __common = `<svg id="svg__button_${uuid}" width="20" height="40" viewBox="0 0 20 40"xmlns="http://www.w3.org/2000/svg">`;
+    let __common = `<svg id="svg__${this._target}_button_${uuid}" width="20" height="40" viewBox="0 0 20 40"xmlns="http://www.w3.org/2000/svg">`;
 
     switch (type) {
       case "i":
         return (
-          `<svg width="20" height="25" viewBox="0 0 20 25"xmlns="http://www.w3.org/2000/svg">` +
+          `<svg width="20" height="25" viewBox="0 0 20 25" xmlns="http://www.w3.org/2000/svg">` +
           '<line x1="10" x2="10" y1="0" y2="25" stroke="white" fill="transparent" stroke-width="1"/>' +
           "</svg>"
         );

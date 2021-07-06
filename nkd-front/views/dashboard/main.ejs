@@ -1,14 +1,14 @@
 <div class="container-fluid p-0">
     <div class="row col-12 mb-3">
 
-        <div class="col-6">
+        <div class="col-12 col-xl-6 col-xxl-4 pb-2">
             <div class="card m-0">
                 <div class="card-body  p-0" id="mnemo_container">
                 </div>
             </div>    
         </div>
 
-        <div class="col-6">
+        <div class="col-12 col-xl-6 col-xxl-8">
             <div class="card m-0">
                 <div class="card-body  p-0">
                     <table class="table table-striped">
@@ -46,19 +46,19 @@
                                 <td class="d-none d-md-table-cell">м/с</td>    
                             </tr>
                             <tr>
-                                <td>Датчик вибрации первая ступень (СКЗ)</td>
+                                <td>Датчик вибрации "<%=hardware.device0_channel1.name %>"</td>
                                 <td><span source="badges" id="signal1" class="badge p-2"></span></td>                            
                                 <td><span source="signals" id="signal1"></span></td>
                                 <td class="d-none d-md-table-cell">мм/с</td>    
                             </tr>
                             <tr>
-                                <td>Датчик вибрации вторая ступень (СКЗ)</td>
+                                <td>Датчик вибрации "<%=hardware.device0_channel2.name %>"</td>
                                 <td><span source="badges" id="signal2" class="badge p-2"></span></td>                            
                                 <td><span source="signals" id="signal2"></span></td>
                                 <td class="d-none d-md-table-cell">мм/с</td>    
                             </tr>
                             <tr>
-                                <td>Датчик вибрации третья ступень (СКЗ)</td>
+                                <td>Датчик вибрации "<%=hardware.device0_channel3.name %>"</td>
                                 <td><span source="badges" id="signal3" class="badge p-2"></span></td>                            
                                 <td><span source="signals" id="signal3"></span></td>
                                 <td class="d-none d-md-table-cell">мм/с</td>    

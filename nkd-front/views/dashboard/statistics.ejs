@@ -1,1 +1,219 @@
-Сатистика по диагностическим процедурам
+<script src="/public/js/statistics/f_statistics.js"></script>
+
+<div class="tab">
+    <ul class="nav nav-pills mb-3" id="monitoringTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="diagn-tab" data-bs-toggle="tab" data-bs-target="#tabDate" type="button" role="tab" aria-controls="tabDate" aria-selected="true">Выборка по дате</a>
+        </li>
+
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="diagn-tab" data-bs-toggle="tab" data-bs-target="#tabMoto" type="button" role="tab" aria-controls="tabMoto" aria-selected="false">Выборка по наработке</a>
+        </li>
+    </ul>
+
+    <div class="tab-content bg-transparent p-0" id="monitoringTabContent">
+        <div class="tab-pane fade show active" id="tabDate" role="tabpanel" aria-labelledby="tabDate">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Настройка выборки</h5>
+                    </div>
+            
+                    <div class="card-body px-3">
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Выбор периода</span>
+                            </div>                            
+                            <input id="input__request_dateTimeRange" class="form-control col-8" type="text" name="datetimes" />
+                        </div>
+            
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Редуктор</span>
+                            </div>
+                            <select class="form-control mb-1" id="active_gear">
+                                <option value="0">Редуктор №1</option>
+                                <option value="1">Редуктор №2</option>
+                                <option value="2" selected>Оба редуктора</option>
+                            </select>
+                        </div>
+            
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Выбрать узел</span>
+                            </div>
+                            <select class="form-control mb-1" id="object">                                    
+                                <option value="all" selected>Все узлы</option>
+                                <option value="all1"><span width="20px"></span>Все узлы</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Скорость кабинок</span>
+                            </div>
+                            <select class="form-control mb-1" id="speed_zone">
+                                <option value="0" selected>Любая</option>
+                                <option value="1">1 м/с</option>
+                                <option value="2.4">2.4 м/с</option>
+                                <option value="4">4 м/с</option>
+                                <option value="5">5 м/с</option>
+                            </select>
+                        </div>
+                    </div>
+            
+                    <div class="px-0">
+                        <hr class="mt-0 mb-3">
+                    </div>
+            
+                    <div class="container-fluid px-3 pb-3">
+                        <div class="d-flex justify-content-begin">
+                            <button id="btn__request" type="button" class="btn btn-primary">Выполнить запрос</button>                                
+                        </div>                                    
+                    </div>
+                </div>        
+            </div>
+
+            <div class="card">
+                <div id="result_1">
+
+                </div>
+            </div>
+            <div class="card">
+                <div id="result_2">
+
+                </div>    
+            </div>
+            <div class="card">
+                <div id="result_3">
+
+                </div>
+            </div>
+            <div class="card">
+                <div id="result_4">
+
+                </div>
+            </div>
+            <div class="card">
+                <div id="result_5">
+
+                </div>    
+            </div>
+            <div class="card">
+                <div id="result_6">
+
+                </div>
+            </div>
+            <div class="card">
+                <div id="result_7">
+
+                </div>
+            </div>
+            <div class="card">
+                <div id="result_8">
+
+                </div>    
+            </div>
+            <div class="card">
+                <div id="result_9">
+
+                </div>
+            </div>
+
+        </div>
+    
+        <div class="tab-pane fade show" id="tabMoto" role="tabpanel" aria-labelledby="tabDate">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Настройка выборки</h5>
+                    </div>
+        
+                    <div class="card-body px-3">
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-6">
+                                <span class="input-group-text">Начало выборки</span>
+                            </div>                            
+                            <input id="input__moto_begin" class="form-control col-4" type="text"/>
+                            <div class="input-group-append col-2">
+                                <span class="input-group-text">мото часы</span>
+                            </div>                            
+                        </div>
+
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-6">
+                                <span class="input-group-text">Конец выборки</span>
+                            </div>                            
+                            <input id="input__moto_end" class="form-control col-4" type="text"/>
+                            <div class="input-group-append col-2">
+                                <span class="input-group-text">мото часы</span>
+                            </div>      
+                        </div>
+
+
+                        <!-- <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Редуктор</span>
+                            </div>
+                            <select class="form-control mb-1" id="active_gear_moto">
+                                <option value="0">Редуктор №1</option>
+                                <option value="1">Редуктор №2</option>
+                                <option value="2" selected>Оба редуктора</option>
+                            </select>
+                        </div> -->
+
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Правая ось ординат</span>
+                            </div>
+                            <select class="form-control mb-1" id="second_ordinat_moto">                                    
+                                <option value="freq" selected>Частота вращения первичного вала</option>
+                                <option value="speed_zone">Скорость кабинок</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Левая ось ординат</span>
+                            </div>
+                            <select class="form-control mb-1" id="first_ordinat_moto">                                    
+                                <option value="signals" selected>Масштабирование по уровню сигналов</option>
+                                <option value="gost">Масштабирование по уровням ГОСТ 10816</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3 input-group">
+                            <div class="input-group-prepend col-4">
+                                <span class="input-group-text">Скорость кабинок</span>
+                            </div>
+                            <select class="form-control mb-1" id="speed_zone_moto">
+                                <option value="0" selected>Любая</option>
+                                <option value="1">1 м/с</option>
+                                <option value="2.4">2.4 м/с</option>
+                                <option value="4">4 м/с</option>
+                                <option value="5">5 м/с</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="px-0">
+                        <hr class="mt-0 mb-3">
+                    </div>
+
+                    <div class="container-fluid px-3 pb-3">
+                        <div class="d-flex justify-content-begin">
+                            <button id="btn__request_moto" type="button" class="btn btn-primary">Выполнить запрос</button>                                
+                        </div>                                    
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    main();
+</script>

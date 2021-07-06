@@ -1224,14 +1224,17 @@
         
         if (!e.target.classList.contains('highcharts-point')) return;
         
-        $("#input__moto_begin").val(Math.round(e.point.x - currentAgregation * moto_factor / 3600 - 1));
+        let __from = Math.round(e.point.x - currentAgregation * moto_factor / 3600 - 1);
+        if (__from < 0) __from = 0;
+
+        $("#input__moto_begin").val(__from);
         $("#input__moto_end").val(Math.round(e.point.x + currentAgregation * moto_factor / 3600 + 1));
 
         getGraph_moto();
 
-        console.log(e.point.x);        
-        console.log(Math.round(e.point.x - currentAgregation * moto_factor / 3600 - 1));
-        console.log(Math.round(e.point.x + currentAgregation * moto_factor / 3600 + 1));
+        // console.log(e.point.x);        
+        // console.log(Math.round(e.point.x - currentAgregation * moto_factor / 3600 - 1));
+        // console.log(Math.round(e.point.x + currentAgregation * moto_factor / 3600 + 1));
 
     }
 

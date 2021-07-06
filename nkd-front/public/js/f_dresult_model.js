@@ -6,7 +6,7 @@ class dresult_model {
     this._savedNode = configs.savedNode;
     this._records = configs.records;
 
-    console.log(configs.records);
+    // console.log(configs.records);
 
     this._signals = {};
 
@@ -29,12 +29,14 @@ class dresult_model {
     treetable__currentResult.render();
     treetable__currentResult.plot();
 
-    this._mnemo = mnemo;
-    mnemo.model = this;
+    if (mnemo != undefined) {
+      this._mnemo = mnemo;
+      mnemo.model = this;
 
-    if (mnemo_ready) mnemo.plot();
+      if (mnemo_ready) mnemo.plot();
 
-    model_ready = true;
+      model_ready = true;
+    }
   }
 
   get savedNode() {
@@ -84,7 +86,8 @@ class dresult_model {
 
       return this._container(
         this._badge(
-          `Обнаружено : ${__yes}; Под подозрением : ${__suspicion}`,
+          `${__yes} / ${__suspicion}`,
+          // `Обнаружено : ${__yes}; Под подозрением : ${__suspicion}`,
           __badge_type
         )
       );
@@ -131,13 +134,17 @@ class dresult_model {
   }
 
   mnemoPlot() {
-    this._mnemo.plot();
+    if (mnemo != undefined) {
+      this._mnemo.plot();
+    }
   }
 
   update(diagn) {
     this._subListData = diagn.content;
     this._treetable__currentResult.plot();
-    this._mnemo.plot();
+    if (this._mnemo != undefined) {
+      this._mnemo.plot();
+    }
   }
 
   // private

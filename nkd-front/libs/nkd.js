@@ -64,7 +64,22 @@ async function getGearHistory(connection) {
   );
 }
 
+function proceed(ans, err, res) {
+  if (err != undefined) {
+    console.log(err);
+    ans.status.error = err;
+    ans.status.success = false;
+  } else {
+    ans.status.success = true;
+  }
+
+  if (res != undefined) {
+    ans.data = res;
+  }
+}
+
 module.exports.check_role = check_role;
 module.exports.addGearEvent = addGearEvent;
 module.exports.getGearHistory = getGearHistory;
 module.exports.signature = signature;
+module.exports.proceed = proceed;

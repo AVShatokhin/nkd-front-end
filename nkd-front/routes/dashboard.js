@@ -7,6 +7,8 @@ var conf = require("nconf")
   .env()
   .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
+let hardware = options.openConfigFile("hardware");
+
 router.get("/", function (req, res, next) {
   if (!api.check_role(req, "")) {
     res.redirect("/auth");
@@ -36,7 +38,8 @@ router.get("/get_main", function (req, res, next) {
     return;
   }
 
-  res.render("dashboard/main");
+  res.render("dashboard/main", { hardware });
+  console.log(hardware);
 });
 
 router.get("/get_control", function (req, res, next) {

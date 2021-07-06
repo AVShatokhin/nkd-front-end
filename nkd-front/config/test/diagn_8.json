@@ -2,9 +2,9 @@
     "diagn" : {
         "calc_ts" : 123456789,
         "record_ts" : 12344444,
+        "record_url" : "/file/name/directory/record.wav",
         "mode": "auto",
-        "freq": 15.4,
-        "record_url" : "/file/name/directory/record.wav",        
+        "freq": 19.4,
         "content" : {
             "{4dfafc27-cb3e-40c0-9a0b-18bab82121c9}" : {
                 "device0_channel1" : {
@@ -325,7 +325,7 @@
                         "integral" : 0
                     },
                     "3" : {
-                        "main" : "no",
+                        "main" : "yes",
                         "integral" : 0
                     }
                 },

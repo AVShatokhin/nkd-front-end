@@ -1,4 +1,5 @@
 var config = require("../../libs/config.js");
+var nkd = require("../../libs/nkd.js");
 var express = require("express");
 var router = express.Router();
 const EventEmitter = require("events");
@@ -6,8 +7,43 @@ class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 const { ClickHouse } = require("clickhouse");
 
+// хорошенько подчистить всё отладочное !!!
+
+let start_ts = 1625465938;
+let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
+let index = 0;
+let moto = [0, 0];
+
 const signals_config = config.openConfigFile("signals");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
+
+let samples = [
+  config.openConfigFile("test/diagn_1"),
+  config.openConfigFile("test/diagn_2"),
+  config.openConfigFile("test/diagn_3"),
+  config.openConfigFile("test/diagn_4"),
+  config.openConfigFile("test/diagn_5"),
+  config.openConfigFile("test/diagn_6"),
+  config.openConfigFile("test/diagn_7"),
+  config.openConfigFile("test/diagn_8"),
+  config.openConfigFile("test/diagn_9"),
+];
+
+let object = config.openObjectXML();
+
+let configs = {
+  savedNode: object.savedNode,
+  yellow_table: config.openConfigFile("yellow_table"),
+  mnemo_config: config.openConfigFile("mnemo_config"),
+  signals: config.openSignalsConfig(),
+  records: config.openConfigFile("records"),
+  hardware: config.openConfigFile("hardware"),
+};
+
+router.get("/text", function (req, res, next) {
+  res.json({ diagns: samples, configs });
+});
 
 router.get("/get_rolling_csv", async function (req, res, next) {
   let csv = "";
@@ -70,7 +106,7 @@ router.get("/get_current/", function (req, res, next) {
   res.json(ans);
 });
 
-router.post("/income/", function (req, res, next) {
+router.post("/income/", async function (req, res, next) {
   let ans = {
     status: {
       success: false,
@@ -86,13 +122,57 @@ router.post("/income/", function (req, res, next) {
   }
 
   if ("diagn" in req.body) {
-    ans.status.success = true;
+    ans.status.success = true; // убрать
     current.updateData("diagn", req.body.diagn);
+
+    // let diagn = req.body.diagn;
+
+    // for (let i = 1; i < 2; i++) {
+    //   diagn.record_ts = start_ts;
+    //   diagn.calc_ts = start_ts + 60;
+
+    //   diagn.active_gear = active_gear[index];
+    //   diagn.moto = moto[active_gear[index]];
+    //   diagn.freq = freq[index];
+
+    //   diagn.mode = "auto";
+
+    //   await DIANG_statisticWrite(connection, ans, diagn);
+
+    //   start_ts = start_ts + 24 * 3600;
+    //   moto[active_gear[index]] =
+    //     moto[active_gear[index]] + 24 * 3600 * freq[index];
+    //   console.log(".");
+    // }
+
+    // index = index + 1;
+    // if (index > 10) index = 0;
     myEmitter.emit("diagn");
   }
 
   res.json(ans);
 });
+
+async function DIANG_statisticWrite(connection, ans, diagn) {
+  return new Promise((resolve) => {
+    connection.query(
+      "insert into diagn_history set calc_ts=FROM_UNIXTIME(?), record_ts=FROM_UNIXTIME(?), active_gear=?, moto=?, freq=?, mode=?, content=?;",
+      [
+        diagn.calc_ts,
+        diagn.record_ts,
+        diagn.active_gear,
+        diagn.moto,
+        diagn.freq,
+        diagn.mode,
+        JSON.stringify(diagn.content),
+      ],
+      (err, res) => {
+        nkd.proceed(ans, err, res);
+        resolve(ans);
+      }
+    );
+  });
+}
 
 async function insert(data) {
   let clickhouse = connectClickhouse("income");
