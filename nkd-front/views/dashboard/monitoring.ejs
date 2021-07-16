@@ -44,7 +44,7 @@
                                 </div>
                                 <select class="form-control mb-1" id="second_ordinat">                                    
                                     <option value="freq" selected>Частота вращения первичного вала</option>
-                                    <option value="speed_zone">Скорость кабинок</option>
+                                    <option value="speed_zone">Скорость дороги</option>
                                 </select>
                             </div>
 
@@ -60,7 +60,7 @@
                             
                             <div class="mb-3 input-group">
                                 <div class="input-group-prepend col-4">
-                                    <span class="input-group-text">Скорость кабинок</span>
+                                    <span class="input-group-text">Скорость дороги</span>
                                 </div>
                                 <select class="form-control mb-1" id="speed_zone">
                                     <option value="0" selected>Любая</option>
@@ -185,7 +185,7 @@
                                 </div>
                                 <select class="form-control mb-1" id="second_ordinat_moto">                                    
                                     <option value="freq" selected>Частота вращения первичного вала</option>
-                                    <option value="speed_zone">Скорость кабинок</option>
+                                    <option value="speed_zone">Скорость дороги</option>
                                 </select>
                             </div>
 
@@ -201,7 +201,7 @@
                             
                             <div class="mb-3 input-group">
                                 <div class="input-group-prepend col-4">
-                                    <span class="input-group-text">Скорость кабинок</span>
+                                    <span class="input-group-text">Скорость дороги</span>
                                 </div>
                                 <select class="form-control mb-1" id="speed_zone_moto">
                                     <option value="0" selected>Любая</option>
@@ -395,7 +395,7 @@
             income["second_ordinat_max"] = 20;
         } else if (income.second_ordinat == "speed_zone") {
             // income["second_ordinat"] = "Скорость кабинок";
-            income["second_ordinat_yxis"] = "Скорость кабинок, м/с";
+            income["second_ordinat_yxis"] = "Скорость дороги, м/с";
             income["second_ordinat_max"] = 5;
         }
 
@@ -405,7 +405,7 @@
             income["first_ordinat_max"]=income.gost.c
         }
 
-        income["title"] = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
+        income["title"] = `Выборка по дате, ${["Редуктор №1", "Редуктор №2", "Оба редуктора"][income.active_gear]}, скорость дороги - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
         income["range"] = `c ${income.fromRange} по ${income.toRange}`;
 
         let dd = [];
@@ -430,7 +430,7 @@
             income["second_ordinat_max"] = 20;
         } else if (income.second_ordinat == "speed_zone") {
             // income["second_ordinat"] = "Скорость кабинок";
-            income["second_ordinat_yxis"] = "Скорость кабинок, м/с";
+            income["second_ordinat_yxis"] = "Скорость дороги, м/с";
             income["second_ordinat_max"] = 5;
         }
 
@@ -444,7 +444,7 @@
         let toRange = Math.round(income.toRange * income.signals.cnt.moto_factor / 3600);
 
 
-        income["title"] = `Выборка по наработке, скорость кабинок - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
+        income["title"] = `Выборка по наработке, скорость дороги - ${{"0": "Любая", "1": "1 м/с", "2.4": "2.4 м/с", "4" : "4 м/с", "5" : "5 м/с"}[income.speed_zone]}`;
         income["range"] = `c ${fromRange} по ${toRange} (мото часы)`;
 
         let dd = [];
