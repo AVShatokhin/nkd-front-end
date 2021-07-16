@@ -27,14 +27,16 @@ function bindHandlers() {
         //console.log(element);
         switch (element) {
           case "configs":
-            treetable__currentResult_model = new dresult_model(
-              data.configs,
-              new treetable("treetable__currentResult"),
-              new mnemo(data.configs.mnemo_config, "div__mnemo")
-            );
+            sessionStorage.setItem("configs", JSON.stringify(data.configs));
+            treetable__currentResult_model = new dresult_model({
+              configs: data.configs,
+              treetable: new treetable("treetable__currentResult"),
+              mnemo: new mnemo(data.configs.mnemo_config, "div__mnemo"),
+            });
             break;
           case "diagn":
             treetable__currentResult_model.update(data.diagn);
+            processMetaInfoDiagn(data.diagn);
             break;
           case "result":
             break;
@@ -68,11 +70,68 @@ function bindHandlers() {
   };
 }
 
+function processMetaInfoDiagn(diagn) {
+  let __freq = diagn.freq;
+  let __speed_zone = diagn.speed_zone;
+
+  let __active_gear = ["Редуктор №1", "Редуктор №2"][diagn.active_gear];
+
+  let __configs = JSON.parse(sessionStorage.getItem("configs"));
+
+  let __moto = calcMoto(diagn.moto, __configs.signals.cnt.moto_factor);
+
+  let __calc_ts = new Date(diagn.calc_ts * 1000).toLocaleString("ru", {
+    timezone: "UTC",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+
+  let __record_ts = new Date(diagn.record_ts * 1000).toLocaleString("ru", {
+    timezone: "UTC",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+
+  $("div#div__speedfreq").html(
+    `<div class="p-1">Скорость дороги, м/с : <span class="badge bg-primary  p-2">${__speed_zone}</span></div>` +
+      `<div class="p-1">Частота вращения, Гц : <span class="badge bg-primary  p-2">${__freq}</span></div>`
+  );
+  $("div#div__dates").html(
+    `<div class="p-1">Дата замера : <span class="badge bg-primary  p-2">${__record_ts}</span></div>` +
+      `<div class="p-1">Дата вычисления : <span class="badge bg-primary  p-2">${__calc_ts}</span></div>`
+  );
+  $("div#div__gearmoto").html(
+    `<div class="p-1">Редуктор : <span class="badge bg-primary  p-2">${__active_gear}</span></div>` +
+      `<div class="p-1">Наработка, час:мин : <span class="badge bg-primary  p-2">${__moto}</span></div>`
+  );
+}
+
+function resetMetaInfoDiagn() {
+  $("div#div__speedfreq").html(
+    "<div>Скорость дороги : -</div><div>Частота вращения : -</div>"
+  );
+  $("div#div__dates").html(
+    "<div>Дата замера : -</div><div>Дата вычисления : -</div>"
+  );
+  $("div#div__gearmoto").html(
+    "<div>Редуктор : -</div><div>Наработка : -</div>"
+  );
+}
+
 function getAllClient() {
   resetTarget("signals");
   resetTarget("moto");
   resetActiveGear();
   resetBadges();
+  resetMetaInfoDiagn();
   socket.send("get_all");
 }
 
@@ -137,12 +196,17 @@ function resetTarget(target) {
 function processMoto(data) {
   resetTarget("moto");
 
-  $(`span#moto_0[source=moto]`).html(calcMoto(data.moto.moto_0));
-  $(`span#moto_1[source=moto]`).html(calcMoto(data.moto.moto_1));
+  $(`span#moto_0[source=moto]`).html(
+    calcMoto(data.moto.moto_0, data.moto.moto_factor)
+  );
+  $(`span#moto_1[source=moto]`).html(
+    calcMoto(data.moto.moto_1, data.moto.moto_factor)
+  );
 }
 
-function calcMoto(moto) {
-  let m_sec = moto * data.moto.moto_factor;
+function calcMoto(moto, factor) {
+  // console.log(data);
+  let m_sec = moto * factor;
   let m_min = Math.trunc(m_sec / 60);
   let m_hour = Math.trunc(m_min / 60);
 

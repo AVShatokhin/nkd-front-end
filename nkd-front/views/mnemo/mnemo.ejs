@@ -1,36 +1,39 @@
-<svg class="col-12" viewBox="0 0 602.7 574.1" xmlns="http://www.w3.org/2000/svg" id="mnemo">
+<svg class="col-12" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" id="mnemo">
     <g>
-        <rect fill="none" id="canvas_background" height="574.1" width="602.7" y="-1" x="-1"/>        
+        <rect fill="none" id="canvas_background" width="800" height="630" y="-1" x="-1"/>        
         <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
             <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
         </g>
     </g>
     <g>
        
-        <svg id="s">
+        <svg id="s" viewBox="-100 -25 800 600">
             <%- include("style.ejs") %>
         </svg>
         
-        <svg id="back">
+        <svg id="back" viewBox="-100 -25 800 600">
             <%- include("background.ejs") %>
         </svg>
 
-        <svg id="o_1">
+        <svg id="o_1" viewBox="-100 -25 800 600">
             <%- include("gear_transmission_stage1.ejs") %>
         </svg>
 
-        <svg id="o_2">
+        <svg id="o_2" viewBox="-100 -25 800 600">
             <%- include("planetary_gear_stage2.ejs") %>
         </svg>
 
-        <svg id="o_3">
+        <svg id="o_3" viewBox="-100 -25 800 600">
             <%- include("planetary_gear_stage3.ejs") %>
         </svg>
 
-        <svg id="r">
+        <svg id="r" viewBox="-100 -25 800 600">
             <%- include("reducer.ejs") %>
         </svg>
-
+        
+        <svg id="s" viewBox="-100 -25 800 600">
+            <%- include("signals.ejs") %>
+        </svg>
         
         
     </g>

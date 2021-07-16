@@ -158,7 +158,7 @@ class treetable {
       }
       __tableBody.append(
         `<tr id="tr__${this._target}_treetable_${node.uuid}_sublist_${__slid}" style="display: none;">` +
-          `<td style="padding: 0px;">` +
+          `<td nowrap style="padding: 0px;">` +
           `<span id="span__${this._target}_treetable_spacer_${node.uuid}_sublist_${__slid}" style="padding-right:.25rem;"></span>` +
           `<span style="padding-left:.75rem;">${__sublist[__slid]}</span>` +
           `</td>${__tableSublist_TDs}</tr>`

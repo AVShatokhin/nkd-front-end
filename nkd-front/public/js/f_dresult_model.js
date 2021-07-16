@@ -1,12 +1,16 @@
 class dresult_model {
   // ===================== PUBLIC
-  constructor(configs, treetable__currentResult, mnemo) {
+  constructor(params) {
+    let configs = params.configs;
+    let treetable__currentResult = params.treetable;
+    let mnemo = params.mnemo;
+    let initData = params.initData;
+    // console.log(initData);
+
     this._hardware = configs.hardware;
     this._yellow_table = configs.yellow_table;
     this._savedNode = configs.savedNode;
     this._records = configs.records;
-
-    // console.log(configs.records);
 
     this._signals = {};
 
@@ -36,6 +40,11 @@ class dresult_model {
       if (mnemo_ready) mnemo.plot();
 
       model_ready = true;
+    }
+
+    if (initData != undefined) {
+      this.update(initData);
+      // console.log(initData);
     }
   }
 

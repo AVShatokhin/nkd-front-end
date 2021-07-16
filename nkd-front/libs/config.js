@@ -36,6 +36,7 @@ async function openMainConfig(connection) {
   object.signals = openSignalsConfig();
   object.records = openRecordsConfig();
   object.hardware = openConfigFile("hardware");
+  object.yellow_table = openConfigFile("yellow_table");
 
   let options = await getOptionsByLink(connection, [
     "update_period_collection",

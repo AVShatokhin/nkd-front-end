@@ -39,7 +39,6 @@ router.get("/get_main", function (req, res, next) {
   }
 
   res.render("dashboard/main", { hardware });
-  console.log(hardware);
 });
 
 router.get("/get_control", function (req, res, next) {

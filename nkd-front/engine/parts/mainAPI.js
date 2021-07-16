@@ -9,27 +9,26 @@ const { ClickHouse } = require("clickhouse");
 
 // хорошенько подчистить всё отладочное !!!
 
-let start_ts = 1625465938;
-let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
-let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
-let index = 0;
-let moto = [0, 0];
+// let start_ts = 1625465938;
+// let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+// let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
+// let index = 0;
+// let moto = [0, 0];
+
+// let samples = [
+//   config.openConfigFile("test/diagn_1"),
+//   config.openConfigFile("test/diagn_2"),
+//   config.openConfigFile("test/diagn_3"),
+//   config.openConfigFile("test/diagn_4"),
+//   config.openConfigFile("test/diagn_5"),
+//   config.openConfigFile("test/diagn_6"),
+//   config.openConfigFile("test/diagn_7"),
+//   config.openConfigFile("test/diagn_8"),
+//   config.openConfigFile("test/diagn_9"),
+// ];
 
 const signals_config = config.openConfigFile("signals");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
-
-let samples = [
-  config.openConfigFile("test/diagn_1"),
-  config.openConfigFile("test/diagn_2"),
-  config.openConfigFile("test/diagn_3"),
-  config.openConfigFile("test/diagn_4"),
-  config.openConfigFile("test/diagn_5"),
-  config.openConfigFile("test/diagn_6"),
-  config.openConfigFile("test/diagn_7"),
-  config.openConfigFile("test/diagn_8"),
-  config.openConfigFile("test/diagn_9"),
-];
-
 let object = config.openObjectXML();
 
 let configs = {
@@ -122,12 +121,16 @@ router.post("/income/", async function (req, res, next) {
   }
 
   if ("diagn" in req.body) {
-    ans.status.success = true; // убрать
     current.updateData("diagn", req.body.diagn);
+    req.body.diagn.active_gear = current.getActiveGear();
+    req.body.diagn.moto = current.getMoto(req.body.diagn.active_gear);
+    req.body.diagn.speed_zone = calcSpeedZone(req.body.diagn.freq);
+    await DIANG_statisticWrite(connection, ans, req.body.diagn);
 
-    // let diagn = req.body.diagn;
+    // let diagn = samples[index].diagn;
+    // console.log(diagn);
 
-    // for (let i = 1; i < 2; i++) {
+    // for (let i = 1; i < 365; i++) {
     //   diagn.record_ts = start_ts;
     //   diagn.calc_ts = start_ts + 60;
 
@@ -146,7 +149,7 @@ router.post("/income/", async function (req, res, next) {
     // }
 
     // index = index + 1;
-    // if (index > 10) index = 0;
+    // if (index > 8) index = 0;
     myEmitter.emit("diagn");
   }
 

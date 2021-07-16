@@ -4,7 +4,7 @@
         "device_type": "d001", 
         "device_id": 0,
         "channel" : 0,
-        "gain": 0.95,
+        "gain": 0.8,
         "iepe": true,
         "tacho": true       
     },

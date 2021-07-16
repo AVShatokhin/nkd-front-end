@@ -1,6 +1,5 @@
-{ 
-    
-    "{4dfafc27-cb3e-40c0-9a0b-18bab82121c9}" : ["gear_engagement_wheel_stage1", "gear_wheel_stage1", "val_stage1","driven_gear_stage1", "driving_gear_stage1" ],
+{
+    "{4dfafc27-cb3e-40c0-9a0b-18bab82121c9}" : ["gear_engagement_wheel_stage1", "gear_wheel_stage1", "val_stage1","driven_gear_stage1", "driving_gear_stage1"],
     "{f109a595-6410-4304-9a80-22a1a5ea5893}" : ["rolling_bearing_22322_stage1"],
     "{b9d6e0ea-8d71-4df7-9fda-3b96c6a49bbf}" : ["rolling_bearing_313260_stage1"],
     "{99d715f3-98fc-43fb-9713-e389d9f2a5bc}" : ["rolling_bearing_30230_stage1", "rolling_bearing_30230_stage2"],
@@ -9,5 +8,4 @@
     "{0818f0ac-847d-43c2-a6f9-fb05d7656969}" : ["cage_stage3", "drive_val_stage3", "sun_val_stage3", "sun_stage3", "crown_stage3", "satellit_stage3"],
     "{261d672f-1625-4759-b9da-08c039570b74}" : ["rolling_bearing_sat_22224_stage3"],
     "{9afcd1fa-3085-45fd-a548-9478e1686809}" : ["rolling_bearing_61860_stage3"]
-
 }
