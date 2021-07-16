@@ -59,13 +59,13 @@ class dresults_array_model {
           });
 
           $(__tempObject).append(
-            `<div>Время записи : <span class="badge bg-primary  p-2">${__cell.record_ts}</span></div>`
+            `<div class="p-1">Время записи : <span class="badge bg-primary  p-2">${__cell.record_ts}</span></div>`
           );
           $(__tempObject).append(
-            `<div>Время расчета : <span class="badge bg-primary  p-2">${__cell.calc_ts}</span</div>`
+            `<div class="p-1">Время расчета : <span class="badge bg-primary  p-2">${__cell.calc_ts}</span</div>`
           );
           $(__tempObject).append(
-            `<div>Редуктор : <span class="badge bg-primary  p-2">${
+            `<div class="p-1">Редуктор : <span class="badge bg-primary  p-2">${
               ["Редуктор №1", "Редуктор №2"][__cell.active_gear]
             }</span></div>`
           );
@@ -82,10 +82,10 @@ class dresults_array_model {
           }
 
           $(__tempObject).append(
-            `<div>Наработка, часы:минуты : <span class="badge bg-primary p-2">${`${m_hour} : ${m_min}`}</span></div>`
+            `<div class="p-1">Наработка, часы:минуты : <span class="badge bg-primary p-2">${`${m_hour} : ${m_min}`}</span></div>`
           );
           $(__tempObject).append(
-            `<div>Частота, Гц : <span class="badge bg-primary  p-2">${__cell.freq}</span></div>`
+            `<div class="p-1">Частота, Гц : <span class="badge bg-primary  p-2">${__cell.freq}</span></div>`
           );
 
           let speed_zone;
@@ -99,7 +99,7 @@ class dresults_array_model {
           }
 
           $(__tempObject).append(
-            `<div>Скорость дороги, м/с : <span class="badge bg-primary  p-2">${speed_zone}</span></div>`
+            `<div class="p-1">Скорость дороги, м/с : <span class="badge bg-primary  p-2">${speed_zone}</span></div>`
           );
         }
         return $(__tempObject).get(0).outerHTML;
