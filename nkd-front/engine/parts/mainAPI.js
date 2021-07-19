@@ -121,11 +121,11 @@ router.post("/income/", async function (req, res, next) {
   }
 
   if ("diagn" in req.body) {
-    current.updateData("diagn", req.body.diagn);
     req.body.diagn.active_gear = current.getActiveGear();
     req.body.diagn.moto = current.getMoto(req.body.diagn.active_gear);
     req.body.diagn.speed_zone = calcSpeedZone(req.body.diagn.freq);
     req.body.diagn.freq = Math.round(req.body.diagn.freq * 100) / 100;
+    current.updateData("diagn", req.body.diagn);
     await DIANG_statisticWrite(connection, ans, req.body.diagn);
 
     // let diagn = samples[index].diagn;
