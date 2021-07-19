@@ -1,6 +1,8 @@
 class dresult_model {
   // ===================== PUBLIC
   constructor(params) {
+    this.configs = params.configs;
+
     let configs = params.configs;
     let treetable__currentResult = params.treetable;
     let mnemo = params.mnemo;
@@ -11,7 +13,6 @@ class dresult_model {
     this._yellow_table = configs.yellow_table;
     this._savedNode = configs.savedNode;
     this._records = configs.records;
-
     this._signals = {};
 
     this._records[0].channels.forEach((__sid) => {
@@ -155,6 +156,16 @@ class dresult_model {
       this._mnemo.plot();
     }
   }
+
+  // updateSignals(data) {
+  //   this._signalsData = data;
+  //   // this._mnemo.plot();
+  //   this.mnemoPlot();
+  // }
+
+  // getSignals() {
+  //   return this._signalsData;
+  // }
 
   // private
   _container(content) {

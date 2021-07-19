@@ -38,19 +38,23 @@ function bindHandlers() {
             treetable__currentResult_model.update(data.diagn);
             processMetaInfoDiagn(data.diagn);
             break;
-          case "result":
-            break;
           case "moto":
             processMoto(data);
+            treetable__currentResult_model._mnemo.plotMoto(data.moto);
             break;
           case "signals":
             processSignals(data);
+            treetable__currentResult_model._mnemo.plotSignals(data.signals);
             break;
           case "badges":
             processBadges(data);
+            treetable__currentResult_model._mnemo.plotBadges(data.badges);
             break;
           case "active_gear_collection":
             processActiveGear(data);
+            treetable__currentResult_model._mnemo.plotActiveGear(
+              data.active_gear_collection
+            );
             break;
           case "loading":
             // сервер сказал что не готов обрабатывать WS
@@ -205,7 +209,6 @@ function processMoto(data) {
 }
 
 function calcMoto(moto, factor) {
-  // console.log(data);
   let m_sec = moto * factor;
   let m_min = Math.trunc(m_sec / 60);
   let m_hour = Math.trunc(m_min / 60);
