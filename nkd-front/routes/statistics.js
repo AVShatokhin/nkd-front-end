@@ -69,7 +69,7 @@ router.get("/get_data_by_jquery", async function (req, res, next) {
 
   ans.data = await new Promise((resolve) => {
     connection.query(
-      `select did, lts, calc_ts, record_ts, active_gear, moto, freq, mode, content` +
+      `select did, lts, UNIX_TIMESTAMP(calc_ts) as calc_ts, UNIX_TIMESTAMP(record_ts) as record_ts, active_gear, moto, freq, mode, content` +
         ` from diagn_history where ` +
         ` record_ts > ? and record_ts < ? ` +
         ` ${active_gear_sql} ` +

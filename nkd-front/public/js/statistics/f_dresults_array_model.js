@@ -38,7 +38,9 @@ class dresults_array_model {
           let __cell = JSON.parse(data);
           let __configs = JSON.parse(sessionStorage.getItem("configs"));
 
-          __cell.record_ts = new Date(__cell.record_ts).toLocaleString("ru", {
+          let __record_datetime = new Date(
+            __cell.record_ts * 1000
+          ).toLocaleString("ru", {
             timezone: "UTC",
             hour: "numeric",
             minute: "numeric",
@@ -48,21 +50,24 @@ class dresults_array_model {
             day: "numeric",
           });
 
-          __cell.calc_ts = new Date(__cell.calc_ts).toLocaleString("ru", {
-            timezone: "UTC",
-            hour: "numeric",
-            minute: "numeric",
-            second: "numeric",
-            year: "numeric",
-            month: "numeric",
-            day: "numeric",
-          });
+          let __cell_datetime = new Date(__cell.calc_ts * 1000).toLocaleString(
+            "ru",
+            {
+              timezone: "UTC",
+              hour: "numeric",
+              minute: "numeric",
+              second: "numeric",
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+            }
+          );
 
           $(__tempObject).append(
-            `<div class="p-1">Время записи : <span class="badge bg-primary  p-2">${__cell.record_ts}</span></div>`
+            `<div class="p-1">Время записи : <span class="badge bg-primary  p-2">${__record_datetime}</span></div>`
           );
           $(__tempObject).append(
-            `<div class="p-1">Время расчета : <span class="badge bg-primary  p-2">${__cell.calc_ts}</span</div>`
+            `<div class="p-1">Время расчета : <span class="badge bg-primary  p-2">${__cell_datetime}</span</div>`
           );
           $(__tempObject).append(
             `<div class="p-1">Редуктор : <span class="badge bg-primary  p-2">${
