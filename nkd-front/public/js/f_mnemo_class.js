@@ -35,33 +35,34 @@ class mnemo {
 
   plotSignals(signalsData) {
     let signals;
-
     if (signalsData != undefined) {
       this._model.signals = signalsData;
       signals = signalsData;
     } else {
       signals = this._model.signals;
     }
-
     if (signals == undefined) return;
 
     let __signals = this._model.configs.signals;
     let __hardware = this._model.configs.hardware;
-
     for (let __signal in signals.data) {
       if (__signals[__signal] != undefined) {
         $(`text#text_${__signal}_value`).html(signals.data[__signal]);
-        $(`text#text_${__signal}_name`).html(__signals[__signal].name);
+        if (__signals[__signal].small_name != undefined) {
+          $(`text#text_${__signal}_name`).html(__signals[__signal].small_name);
+        } else {
+          $(`text#text_${__signal}_name`).html(__signals[__signal].name);
+        }
         $(`text#text_${__signal}_unit`).html(
           __hardware[__signals[__signal].hardware_id].unit
         );
       }
     }
-
     $(`text#text_speed_zone_unit`).html("м/с");
+    $(`text#text_speed_zone_name`).html("Скорость дороги");
     $(`text#text_tacho_unit`).html("Гц");
     $(`text#text_speed_zone_value`).html(signals.data.speed_zone);
-    $(`text#text_tacho_value`).html(signals.data.tacho);
+    // $(`text#text_tacho_value`).html(signals.data.tacho);
   }
 
   plotBadges(badgesData) {
@@ -80,6 +81,8 @@ class mnemo {
 
     for (let __signal in badges) {
       if (__signals[__signal] != undefined) {
+        $(`text#text_${__signal}_badge`).html(badges[__signal]);
+
         $(`rect#badge_${__signal}`).removeAttr("class");
         if ((badges[__signal] == "A") | (badges[__signal] == "B")) {
           $(`rect#badge_${__signal}`).addClass("ok");

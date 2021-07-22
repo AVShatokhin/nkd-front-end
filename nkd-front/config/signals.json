@@ -1,7 +1,8 @@
 {
     "tacho" : { 
         "hardware_id" : "device0_channel0",
-        "name": "Частота вращения первичного вала",        
+        "name": "Частота вращения первичного вала", 
+        "small_name" : "Входной вал",       
         "signal_type" : "freq",
         "speed_zones" : {
             "0" : { "begin" : -1, "end" : 0 },
