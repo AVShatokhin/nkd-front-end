@@ -22,6 +22,7 @@ let configs = {
   signals: config.openSignalsConfig(),
   records: config.openConfigFile("records"),
   hardware: config.openConfigFile("hardware"),
+  config: config.openConfigFile("config"),
 };
 
 router.get("/text", function (req, res, next) {

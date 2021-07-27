@@ -140,8 +140,14 @@ class dresult_render {
       `<th style="width:16%">Скорость дороги, м/с</th>` +
       `</tr></thead>` +
       `<tbody><tr>` +
-      `<th>${this._localtime(params.diagn.record_ts)}</th>` +
-      `<th>${this._localtime(params.diagn.calc_ts)}</th>` +
+      `<th>${this._localtime(
+        params.diagn.record_ts,
+        params.configs.config.timezone_offset
+      )}</th>` +
+      `<th>${this._localtime(
+        params.diagn.calc_ts,
+        params.configs.config.timezone_offset
+      )}</th>` +
       `<th>${["Редуктор №1", "Редуктор №2"][params.diagn.active_gear]}</th>` +
       `<th>${this._calcMoto(params, params.diagn.moto)}</th>` +
       `<th>${params.diagn.freq}</th>` +
@@ -157,8 +163,10 @@ class dresult_render {
     return this._html;
   }
 
-  _localtime(ts) {
-    let localtime = new Date(ts * 1000).toLocaleString("ru", {
+  _localtime(ts, timezone_offset) {
+    let localtime = new Date(
+      (ts + timezone_offset * 3600) * 1000
+    ).toLocaleString("ru", {
       timezone: "UTC",
       hour: "numeric",
       minute: "numeric",
