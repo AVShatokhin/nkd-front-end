@@ -66,4 +66,46 @@ $(function () {
       }
     );
   });
+
+  $(".btn__spam_on").click((event) => {
+    let uid = $(event.target).attr("uid");
+    sendAjaxForm(
+      "/spam",
+      `form__spam_on_${uid}`,
+      (result) => {
+        var result = JSON.parse(result);
+        if (result.success != true) {
+          showMessage("Ошибка на сервере!", "danger");
+        } else {
+          showMessage("Пользователь добавлен в рассылку!", "success");
+          $(`span#span__spam_off_${uid}`).removeClass("d-none");
+          $(`span#span__spam_on_${uid}`).addClass("d-none");
+        }
+      },
+      (result) => {
+        showMessage("Ошибка на сервере!", "danger");
+      }
+    );
+  });
+
+  $(".btn__spam_off").click((event) => {
+    let uid = $(event.target).attr("uid");
+    sendAjaxForm(
+      "/spam",
+      `form__spam_off_${uid}`,
+      (result) => {
+        var result = JSON.parse(result);
+        if (result.success != true) {
+          showMessage("Ошибка на сервере!", "danger");
+        } else {
+          showMessage("Пользователь удалён из рассылки!", "success");
+          $(`span#span__spam_on_${uid}`).removeClass("d-none");
+          $(`span#span__spam_off_${uid}`).addClass("d-none");
+        }
+      },
+      (result) => {
+        showMessage("Ошибка на сервере!", "danger");
+      }
+    );
+  });
 });

@@ -1,31 +1,15 @@
 var config = require("../../libs/config.js");
 var nkd = require("../../libs/nkd.js");
+
+const dresult_render = require("../../libs/classes/dresult_render.js");
+
 var express = require("express");
 var router = express.Router();
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 const { ClickHouse } = require("clickhouse");
-
-// хорошенько подчистить всё отладочное !!!
-
-// let start_ts = 1625465938;
-// let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
-// let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
-// let index = 0;
-// let moto = [0, 0];
-
-// let samples = [
-//   config.openConfigFile("test/diagn_1"),
-//   config.openConfigFile("test/diagn_2"),
-//   config.openConfigFile("test/diagn_3"),
-//   config.openConfigFile("test/diagn_4"),
-//   config.openConfigFile("test/diagn_5"),
-//   config.openConfigFile("test/diagn_6"),
-//   config.openConfigFile("test/diagn_7"),
-//   config.openConfigFile("test/diagn_8"),
-//   config.openConfigFile("test/diagn_9"),
-// ];
+const nodemailer = require("nodemailer");
 
 const signals_config = config.openConfigFile("signals");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
@@ -127,40 +111,58 @@ router.post("/income/", async function (req, res, next) {
     req.body.diagn.freq = Math.round(req.body.diagn.freq * 100) / 100;
     current.updateData("diagn", req.body.diagn);
     await DIANG_statisticWrite(connection, ans, req.body.diagn);
-
-    // let diagn = samples[index].diagn;
-    // console.log(diagn);
-
-    // for (let i = 1; i < 365; i++) {
-    //   diagn.record_ts = start_ts;
-    //   diagn.calc_ts = start_ts + 60;
-
-    //   diagn.active_gear = active_gear[index];
-    //   diagn.moto = moto[active_gear[index]];
-    //   diagn.freq = freq[index];
-
-    //   diagn.mode = "auto";
-
-    //   await DIANG_statisticWrite(connection, ans, diagn);
-
-    //   start_ts = start_ts + 24 * 3600;
-    //   moto[active_gear[index]] =
-    //     moto[active_gear[index]] + 24 * 3600 * freq[index];
-    //   console.log(".");
-    // }
-
-    // index = index + 1;
-    // if (index > 8) index = 0;
     myEmitter.emit("diagn");
+    await DIAGN_sendEmails(connection, req.body.diagn);
   }
 
   res.json(ans);
 });
 
+async function DIAGN_sendEmails(connection, diagn) {
+  let __users = await getUsers(connection);
+
+  let r = new dresult_render({
+    configs,
+    diagn,
+  });
+
+  // console.log(r.html);
+
+  __users.forEach((e) => {
+    if (e.spam == "on") {
+      let __opt = {
+        from: `"Система вибродиагностики" <${conf.get("smtp_user")}>`,
+        to: e.email,
+        subject: `GTLab.Диагностика: получены результаты диагностической процедуры [${Math.random()}]`,
+        html: r.html,
+      };
+
+      transporter.sendMail(__opt);
+    }
+  });
+}
+
+async function getUsers(connection) {
+  return new Promise((resolve) =>
+    connection.query(
+      `select uid, name, second_name, surname, ava, phone, address, email, role, spam from users order by uid`,
+      [],
+      (err, result) => {
+        if (err != undefined) {
+          console.log(err);
+          resolve({ error: err });
+        } else {
+          resolve(result);
+        }
+      }
+    )
+  );
+}
+
 async function DIANG_statisticWrite(connection, ans, diagn) {
   return new Promise((resolve) => {
     connection.query(
-      "insert into diagn_history set calc_ts=FROM_UNIXTIME(?), record_ts=FROM_UNIXTIME(?), active_gear=?, moto=?, freq=?, mode=?, content=?;",
+      "insert into diagn_history set calc_ts=FROM_UNIXTIME(?), record_ts=FROM_UNIXTIME(?), active_gear=?, moto=?, freq=?, mode=?, content=?, record_url=?;",
       [
         diagn.calc_ts,
         diagn.record_ts,
@@ -169,6 +171,7 @@ async function DIANG_statisticWrite(connection, ans, diagn) {
         diagn.freq,
         diagn.mode,
         JSON.stringify(diagn.content),
+        diagn.record_url,
       ],
       (err, res) => {
         nkd.proceed(ans, err, res);
@@ -312,8 +315,18 @@ function connectClickhouse(session_id) {
 }
 
 let conf;
+let transporter;
 function setConfig(c) {
   conf = c;
+  transporter = nodemailer.createTransport({
+    host: conf.get("smtp_server"),
+    port: 465,
+    secure: true,
+    auth: {
+      user: conf.get("smtp_user"),
+      pass: conf.get("smtp_pass"),
+    },
+  });
 }
 
 module.exports.router = router;
@@ -321,3 +334,47 @@ module.exports.setConfig = setConfig;
 module.exports.setConnection = setConnection;
 module.exports.setCurrent = setCurrent;
 module.exports.on = bindEvent;
+
+// хорошенько подчистить всё отладочное !!!
+
+// let start_ts = 1625465938;
+// let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+// let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
+// let index = 0;
+// let moto = [0, 0];
+
+// let samples = [
+//   config.openConfigFile("test/diagn_1"),
+//   config.openConfigFile("test/diagn_2"),
+//   config.openConfigFile("test/diagn_3"),
+//   config.openConfigFile("test/diagn_4"),
+//   config.openConfigFile("test/diagn_5"),
+//   config.openConfigFile("test/diagn_6"),
+//   config.openConfigFile("test/diagn_7"),
+//   config.openConfigFile("test/diagn_8"),
+//   config.openConfigFile("test/diagn_9"),
+// ];
+
+// let diagn = samples[index].diagn;
+// console.log(diagn);
+
+// for (let i = 1; i < 365; i++) {
+//   diagn.record_ts = start_ts;
+//   diagn.calc_ts = start_ts + 60;
+
+//   diagn.active_gear = active_gear[index];
+//   diagn.moto = moto[active_gear[index]];
+//   diagn.freq = freq[index];
+
+//   diagn.mode = "auto";
+
+//   await DIANG_statisticWrite(connection, ans, diagn);
+
+//   start_ts = start_ts + 24 * 3600;
+//   moto[active_gear[index]] =
+//     moto[active_gear[index]] + 24 * 3600 * freq[index];
+//   console.log(".");
+// }
+
+// index = index + 1;
+// if (index > 8) index = 0;

@@ -391,6 +391,40 @@ router.post("/delete_user", async function (req, res, next) {
   }
 });
 
+router.post("/spam", async function (req, res, next) {
+  // сброс пароля по запросу администратора через административный интерфейс
+  let ans = { success: false };
+  if (!api.check_role(req, "admin")) {
+    console.log("Not permit while spam on|off for user");
+    res.json(ans);
+  } else {
+    let result = await spamUser(connection, req.body.uid, req.body.spam);
+
+    if (result.error == undefined) {
+      ans.success = true;
+      console.log(`Spam ${req.body.spam} for user ${req.body.uid} `);
+    }
+
+    res.json(ans);
+  }
+});
+
+async function spamUser(connection, uid, spam) {
+  return new Promise((resolve) =>
+    connection.query(
+      `UPDATE users set spam=? where uid=? limit 1;`,
+      [spam, uid],
+      (err, result) => {
+        if (err != undefined) {
+          resolve({ error: err });
+        } else {
+          resolve(result);
+        }
+      }
+    )
+  );
+}
+
 async function sendAuthMail(hash, email) {
   let result = await transporter.sendMail({
     from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
@@ -474,12 +508,12 @@ function setConnection(con) {
 }
 
 async function getUsers(connection, uid) {
-  let request = `select uid, name, second_name, surname, ava, phone, address, email, role from users order by uid`;
+  let request = `select uid, name, second_name, surname, ava, phone, address, email, role, spam from users order by uid`;
   let param = [];
 
   if (uid != undefined) {
     // если мы достаем одного пользователя по UID
-    request = `select uid, name, second_name, surname, ava, phone, address, email, role from users where uid=?`;
+    request = `select uid, name, second_name, surname, ava, phone, address, email, role, spam from users where uid=?`;
     param = [uid];
   }
 

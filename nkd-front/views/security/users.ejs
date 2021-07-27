@@ -17,10 +17,83 @@
                             </tr>    
                         </thead>
                         <tbody>
+
                             <% for (var i = 0; i < users.length; i ++ ) { %>
+
                                 <tr id="tr__<%=users[i].uid%>">
                                     <td><%=users[i].uid%></td>
-                                    <td><%=users[i].email%></td>                            
+                                    <td><%=users[i].email%>
+                                    
+                                        <% if (users[i].spam == "on") { %>
+                                            <span class="px-1 d-none" id="span__spam_on_<%=users[i].uid%>">
+                                        <%} else { %>
+                                            <span class="px-1" id="span__spam_on_<%=users[i].uid%>">                                        
+                                        <% } %>
+                                            <button type="button" class="btn btn-primary"                                                         
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#window__spam_on_<%=users[i].uid%>">
+                                                Добавиь в рассылку
+                                                <form id="form__spam_on_<%=users[i].uid%>">
+                                                    <input type="hidden" name="uid" value="<%=users[i].uid%>">
+                                                    <input type="hidden" name="spam" value="on">                                                                                        
+                                                </form>
+                                            </button> 
+                                        </span>
+
+                                        <% if (users[i].spam == "on") { %>
+                                            <span class="px-1" id="span__spam_off_<%=users[i].uid%>">
+                                        <%} else { %>
+                                            <span class="px-1 d-none" id="span__spam_off_<%=users[i].uid%>">
+                                        <% } %>
+
+                                            <button type="button" class="btn btn-danger"                                                         
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#window__spam_off_<%=users[i].uid%>">
+                                                Удалить из рассылки
+                                                <form id="form__spam_off_<%=users[i].uid%>">
+                                                    <input type="hidden" name="uid" value="<%=users[i].uid%>">                                            
+                                                    <input type="hidden" name="spam" value="off">                                            
+                                                </form>
+                                            </button>                                             
+                                        </span>
+
+                                        <div class="modal fade" id="window__spam_on_<%=users[i].uid%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Управление рассылкой</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body m-3">
+                                                        Добавить пользователя <b><%=users[i].email%></b> в список рассылки результатов диагностики?<br><br>                                                         
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary btn__spam_on" uid="<%=users[i].uid%>" data-bs-dismiss="modal">Принять изменения</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="window__spam_off_<%=users[i].uid%>" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Управление рассылкой</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body m-3">
+                                                        Удалить пользователя <b><%=users[i].email%></b> из списка рассылки результатов диагностики?<br><br>                                                         
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary btn__spam_off" uid="<%=users[i].uid%>" data-bs-dismiss="modal">Принять изменения</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>       
+
                                     <td><%=users[i].surname + " " +  users[i].name + " " + users[i].second_name%></td>                            
                                     <td>
                                         <div class="row col-12">
