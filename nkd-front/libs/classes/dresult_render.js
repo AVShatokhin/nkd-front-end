@@ -115,13 +115,15 @@ class dresult_render {
       if (counter[__hardware_id] == undefined) {
         __result = __result + `<th></th>`;
       } else {
-        let col = "green";
-        if (counter[__hardware_id].suspicion > 0) col = "yellow";
-        if (counter[__hardware_id].yes > 0) col = "red";
+        let col = "background-color:red; color:white;";
+        if (counter[__hardware_id].suspicion > 0)
+          col = "background-color:yellow; color:black;";
+        if (counter[__hardware_id].yes > 0)
+          col = "background-color:red; color:white;";
 
         __result =
           __result +
-          `<th><span style="background-color:${col}; padding-left: 4px; padding-right: 4px; padding-top: 2px; padding-bottom: 2px; border-radius: 2px; color:white">` +
+          `<th><span style="${col} padding-left: 4px; padding-right: 4px; padding-top: 2px; padding-bottom: 2px; border-radius: 2px;">` +
           `${counter[__hardware_id].yes} / ${counter[__hardware_id].suspicion}</span></th>`;
       }
     });
