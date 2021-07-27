@@ -115,7 +115,7 @@ class dresult_render {
       if (counter[__hardware_id] == undefined) {
         __result = __result + `<th></th>`;
       } else {
-        let col = "background-color:red; color:white;";
+        let col = "background-color:green; color:white;";
         if (counter[__hardware_id].suspicion > 0)
           col = "background-color:yellow; color:black;";
         if (counter[__hardware_id].yes > 0)
