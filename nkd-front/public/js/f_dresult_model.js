@@ -217,7 +217,7 @@ class dresult_model {
           </g>
         </g>
       </svg></span>`,
-      suspicion: `<span class="m-0 p-1 badge bg-warning"><svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" height="14" viewBox="0 0 16 16">
+      suspicion: `<span class="m-0 p-1 badge bg-warning"><svg id="Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" height="14" width="30" viewBox="0 0 4 16">
         <defs>
           <style>
             .cls-1 {
