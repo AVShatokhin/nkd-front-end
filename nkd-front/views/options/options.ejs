@@ -19,9 +19,9 @@
     
     <div class="tab-content px-0" id="optionsTabContents">
         <div class="tab-pane fade show active" id="tabDiagn" role="tabpanel" aria-labelledby="tabDiagn">
-            <form name="timers_" id="timers_">
+            <!-- <form name="timers_" id="timers_"> -->
                 <div class="row px-2">                    
-                    <div class="col-12">
+                    <div class="col-12" id="div__periodik_list">
                         <!-- <div class="mb-3 input-group">
                             <div class="input-group-prepend col-10">
                                 <span class="input-group-text">Периодичность диагностики</span>
@@ -32,7 +32,7 @@
                                 <option>Каждый нечетный день</option>
                             </select>
                         </div> -->
-                        <div class="mb-3 input-group">
+                        <!-- <div class="mb-3 input-group">
                             <div class="input-group-prepend col-8">
                                 <span class="input-group-text">Время старта диагностической процедуры</span>
                             </div>
@@ -47,9 +47,9 @@
                             <div class="input-group-append">
                                 <span class="input-group-text">МСК</span>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="mb-3 input-group">
+                        <!-- <div class="mb-3 input-group">
                             <div class="input-group-prepend col-8">
                                 <span class="input-group-text">При неудаче</span>
                             </div>
@@ -58,12 +58,55 @@
                                 <option>Повторить через час (до 5-ти раз)</option>
                                 <option>Не повторять до следующего дня</option>
                             </select>
-                        </div>        
+                        </div>         -->
+                    </div>
 
-                        
+                    <div class="modal fade" id="window__add_period" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Добавить диагностическую процедуру</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body m-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Час</span>
+                                        <select id="select__add_periodik_hour" class="form-select flex-grow-1">
+                                            <% for (let i = 0; i < 24; i++) { 
+                                                let j = i > 9 ? i : `0${i}`;    
+                                            %>
+                                                <option><%=j%></option>
+                                            <% } %>
+                                        </select>
+                                        <span class="input-group-text">Минута</span>
+                                        <select id="select__add_periodik_min" class="form-select flex-grow-1">
+                                            <% for (let i = 0; i < 60; i++) { 
+                                                let j = i > 9 ? i : `0${i}`;    
+                                            %>
+                                                <option><%=j%></option>
+                                            <% } %>
+                                        </select>    
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="btn__add_periodik">Добавить</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid px-2 mb-3">
+                        <div class="d-flex justify-content-center">
+                            <button type="button" class="btn btn-success"
+                            data-bs-toggle="modal" 
+                            data-bs-target="#window__add_period">
+                            Добавить диагностическую процедуру</button>                                
+                        </div>                                    
                     </div>
                 </div>
-            </form>
+            <!-- </form> -->
 
             <div class="px-0">
                 <hr class="mt-0 mb-3">
@@ -72,9 +115,30 @@
             <div class="container-fluid px-2">
                 <div class="d-flex justify-content-begin">
                     <div class="btn-group" role="group" aria-label="Сохранить настройки">                                    
-                        <button type="button" class="btn btn-primary my__btn_apply" form_id="timers_" role="single" router="set_timers_options">Применить настройки</button>                                
+                        <button type="button" class="btn btn-primary" role="single"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#window__update_periodiks">
+                        Применить настройки</button>                                
                     </div>    
                 </div>                                    
+            </div>
+
+            <div class="modal fade" id="window__update_periodiks" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Подтверждение операции</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body m-3">
+                            Подтвердите изменение времени проведения диагностических процедур.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn__send_periodik_data" data-bs-dismiss="modal">Принять изменения</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -288,4 +352,4 @@
     </div>
 </div>
 
-<script src="/public/js/f_options.js"></script>
+

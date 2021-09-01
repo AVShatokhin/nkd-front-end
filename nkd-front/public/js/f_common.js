@@ -10,6 +10,20 @@ function sendAjaxForm(url, ajax_form, sucess_function, error_function) {
   });
 }
 
+function sendAjax(url, data, sucess_function, error_function) {
+  $.ajax({
+    url: url, //url страницы (action_ajax_form.php)
+    // type: "POST", //метод отправки
+    method: "POST", //метод отправки
+    dataType: "html", //формат данных принимаемых обратно
+    data,
+    // data: JSON.stringify(data),
+    // processData: false,
+    success: sucess_function,
+    error: error_function,
+  });
+}
+
 async function sendAjaxData(url, formData, sucess_function, error_function) {
   let res = await fetch(url, {
     method: "POST",

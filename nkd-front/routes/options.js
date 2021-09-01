@@ -13,16 +13,31 @@ router.get("/get_options", async function (req, res, next) {
     return;
   }
 
-  let opt = await config.getOptionsByLink(connection, [
+  let options = await config.getOptionsByLink(connection, [
     "active_gear_collection",
     "update_period_collection",
+    "periodiks_collection",
   ]);
 
-  res.render("options/options", opt);
-  // console.log(opt);
+  let ans = {
+    status: {
+      success: false,
+    },
+    data: {},
+  };
+
+  res.render("options/options", options, (err, html) => {
+    ans.data["html"] = html;
+    ans.data["options"] = options;
+  });
+
+  // console.log(ans);
+
+  res.end(JSON.stringify(ans));
 });
 
 router.post("/set_options", async function (req, res, next) {
+  // console.log(req.body);
   let ans = { success: false };
   if (!nkd.check_role(req, "admin")) {
     console.log("Нет авторизации при изменении настроек");
@@ -40,6 +55,17 @@ router.post("/set_options", async function (req, res, next) {
           myEmitter.emit("active_gear", req.body.active_gear);
           ans.success = await config.setOptionsByLink(connection, req);
         }
+        break;
+
+      case "periodiks_collection":
+        // предстоит выяснить причину появления []
+        // видимо после передачи объекта с фронта через jquery выполняется преобразование такое,
+        // что у массивов появляются квадратные скобки
+        req.body["periodiks"] = req.body["periodiks[]"];
+        delete req.body["periodiks[]"];
+        ans.success = await config.setOptionsByLink(connection, req);
+        break;
+
       default:
         ans.success = await config.setOptionsByLink(connection, req);
     }
