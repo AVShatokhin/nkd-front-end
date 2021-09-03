@@ -55,7 +55,9 @@ $(function () {
         });
 
         $("#btn__show_control").click((e) => {
-          get_end_point("dashboard/get_control");
+          get_end_point("dashboard/get_control", () => {
+            initControl();
+          });
           set_active("btn__show_control");
         });
       },
