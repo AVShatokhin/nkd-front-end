@@ -8,6 +8,7 @@ var conf = require("nconf")
   .file({ file: process.env.NKD_PATH + "./config/config.json" });
 
 let hardware = options.openConfigFile("hardware");
+let signals = options.openConfigFile("signals");
 
 router.get("/", function (req, res, next) {
   if (!api.check_role(req, "")) {
@@ -73,7 +74,7 @@ router.get("/get_redchange", async function (req, res, next) {
     return;
   }
 
-  let gearStat = await api.getGearHistory(connection);
+  let gearStat = await api.getGearHistory(connection, signals);
   let opt = await options.getOptionsByLink(connection, [
     "active_gear_collection",
   ]);

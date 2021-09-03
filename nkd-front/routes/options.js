@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var nkd = require("../libs/nkd.js");
 var config = require("../libs/config.js");
+let current;
 
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
@@ -44,10 +45,15 @@ router.post("/set_options", async function (req, res, next) {
   } else {
     switch (req.body.link) {
       case "active_gear_collection":
+        let __active_gear = current.getActiveGear();
+        let __moto = current.getMoto(__active_gear);
+
+        console.log(__moto);
+
         if (
           await nkd.addGearEvent(
             connection,
-            0, // !!!!!!!!!!!!!!!! добавить
+            __moto,
             req.body.active_gear,
             nkd.signature(req)
           )
@@ -61,17 +67,31 @@ router.post("/set_options", async function (req, res, next) {
         // предстоит выяснить причину появления []
         // видимо после передачи объекта с фронта через jquery выполняется преобразование такое,
         // что у массивов появляются квадратные скобки
-        req.body["periodiks"] = req.body["periodiks[]"];
-        delete req.body["periodiks[]"];
+        // добавлено позже. на самом деле удобно с помощью скобок определять массив там или нет
+
+        if (req.body["periodiks[]"] != undefined) {
+          req.body["periodiks"] = req.body["periodiks[]"];
+          delete req.body["periodiks[]"];
+        } else {
+          let __temp = req.body["periodiks"];
+          req.body["periodiks"] = [__temp];
+        }
+
         ans.success = await config.setOptionsByLink(connection, req);
+        myEmitter.emit("optionsChanged");
         break;
 
       default:
         ans.success = await config.setOptionsByLink(connection, req);
+        myEmitter.emit("optionsChanged");
     }
   }
   res.json(ans);
 });
+
+function setCurrent(__current) {
+  current = __current;
+}
 
 let connection;
 
@@ -86,3 +106,4 @@ function bindEvent(event, handler) {
 module.exports = router;
 module.exports.setConnection = setConnection;
 module.exports.on = bindEvent;
+module.exports.setCurrent = setCurrent;

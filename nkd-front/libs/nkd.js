@@ -48,7 +48,8 @@ async function addGearEvent(connection, op_time, active_gear, signature) {
   );
 }
 
-async function getGearHistory(connection) {
+async function getGearHistory(connection, signals) {
+  // console.log(signals);
   return new Promise((resolve) =>
     connection.query(
       'select DATE_FORMAT(lts, "%d.%m.%Y %T") as date, lts, op_time, active_gear, signature from gear_history order by lts desc;',
@@ -58,6 +59,10 @@ async function getGearHistory(connection) {
           console.log(err);
           resolve(undefined);
         }
+        result.forEach((element) => {
+          element.op_time = calcMoto(element.op_time, signals.cnt.moto_factor);
+        });
+        // console.log(result);
         resolve(result);
       }
     )
@@ -76,6 +81,20 @@ function proceed(ans, err, res) {
   if (res != undefined) {
     ans.data = res;
   }
+}
+
+function calcMoto(moto, factor) {
+  let m_sec = moto * factor;
+  let m_min = Math.trunc(m_sec / 60);
+  let m_hour = Math.trunc(m_min / 60);
+
+  m_min = m_min - m_hour * 60;
+
+  if (m_min < 10) {
+    m_min = "0" + m_min;
+  }
+
+  return `${m_hour} : ${m_min}`;
 }
 
 module.exports.check_role = check_role;

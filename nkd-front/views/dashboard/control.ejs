@@ -8,12 +8,34 @@
     
     <div class="tab-content px-0" id="optionsTabContents">
         <div class="tab-pane fade show active" id="tabDiagnControl" role="tabpanel" aria-labelledby="home-tab">
+
             <div class="container-fluid px-2">
                 <div class="d-flex justify-content-begin">
-                    <div class="btn-group" role="group" aria-label="Сохранить настройки">                                    
-                        <button type="button" class="btn btn-primary my__btn_apply" form_id="timers_" role="single" router="set_timers_options">Выполнить внеочредной запуск диагностической процедуры</button>                                
+                    <div class="btn-group" role="group" aria-label="Подтвердить...">                                    
+                        <button type="button" class="btn btn-primary" role="single"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#window__send_diagn_command">
+                        Выполнить диагностику</button>                                
                     </div>    
                 </div>                                    
+            </div>
+
+            <div class="modal fade" id="window__send_diagn_command" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Подтверждение операции</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body m-3">
+                            Подтвердите выполнение внеочередной диагностической процедуры.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="btn__send_diagn_command" data-bs-dismiss="modal">Подтвердить</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

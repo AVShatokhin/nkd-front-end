@@ -12,6 +12,10 @@ let hardware = config.openConfigFile("hardware");
 
 mainApi.setCurrent(current);
 
+function getCurrent() {
+  return current;
+}
+
 mainApi.on("signals", () => {
   ws.send(JSON.stringify({ signals: current.getDataByLink("signals") }));
   ws.send(JSON.stringify({ badges: current.getDataByLink("badges") }));
@@ -20,6 +24,7 @@ mainApi.on("signals", () => {
 
 mainApi.on("diagn", () => {
   ws.send(JSON.stringify({ diagn: current.getDataByLink("diagn") }));
+  current.setCMD("diagn", false);
 });
 
 ws.on("get_all", (id) => {
@@ -48,6 +53,14 @@ function updateActiveGear(data) {
   );
 }
 
+function optionsChanged() {
+  current.optionsChanged();
+}
+
+function cmd(cmd) {
+  current.setCMD(cmd, true);
+}
+
 function setConnection(con) {
   current.setConnection(con);
   mainApi.setConnection(con);
@@ -62,3 +75,6 @@ module.exports = mainApi.router;
 module.exports.setConfig = setConfig;
 module.exports.setConnection = setConnection;
 module.exports.updateActiveGear = updateActiveGear;
+module.exports.optionsChanged = optionsChanged;
+module.exports.cmd = cmd;
+module.exports.getCurrent = getCurrent;

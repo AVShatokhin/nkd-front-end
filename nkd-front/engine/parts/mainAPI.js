@@ -95,7 +95,7 @@ router.post("/income/", async function (req, res, next) {
     status: {
       success: false,
     },
-    data: [],
+    data: {},
   };
 
   if ("signals" in req.body) {
@@ -115,6 +115,9 @@ router.post("/income/", async function (req, res, next) {
     myEmitter.emit("diagn");
     await DIAGN_sendEmails(connection, req.body.diagn);
   }
+
+  ans.data["options_changed_ts"] = current.getDataByLink("options_changed_ts");
+  ans.data["cmd"] = current.getDataByLink("cmd");
 
   res.json(ans);
 });

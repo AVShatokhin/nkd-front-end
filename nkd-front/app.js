@@ -15,6 +15,7 @@ const optionsRouter = require("./routes/options");
 const debugRouter = require("./routes/debug");
 const monitoringRouter = require("./routes/monitoring");
 const statisticsRouter = require("./routes/statistics");
+const controlRouter = require("./routes/control");
 const { allowedNodeEnvironmentFlags } = require("process");
 
 const app = express();
@@ -56,6 +57,7 @@ function init(conf) {
   app.use("/api", engineRouter);
   app.use("/monitoring", monitoringRouter);
   app.use("/statistics", statisticsRouter);
+  app.use("/control", controlRouter);
 
   app.use(function (req, res, next) {
     next(createError(404));
@@ -97,6 +99,16 @@ function init(conf) {
 
   optionsRouter.on("active_gear", (data) => {
     engineRouter.updateActiveGear(data);
+  });
+
+  optionsRouter.on("optionsChanged", () => {
+    engineRouter.optionsChanged();
+  });
+
+  optionsRouter.setCurrent(engineRouter.getCurrent());
+
+  controlRouter.on("cmd", (cmd) => {
+    engineRouter.cmd(cmd);
   });
 
   monitoringRouter.setConfig(conf);

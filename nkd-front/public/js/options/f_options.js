@@ -18,6 +18,8 @@ function initOptions(configs) {
     );
   });
 
+  // console.log(configs);
+
   let periodikList = new periodik_list_model(
     "div__periodik_list",
     configs.periodiks_collection.periodiks.value
@@ -31,7 +33,13 @@ function initOptions(configs) {
 
   $("#btn__send_periodik_data").click((event) => {
     let __sendData = {};
-    __sendData["periodiks"] = periodikList.data;
+
+    if (periodikList.data.length == 1) {
+      __sendData["periodiks"] = `${periodikList.data[0]}`;
+    } else {
+      __sendData["periodiks"] = periodikList.data;
+    }
+
     __sendData["link"] = "periodiks_collection";
 
     sendAjax(

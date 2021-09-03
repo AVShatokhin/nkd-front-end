@@ -86,6 +86,8 @@ async function setConnection(con) {
     "badges",
     "moto",
     "diagn",
+    "options_changed_ts",
+    "cmd",
   ]);
   // console.log(current);
 }
@@ -119,9 +121,23 @@ function getMoto(active_gear) {
   else if (active_gear == 1) return moto.moto_1;
 }
 
+function optionsChanged() {
+  updateData("options_changed_ts", new Date().getTime());
+}
+
+function setCMD(cmd, state) {
+  if (current?.cmd == null) {
+    current["cmd"] = {};
+  }
+  current.cmd[`${cmd}`] = state;
+  updateCurrentBackUP("cmd");
+}
+
 module.exports.setConnection = setConnection;
 module.exports.updateData = updateData;
 module.exports.updateMoto = updateMoto;
+module.exports.optionsChanged = optionsChanged;
+module.exports.setCMD = setCMD;
 module.exports.getMoto = getMoto;
 module.exports.getActiveGear = getActiveGear;
 module.exports.getAllData = getAllData;
