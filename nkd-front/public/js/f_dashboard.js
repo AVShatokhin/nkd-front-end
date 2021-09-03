@@ -35,7 +35,12 @@ $(function () {
         });
 
         $("#btn__show_options").click((e) => {
-          get_end_point("options/get_options");
+          get_end_point("options/get_options", (res) => {
+            let ans = JSON.parse(res);
+            $("#dashboard_main_content").empty();
+            $("#dashboard_main_content").html(ans.data.html);
+            initOptions(ans.data.options);
+          });
           set_active("btn__show_options");
         });
 
@@ -68,7 +73,7 @@ $(function () {
         $("#dashboard_main_content").html(res);
         // если загрузка энд-поинта завершилась удачно, то тогда
         if (callback != undefined) {
-          callback();
+          callback(res);
         }
       },
       () => {

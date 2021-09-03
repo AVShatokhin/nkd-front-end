@@ -40,7 +40,10 @@ async function openMainConfig(connection) {
 
   let options = await getOptionsByLink(connection, [
     "update_period_collection",
+    "periodiks_collection",
   ]);
+
+  object.records[0].periods = options.periodiks_collection.periodiks.value;
 
   object.signals["period"] =
     options.update_period_collection.update_period.value;
@@ -139,16 +142,21 @@ async function getOptionsByLink(connection, links) {
 
 async function setOptionsByLink(connection, req) {
   return new Promise((resolve) => {
+    // console.log(req.body);
     let link = req.body.link;
     let def = getDefaultOptions()[link];
     let newValues = {};
+    // console.log(def);
     if (def != undefined) {
       for (defaultOption in def) {
+        // console.log(defaultOption);
         if (req.body[defaultOption] != undefined) {
           // берем значения заданные пользователем
+          // console.log(req.body[defaultOption]);
           newValues[defaultOption] = req.body[defaultOption];
         } else {
           // берем значения по умолчанию
+          // console.log(req.body);
           newValues[defaultOption] = def[defaultOption].default;
         }
       }

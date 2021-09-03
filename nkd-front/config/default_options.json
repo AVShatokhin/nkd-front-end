@@ -1,4 +1,9 @@
 {
+    "periodiks_collection" : {
+        "periodiks" : {
+            "default" : []
+        }
+    },
     "active_gear_collection" : 
         {
             "active_gear" : {
