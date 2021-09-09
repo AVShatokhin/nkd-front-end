@@ -1,8 +1,14 @@
 class datatable {
   // ===================== PUBLIC
-  constructor(target, model) {
-    this._target = target;
-    this._model = model;
+  constructor(opts) {
+    this._target = opts.target;
+    this._model = opts.model;
+    $(`#${opts.requestButtonID}`).on("click", (e) => {
+      sessionStorage.removeItem("diagns");
+      this._model.clearStorage();
+      this.render();
+    });
+    this.render();
   }
 
   render() {
@@ -68,6 +74,14 @@ class datatable {
           sortDescending: ": activate to sort column descending",
         },
       },
+    });
+
+    this.table.on("draw", () => {
+      this._model.onDraw();
+    });
+
+    this.table.on("preXhr", () => {
+      this._model.onpreXhr();
     });
   }
 

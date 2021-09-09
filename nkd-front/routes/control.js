@@ -19,7 +19,7 @@ router.post("/cmd", function (req, res, next) {
     res.json(ans);
   } else {
     ans.status.success = true;
-    myEmitter.emit("cmd", req.body.cmd);
+    myEmitter.emit("cmd", req.body.cmd, req.body.params);
     res.json(ans);
   }
 });

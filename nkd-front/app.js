@@ -107,8 +107,8 @@ function init(conf) {
 
   optionsRouter.setCurrent(engineRouter.getCurrent());
 
-  controlRouter.on("cmd", (cmd) => {
-    engineRouter.cmd(cmd);
+  controlRouter.on("cmd", (cmd, params) => {
+    engineRouter.cmd(cmd, params);
   });
 
   monitoringRouter.setConfig(conf);

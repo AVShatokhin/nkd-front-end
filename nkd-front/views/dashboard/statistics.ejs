@@ -18,7 +18,7 @@
                     <div class="card-header">
                         <h5 class="card-title mb-0">Настройка выборки</h5>
                     </div>
-            
+
                     <div class="card-body px-3">
                         <div class="mb-3 input-group">
                             <div class="input-group-prepend col-4">
@@ -26,7 +26,7 @@
                             </div>                            
                             <input id="input__request_dateTimeRange" class="form-control col-8" type="text" name="datetimes" />
                         </div>
-            
+
                         <div class="mb-3 input-group">
                             <div class="input-group-prepend col-4">
                                 <span class="input-group-text">Редуктор</span>
@@ -37,8 +37,8 @@
                                 <option value="2" selected>Оба редуктора</option>
                             </select>
                         </div>
-            
-                        <div class="mb-3 input-group">
+
+                        <!-- <div class="mb-3 input-group">
                             <div class="input-group-prepend col-4">
                                 <span class="input-group-text">Выбрать узел</span>
                             </div>
@@ -46,8 +46,8 @@
                                 <option value="all" selected>Весь редуктор</option>
                                 <option value="all1">выбор узлов</option>
                             </select>
-                        </div>
-                        
+                        </div> -->
+
                         <div class="mb-3 input-group">
                             <div class="input-group-prepend col-4">
                                 <span class="input-group-text">Скорость дороги</span>
@@ -61,11 +61,11 @@
                             </select>
                         </div>
                     </div>
-            
+
                     <div class="px-0">
                         <hr class="mt-0 mb-3">
                     </div>
-            
+
                     <div class="container-fluid px-3 pb-3">
                         <div class="d-flex justify-content-begin">
                             <button id="btn__request_Date" type="button" class="btn btn-primary">Выполнить запрос</button>                                
@@ -91,7 +91,7 @@
                             <div class="input-group-prepend col-6">
                                 <span class="input-group-text">Начало выборки</span>
                             </div>                            
-                            <input id="input__moto_begin" class="form-control col-4" type="text"/>
+                            <input id="input__moto_begin" class="form-control col-4" type="text" value="0"/>
                             <div class="input-group-append col-2">
                                 <span class="input-group-text">мото часы</span>
                             </div>                            
@@ -101,42 +101,10 @@
                             <div class="input-group-prepend col-6">
                                 <span class="input-group-text">Конец выборки</span>
                             </div>                            
-                            <input id="input__moto_end" class="form-control col-4" type="text"/>
+                            <input id="input__moto_end" class="form-control col-4" type="text" value="100"/>
                             <div class="input-group-append col-2">
                                 <span class="input-group-text">мото часы</span>
                             </div>      
-                        </div>
-
-
-                        <!-- <div class="mb-3 input-group">
-                            <div class="input-group-prepend col-4">
-                                <span class="input-group-text">Редуктор</span>
-                            </div>
-                            <select class="form-control mb-1" id="active_gear_moto">
-                                <option value="0">Редуктор №1</option>
-                                <option value="1">Редуктор №2</option>
-                                <option value="2" selected>Оба редуктора</option>
-                            </select>
-                        </div> -->
-
-                        <div class="mb-3 input-group">
-                            <div class="input-group-prepend col-4">
-                                <span class="input-group-text">Правая ось ординат</span>
-                            </div>
-                            <select class="form-control mb-1" id="second_ordinat_moto">                                    
-                                <option value="freq" selected>Частота вращения первичного вала</option>
-                                <option value="speed_zone">Скорость кабинок</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 input-group">
-                            <div class="input-group-prepend col-4">
-                                <span class="input-group-text">Левая ось ординат</span>
-                            </div>
-                            <select class="form-control mb-1" id="first_ordinat_moto">                                    
-                                <option value="signals" selected>Масштабирование по уровню сигналов</option>
-                                <option value="gost">Масштабирование по уровням ГОСТ 10816</option>
-                            </select>
                         </div>
                         
                         <div class="mb-3 input-group">
@@ -165,6 +133,9 @@
                     </div>
                 </div> 
             </div>
+            <div id="div__diagn_Moto_Results_container">
+            
+            </div>    
         </div>
     </div>
 
