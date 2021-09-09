@@ -24,7 +24,7 @@ mainApi.on("signals", () => {
 
 mainApi.on("diagn", () => {
   ws.send(JSON.stringify({ diagn: current.getDataByLink("diagn") }));
-  current.setCMD("diagn", false);
+  current.setCMD({ cmd: "diagn", state: false, params: "" });
 });
 
 ws.on("get_all", (id) => {
@@ -57,8 +57,8 @@ function optionsChanged() {
   current.optionsChanged();
 }
 
-function cmd(cmd) {
-  current.setCMD(cmd, true);
+function cmd(cmd, params) {
+  current.setCMD({ cmd, state: true, params });
 }
 
 function setConnection(con) {

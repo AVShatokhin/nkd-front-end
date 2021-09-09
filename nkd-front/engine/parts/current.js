@@ -125,11 +125,20 @@ function optionsChanged() {
   updateData("options_changed_ts", new Date().getTime());
 }
 
-function setCMD(cmd, state) {
+function setCMD(opts) {
+  console.log(opts);
+
   if (current?.cmd == null) {
     current["cmd"] = {};
   }
-  current.cmd[`${cmd}`] = state;
+
+  if (current.cmd?.[`${opts?.cmd}`] == null) {
+    current.cmd[`${opts?.cmd}`] = { state: "", params: "" };
+  }
+
+  current.cmd[`${opts.cmd}`]["state"] = opts?.state;
+  current.cmd[`${opts.cmd}`]["params"] = opts?.params;
+
   updateCurrentBackUP("cmd");
 }
 

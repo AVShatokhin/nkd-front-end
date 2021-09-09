@@ -4,6 +4,7 @@ class dresults_array_model {
     this.ColHeaders = ["Реквизиты", "Результат"];
     this.ColWidths = [20, 80];
     this.url = "/statistics/get_data_by_jquery";
+    this.link = "diagns";
   }
 
   reqData(d) {
@@ -114,5 +115,29 @@ class dresults_array_model {
         return data;
         break;
     }
+  }
+
+  onDraw() {
+    let __diagns = sessionStorage.getItem(`${this.link}`);
+    let __configs = sessionStorage.getItem("configs");
+    if (__diagns != null) {
+      __diagns = JSON.parse(__diagns);
+      __diagns.forEach((element) => {
+        new dresult_model({
+          configs: JSON.parse(__configs),
+          treetable: new treetable(element.key),
+          initData: { content: JSON.parse(element.data) },
+        });
+      });
+    }
+    this.clearStorage();
+  }
+
+  onpreXhr() {
+    this.clearStorage();
+  }
+
+  clearStorage() {
+    sessionStorage.removeItem(`${this.link}`);
   }
 }

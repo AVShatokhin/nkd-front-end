@@ -64,10 +64,12 @@ router.get("/get_config", async function (req, res, next) {
     data: await config.openMainConfig(connection),
   };
 
+  ans.data["options_changed_ts"] = current.getDataByLink("options_changed_ts");
+
   res.json(ans);
 });
 
-router.get("/get_current/", function (req, res, next) {
+router.get("/get_current", function (req, res, next) {
   let c = current.getAllData();
 
   let ans = {
@@ -111,13 +113,15 @@ router.post("/income/", async function (req, res, next) {
     req.body.diagn.speed_zone = calcSpeedZone(req.body.diagn.freq);
     req.body.diagn.freq = Math.round(req.body.diagn.freq * 100) / 100;
     current.updateData("diagn", req.body.diagn);
-    await DIANG_statisticWrite(connection, ans, req.body.diagn);
+    await DIAGN_statisticWrite(connection, ans, req.body.diagn);
     myEmitter.emit("diagn");
     await DIAGN_sendEmails(connection, req.body.diagn);
   }
 
   ans.data["options_changed_ts"] = current.getDataByLink("options_changed_ts");
   ans.data["cmd"] = current.getDataByLink("cmd");
+
+  console.log(ans);
 
   res.json(ans);
 });
@@ -163,7 +167,7 @@ async function getUsers(connection) {
   );
 }
 
-async function DIANG_statisticWrite(connection, ans, diagn) {
+async function DIAGN_statisticWrite(connection, ans, diagn) {
   return new Promise((resolve) => {
     connection.query(
       "insert into diagn_history set calc_ts=FROM_UNIXTIME(?), record_ts=FROM_UNIXTIME(?), active_gear=?, moto=?, freq=?, mode=?, content=?, record_url=?;",
