@@ -138,6 +138,6 @@ class dresults_array_model {
   }
 
   clearStorage() {
-    sessionStorage.removeItem(`${this.link}`);
+    sessionStorage.removeItem("diagns");
   }
 }
