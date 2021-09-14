@@ -7,7 +7,7 @@ class datatable {
       this._model.clearStorage();
       this.render();
     });
-    this.render();
+    // this.render();
   }
 
   render() {
