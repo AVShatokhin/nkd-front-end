@@ -125,7 +125,7 @@ class dresults_units_moto_array_model {
             __tbody =
               __tbody +
               `<th class="text-center">${__icons(
-                __results[_d_index]?.main
+                __results?.[_d_index]?.main
               )}</th>`;
           }
         }
