@@ -71,6 +71,7 @@ class dresults_units_moto_array_model {
           </g>
         </svg></span>`,
         undefined: `-`,
+        null: `-`,
       };
       return __icons[index];
     }
@@ -120,7 +121,7 @@ class dresults_units_moto_array_model {
         __tbody = __tbody + `<tr><th>${_d_index}) ${__deffects[_d_index]}</th>`;
         for (let __signal in __signals) {
           if (__signals[__signal].diagn == true) {
-            let __results = __data?.wc[__signal];
+            let __results = __data?.wc?.[__signal];
             __tbody =
               __tbody +
               `<th class="text-center">${__icons(
