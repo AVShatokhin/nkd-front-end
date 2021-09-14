@@ -4,17 +4,17 @@ function f_statistics_main() {
   $.get("/api/get_config/", {}).done((income) => {
     sessionStorage.setItem("configs", JSON.stringify(income.data));
 
-    // new datatable({
-    //   target: "div__diagn_Date_Results_container",
-    //   requestButtonID: "btn__request_Date",
-    //   model: new dresults_array_model(),
-    // });
+    new datatable({
+      target: "div__diagn_Date_Results_container",
+      requestButtonID: "btn__request_Date",
+      model: new dresults_array_model(),
+    });
 
-    // new datatable({
-    //   target: "div__diagn_Moto_Results_container",
-    //   requestButtonID: "btn__request_moto",
-    //   model: new dresults_moto_array_model(),
-    // });
+    new datatable({
+      target: "div__diagn_Moto_Results_container",
+      requestButtonID: "btn__request_moto",
+      model: new dresults_moto_array_model(),
+    });
 
     new datatable({
       target: "div__unit",
