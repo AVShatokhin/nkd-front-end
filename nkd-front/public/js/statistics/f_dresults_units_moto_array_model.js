@@ -1,20 +1,18 @@
-class dresults_units_array_model {
+class dresults_units_moto_array_model {
   // ===================== PUBLIC
 
   constructor() {
-    this.ColHeaders = ["Реквизиты", "Результат"];
-    this.ColWidths = [30, 70];
-    this.url = "/statistics/get_data_units_by_jquery";
+    this.ColHeaders = ["Редуктор №1", "Редуктор №2"];
+    this.ColWidths = [50, 50];
+    this.url = "/statistics/get_data_units_moto_by_jquery";
     return this;
   }
 
   reqData(d) {
-    d.select__uuid = $("#select__uuid").val();
-    d.input__request_dateTimeRange = $(
-      "#input__request_dateTimeRange_unit"
-    ).val();
-    d.speed_zone = $("#speed_zone_unit").val();
-    d.active_gear = $("#active_gear_unit").val();
+    d.select__uuid = $("#select__uuid_moto").val();
+    d.moto_begin = $("#input__unit_moto_begin").val();
+    d.moto_end = $("#input__unit_moto_end").val();
+    d.speed_zone = $("#speed_zone_unit_moto").val();
   }
 
   renderData(data, type, row, meta) {
@@ -140,64 +138,102 @@ class dresults_units_array_model {
       );
     }
 
+    function __appendRow(target, data) {
+      let __temp = document.createElement("div");
+      $(__temp).addClass("d-flex");
+      $(__temp).addClass("flex-column");
+      $(__temp).append(data);
+      $(target).append(__temp);
+    }
+
+    function __calcMeta(__cell, __configs) {
+      let __tempObject = document.createElement("div");
+      $(__tempObject).addClass("d-flex");
+      $(__tempObject).addClass("flex-row");
+      $(__tempObject).addClass("justify-content-between");
+
+      let __record_datetime = __myTime(__cell.record_ts);
+      let __cell_datetime = __myTime(__cell.calc_ts);
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Время записи</div>` +
+          `<div class="p-1 text-center"><span class="badge bg-primary  p-2">${__record_datetime}</span></div>`
+      );
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Время расчета</div>` +
+          `<div class="p-1 text-center"><span class="badge bg-primary  p-2">${__cell_datetime}</span</div>`
+      );
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Редуктор</div>` +
+          `<div class="p-1 text-center"> <span class="badge bg-primary  p-2">${
+            ["Редуктор №1", "Редуктор №2"][__cell.active_gear]
+          }</span></div>`
+      );
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Наработка</div>` +
+          `<div class="p-1 text-center"><span class="badge bg-primary p-2">${__calcMoto(
+            __cell.moto,
+            __configs.signals.cnt.moto_factor
+          )}</span><span class="p-2">ЧЧ:ММ</span></div>`
+      );
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Частота</div>` +
+          `<div class="p-1 text-center"><span class="badge bg-primary  p-2">${__cell.freq}</span><span class="p-2">Гц</span></div>`
+      );
+
+      let speed_zone;
+      for (let sz in __configs.signals.tacho.speed_zones) {
+        if (
+          (__cell.freq > __configs.signals.tacho.speed_zones[sz].begin) &
+          (__cell.freq <= __configs.signals.tacho.speed_zones[sz].end)
+        ) {
+          speed_zone = sz;
+        }
+      }
+
+      __appendRow(
+        __tempObject,
+        `<div class="p-1 text-center">Скорость дороги</div>` +
+          `<div class="p-1 text-center"><span class="badge bg-primary  p-2">${speed_zone}</span><span class="p-2">М/с</span></div>`
+      );
+
+      return __tempObject;
+    }
+
     switch (type) {
       case "display":
         let __configs = JSON.parse(sessionStorage.getItem("configs"));
-        let __tempObject = document.createElement("div");
+        let __cell = JSON.parse(data);
+        let __tempObject = __calcMeta(__cell, __configs);
 
         if (meta.col == 0) {
-          // реквизиты
-          let __cell = JSON.parse(data);
-
-          $(__tempObject).append(
-            `<div class="p-1">Время записи : <span class="badge bg-primary  p-2">${__myTime(
-              __cell.record_ts
-            )}</span></div>`
+          return (
+            $(__tempObject).get(0).outerHTML +
+            `<div class="d-flex flex-column">${__createTable(
+              __configs,
+              __cell.content
+            )}</div>`
           );
-
-          $(__tempObject).append(
-            `<div class="p-1">Время расчета : <span class="badge bg-primary  p-2">${__myTime(
-              __cell.calc_ts
-            )}</span</div>`
-          );
-
-          $(__tempObject).append(
-            `<div class="p-1">Редуктор : <span class="badge bg-primary  p-2">${
-              ["Редуктор №1", "Редуктор №2"][__cell.active_gear]
-            }</span></div>`
-          );
-
-          $(__tempObject).append(
-            `<div class="p-1">Наработка, часы:минуты : <span class="badge bg-primary p-2">${__calcMoto(
-              __cell.moto,
-              __configs.signals.cnt.moto_factor
-            )}</span></div>`
-          );
-
-          $(__tempObject).append(
-            `<div class="p-1">Частота, Гц : <span class="badge bg-primary  p-2">${__cell.freq}</span></div>`
-          );
-
-          let speed_zone;
-          for (let sz in __configs.signals.tacho.speed_zones) {
-            if (
-              (__cell.freq > __configs.signals.tacho.speed_zones[sz].begin) &
-              (__cell.freq <= __configs.signals.tacho.speed_zones[sz].end)
-            ) {
-              speed_zone = sz;
-            }
-          }
-
-          $(__tempObject).append(
-            `<div class="p-1">Скорость дороги, м/с : <span class="badge bg-primary  p-2">${speed_zone}</span></div>`
-          );
-
-          return $(__tempObject).get(0).outerHTML;
         } else if (meta.col == 1) {
-          return `<div class="d-flex flex-column">${__createTable(
-            __configs,
-            JSON.parse(data)
-          )}</div>`;
+          if (data == "{}")
+            return `<span class="badge bg-warning p-4 w-100">нет соотвествия</span>`;
+
+          return (
+            $(__tempObject).get(0).outerHTML +
+            `<div class="d-flex flex-column">${__createTable(
+              __configs,
+              __cell.content
+            )}</div>`
+          );
         }
         break;
       default:

@@ -128,7 +128,7 @@ router.post("/income/", async function (req, res, next) {
   ans.data["options_changed_ts"] = current.getDataByLink("options_changed_ts");
   ans.data["cmd"] = current.getDataByLink("cmd");
 
-  console.log(ans);
+  // console.log(ans);
 
   res.json(ans);
 });
@@ -349,47 +349,3 @@ module.exports.setConfig = setConfig;
 module.exports.setConnection = setConnection;
 module.exports.setCurrent = setCurrent;
 module.exports.on = bindEvent;
-
-// хорошенько подчистить всё отладочное !!!
-
-// let start_ts = 1625465938;
-// let active_gear = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
-// let freq = [10, 16, 19, 10, 16, 19, 10, 16, 19, 10, 16];
-// let index = 0;
-// let moto = [0, 0];
-
-// let samples = [
-//   config.openConfigFile("test/diagn_1"),
-//   config.openConfigFile("test/diagn_2"),
-//   config.openConfigFile("test/diagn_3"),
-//   config.openConfigFile("test/diagn_4"),
-//   config.openConfigFile("test/diagn_5"),
-//   config.openConfigFile("test/diagn_6"),
-//   config.openConfigFile("test/diagn_7"),
-//   config.openConfigFile("test/diagn_8"),
-//   config.openConfigFile("test/diagn_9"),
-// ];
-
-// let diagn = samples[index].diagn;
-// console.log(diagn);
-
-// for (let i = 1; i < 365; i++) {
-//   diagn.record_ts = start_ts;
-//   diagn.calc_ts = start_ts + 60;
-
-//   diagn.active_gear = active_gear[index];
-//   diagn.moto = moto[active_gear[index]];
-//   diagn.freq = freq[index];
-
-//   diagn.mode = "auto";
-
-//   await DIANG_statisticWrite(connection, ans, diagn);
-
-//   start_ts = start_ts + 24 * 3600;
-//   moto[active_gear[index]] =
-//     moto[active_gear[index]] + 24 * 3600 * freq[index];
-//   console.log(".");
-// }
-
-// index = index + 1;
-// if (index > 8) index = 0;

@@ -48,7 +48,7 @@ router.post("/set_options", async function (req, res, next) {
         let __active_gear = current.getActiveGear();
         let __moto = current.getMoto(__active_gear);
 
-        console.log(__moto);
+        // console.log(__moto);
 
         if (
           await nkd.addGearEvent(

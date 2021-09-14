@@ -21,6 +21,12 @@ function f_statistics_main() {
       requestButtonID: "btn__request_Date_unit",
       model: new dresults_units_array_model(),
     });
+
+    new datatable({
+      target: "div__unit_moto",
+      requestButtonID: "btn__request_Moto_unit",
+      model: new dresults_units_moto_array_model(),
+    });
   });
 }
 

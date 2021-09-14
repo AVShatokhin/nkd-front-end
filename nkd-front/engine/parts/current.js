@@ -126,7 +126,7 @@ function optionsChanged() {
 }
 
 function setCMD(opts) {
-  console.log(opts);
+  // console.log(opts);
 
   if (current?.cmd == null) {
     current["cmd"] = {};
