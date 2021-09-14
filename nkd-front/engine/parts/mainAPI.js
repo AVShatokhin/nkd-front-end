@@ -2,6 +2,7 @@ var config = require("../../libs/config.js");
 var nkd = require("../../libs/nkd.js");
 
 const dresult_render = require("../../libs/classes/dresult_render.js");
+const object_parser = require("../../libs/classes/object_parser.js");
 
 var express = require("express");
 var router = express.Router();
@@ -65,6 +66,12 @@ router.get("/get_config", async function (req, res, next) {
   };
 
   ans.data["options_changed_ts"] = current.getDataByLink("options_changed_ts");
+
+  let __object_parser = new object_parser({
+    configs: { savedNode: ans.data.savedNode },
+  });
+
+  ans.data.objectHash = __object_parser.objectHash;
 
   res.json(ans);
 });

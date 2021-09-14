@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var api = require("../libs/nkd.js");
 var options = require("../libs/config.js");
+const object_parser = require("../libs/classes/object_parser");
 var conf = require("nconf")
   .argv()
   .env()
@@ -9,6 +10,9 @@ var conf = require("nconf")
 
 let hardware = options.openConfigFile("hardware");
 let signals = options.openConfigFile("signals");
+let yellow_table = options.openConfigFile("yellow_table");
+
+let savedNode = options.openObjectXML();
 
 router.get("/", function (req, res, next) {
   if (!api.check_role(req, "")) {
@@ -56,7 +60,14 @@ router.get("/get_statistics", function (req, res, next) {
     return;
   }
 
-  res.render("dashboard/statistics");
+  let __object_parser = new object_parser({
+    configs: { savedNode: savedNode.savedNode },
+  });
+
+  res.render("dashboard/statistics", {
+    objectSortedList: __object_parser.objectSortedList,
+    yellow_table,
+  });
 });
 
 router.get("/get_monitoring", async function (req, res, next) {
