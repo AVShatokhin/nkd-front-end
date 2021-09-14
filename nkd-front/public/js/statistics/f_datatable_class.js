@@ -4,7 +4,6 @@ class datatable {
     this._target = opts.target;
     this._model = opts.model;
     $(`#${opts.requestButtonID}`).on("click", (e) => {
-      sessionStorage.removeItem("diagns");
       this._model.clearStorage();
       this.render();
     });
@@ -32,20 +31,18 @@ class datatable {
   }
 
   _initJQuery() {
+    let __columns = [];
+    this._model.ColHeaders.forEach((element) => {
+      __columns.push({ render: this._model.renderData });
+    });
+
     this.table = $(`#table__${this._target}`).DataTable({
       dom: '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>',
       processing: true,
       serverSide: true,
       searching: false,
       ordering: false,
-      columns: [
-        {
-          render: this._model.renderData,
-        },
-        {
-          render: this._model.renderData,
-        },
-      ],
+      columns: __columns,
       ajax: {
         url: this._model.url,
         data: this._model.reqData,
