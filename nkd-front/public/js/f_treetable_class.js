@@ -82,7 +82,8 @@ class treetable {
       if (node.name != undefined) {
         // проверям валидность ноды (нужно ли её отражать в таблице, без имени не надо её отображать)
         let hasChildren = node?.node != undefined; // проверяем есть ли в данной ноде вложенные ноды (или массивы нод)
-        this._createClement(node, index, hasChildren, parentUUID);
+        if (node.type != 4)
+          this._createClement(node, index, hasChildren, parentUUID);
       }
 
       if ("node" in node) {

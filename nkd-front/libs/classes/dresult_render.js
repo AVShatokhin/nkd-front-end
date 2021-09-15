@@ -24,7 +24,7 @@ class dresult_render {
   }
 
   _iterator(params, node, level) {
-    this._result.push(this._tr(params, node, level));
+    if (node.type != 4) this._result.push(this._tr(params, node, level));
     if ("node" in node) {
       if (node.node?.length > 0) {
         node.node.forEach((node) => this._iterator(params, node, level + 1));
