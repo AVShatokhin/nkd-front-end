@@ -38,11 +38,16 @@ async function sendAjaxData(url, formData, sucess_function, error_function) {
 }
 
 function sendAjaxGet(url, sucess_function, error_function) {
+  // function __success(data) {
+  //   console.log(data);
+  //   sucess_function(data);
+  // }
+
   $.ajax({
     url: url, //url страницы
     method: "GET", //метод отправки
     dataType: "html", //формат данных
-    success: sucess_function,
+    success: __success,
     error: error_function,
   });
 }

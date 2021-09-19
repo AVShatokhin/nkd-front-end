@@ -41,10 +41,14 @@ function init(conf) {
   const sessionOpts = {
     store: new redisStorage({
       client: client,
+      ttl: 86400 * 30,
     }),
     secret: conf.get("redis_secret"),
     saveUninitialized: true,
   };
+
+  // console.log(redis);
+  // console.log(redisStorage);
 
   app.use(session(sessionOpts));
   app.use("/theme", express.static(path.join(__dirname, "/theme")));
