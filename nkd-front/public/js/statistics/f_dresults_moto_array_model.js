@@ -4,7 +4,7 @@ class dresults_moto_array_model {
   constructor() {
     this.ColHeaders = ["Редуктор №1", "Редуктор №2"];
     this.ColWidths = [50, 50];
-    this.url = "/statistics/get_moto_data_by_jquery";
+    this.url = "/get_diagn/get_moto_data_by_jquery";
   }
 
   reqData(d) {
@@ -165,7 +165,7 @@ class dresults_moto_array_model {
 
           new dresult_model({
             configs: __configs,
-            treetable: new treetable(element.key),
+            treetable: new treeListTableView(element.key),
             initData: { content: __content },
           });
         }

@@ -128,7 +128,7 @@
             <div class="row">
                 <div class="col-12 px-2">
                     <div class="card">
-                        <div class="card-body p-1">
+                        <div class="card-body p-1 date-graph d-none">
                             <div id="graph" style="width:100%; height: 480px;">
             
                             </div>
@@ -268,7 +268,7 @@
 
             <div class="row">
                 <div class="col-12 px-2">
-                    <div class="card">
+                    <div class="card moto-graph d-none">
                         <div class="card-body p-1">
                             <div id="graph1_moto" style="width:100%; height: 480px;">
             
@@ -341,20 +341,20 @@
         
         $("#btn__request").on('click', () => { getGraph();  });
 
-        getGraph();
+        // getGraph();
 
         $("#btn__request_moto").on('click', () => { getGraph_moto();  });
         $("#input__moto_begin").attr("value", 0);
         $("#input__moto_end").attr("value", 10);
 
-        getGraph_moto();
+        // getGraph_moto();
     });
 
     function getGraph() {
 
         let startTimeStamp = new Date().getTime();
 
-        $.get("/monitoring/get_stat/", 
+        $.get("/get_monitoring/get_stat/", 
                 { 
                     input__request_dateTimeRange : $("#input__request_dateTimeRange").val(),
                     first_ordinat : $("#first_ordinat").val(),
@@ -365,6 +365,7 @@
             ).done((income) => { 
                 dataProcceed(income, startTimeStamp);
                 statictic_write(income, startTimeStamp); 
+                $(".date-graph").removeClass("d-none");
             });
     }
 
@@ -372,7 +373,7 @@
 
         let startTimeStamp = new Date().getTime();
 
-        $.get("/monitoring/get_stat_moto/", 
+        $.get("/get_monitoring/get_stat_moto/", 
                 { 
                     input__moto_begin : $("#input__moto_begin").val(),
                     input__moto_end : $("#input__moto_end").val(),                    
@@ -383,7 +384,8 @@
                 }
             ).done((income) => { 
                 dataProcceed_moto(income, startTimeStamp);
-                statictic_write_moto(income, startTimeStamp); 
+                statictic_write_moto(income, startTimeStamp);
+                $(".moto-graph").removeClass("d-none");                
             });
     }
 

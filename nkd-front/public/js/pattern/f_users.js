@@ -1,4 +1,4 @@
-$(function () {
+function initUsers() {
   $(".select_dostup").change((event) => {
     let uid = $(event.target).attr("uid");
     $(`#div__select_dostup_${uid}`).removeClass("col-12");
@@ -108,4 +108,4 @@ $(function () {
       }
     );
   });
-});
+}

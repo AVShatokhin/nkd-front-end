@@ -1,4 +1,4 @@
-class treetable {
+class treeListTableView {
   // ===================== PUBLIC
   constructor(target, minimized) {
     this.target = target;

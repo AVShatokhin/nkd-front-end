@@ -1,7 +1,7 @@
 function initControl() {
   $("#btn__send_diagn_command").click((event) => {
     sendAjax(
-      "/control/cmd",
+      "/get_control/cmd",
       { cmd: "diagn", params: "{6e665fe4-3d53-4d19-bbee-f80a023677f4}" },
       (result) => {
         var result = JSON.parse(result);

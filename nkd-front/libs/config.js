@@ -33,10 +33,14 @@ function openObjectXML() {
 
 async function openMainConfig(connection) {
   let object = openObjectXML();
+  object.mnemo_config = openConfigFile("mnemo_config");
   object.signals = openSignalsConfig();
   object.records = openRecordsConfig();
   object.hardware = openConfigFile("hardware");
   object.yellow_table = openConfigFile("yellow_table");
+
+  let __configSecret = openConfigFile("config");
+  object.ws_url = __configSecret?.ws_url;
 
   let options = await getOptionsByLink(connection, [
     "update_period_collection",

@@ -3,7 +3,7 @@ class dresults_array_model {
   constructor() {
     this.ColHeaders = ["Реквизиты", "Результат"];
     this.ColWidths = [20, 80];
-    this.url = "/statistics/get_data_by_jquery";
+    this.url = "/get_diagn/get_data_by_jquery";
     this.link = "diagns";
   }
 
@@ -125,7 +125,7 @@ class dresults_array_model {
       __diagns.forEach((element) => {
         new dresult_model({
           configs: JSON.parse(__configs),
-          treetable: new treetable(element.key),
+          treetable: new treeListTableView(element.key),
           initData: { content: JSON.parse(element.data) },
         });
       });

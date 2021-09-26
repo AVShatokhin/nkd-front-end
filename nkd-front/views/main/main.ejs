@@ -1,0 +1,51 @@
+<div class="container-fluid p-0">
+    
+    <div class="tab">
+        <ul class="nav nav-pills mb-3" id="monitoringTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="mnemo-tab" data-bs-toggle="tab" data-bs-target="#tabMnemo" type="button" role="tab" aria-controls="tabMnemo" aria-selected="true">Мнемосхема</a>
+            </li>
+    
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="monitoring-tab" data-bs-toggle="tab" data-bs-target="#tabMonitoring" type="button" role="tab" aria-controls="tabMonitoring" aria-selected="false">Мониторинг</a>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="diagn-tab" data-bs-toggle="tab" data-bs-target="#tabDiagn" type="button" role="tab" aria-controls="tabDiagn" aria-selected="false">Диагностика</a>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="tab-content bg-transparent p-0" id="monitoringTabContent">
+        <div class="tab-pane fade show active" id="tabMnemo" role="tabpanel" aria-labelledby="tabMnemo">
+            <div class="row justify-content-center">
+                <div class="col-12 col-xxl-7">
+                    <div class="p-4" id="mnemo_container">
+                    </div>        
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade show" id="tabMonitoring" role="tabpanel" aria-labelledby="tabMonitoring">
+            <div class="card m-0">
+                <div class="card-body p-0" id="div__monitoringTable">
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade show" id="tabDiagn" role="tabpanel" aria-labelledby="tabDiagn">
+            <div class="flex-row d-flex justify-content-between">
+                <div id="div__gearmoto" class="card mb-2 flex-fill p-2"></div>    
+                <div class="flex-shrink-1 m-1"></div>
+                <div id="div__dates" class="card mb-2 flex-fill p-2"></div>
+                <div class="flex-shrink-1 m-1"></div>
+                <div id="div__speedfreq" class="card mb-2 flex-fill p-2"></div>
+            </div>
+            <div class="card col-12">
+                <div class="card-body p-0" id="treetable__currentResult">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -9,11 +9,6 @@ class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 
 router.get("/get_options", async function (req, res, next) {
-  if (!nkd.check_role(req, "admin")) {
-    res.render("security/noauthreq");
-    return;
-  }
-
   let options = await config.getOptionsByLink(connection, [
     "active_gear_collection",
     "update_period_collection",
@@ -23,16 +18,20 @@ router.get("/get_options", async function (req, res, next) {
   let ans = {
     status: {
       success: false,
+      auth: nkd.check_role(req, "admin"),
     },
     data: {},
   };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
 
   res.render("options/options", options, (err, html) => {
     ans.data["html"] = html;
     ans.data["options"] = options;
   });
-
-  // console.log(ans);
 
   res.end(JSON.stringify(ans));
 });

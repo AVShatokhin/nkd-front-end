@@ -1,3 +1,4 @@
+// const { allowedNodeEnvironmentFlags } = require("process");
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -8,15 +9,21 @@ const mysql = require("mysql");
 const session = require("express-session");
 const redisStorage = require("connect-redis")(session);
 const redis = require("redis");
+
+const profileRouter = require("./routes/pattern/profile");
+const patternRouter = require("./routes/pattern");
+
+// НИЖЕ объявление специфичных для приложения роутеров
 const engineRouter = require("./engine/engine");
-const authRouter = require("./routes/auth");
-const dashboardRouter = require("./routes/dashboard");
 const optionsRouter = require("./routes/options");
 const debugRouter = require("./routes/debug");
-const monitoringRouter = require("./routes/monitoring");
-const statisticsRouter = require("./routes/statistics");
+const monitoringRouter = require("./routes/statistics/monitoring");
+const diagnRouter = require("./routes/statistics/diagn");
+const redchangeRouter = require("./routes/statistics/redchange");
 const controlRouter = require("./routes/control");
-const { allowedNodeEnvironmentFlags } = require("process");
+const mnemoRouter = require("./routes/mnemo");
+const mainRouter = require("./routes/main");
+// ВЫШЕ объявление специфичных для приложения роутеров
 
 const app = express();
 
@@ -47,21 +54,23 @@ function init(conf) {
     saveUninitialized: true,
   };
 
-  // console.log(redis);
-  // console.log(redisStorage);
-
   app.use(session(sessionOpts));
   app.use("/theme", express.static(path.join(__dirname, "/theme")));
   app.use("/public", express.static(path.join(__dirname, "/public")));
 
-  app.use(authRouter);
-  app.use("/dashboard", dashboardRouter);
+  app.use(profileRouter);
+  app.use("/dashboard", patternRouter);
   app.use("/debug", debugRouter);
+
+  // ниже роутеры основного приложения
   app.use("/options", optionsRouter);
   app.use("/api", engineRouter);
-  app.use("/monitoring", monitoringRouter);
-  app.use("/statistics", statisticsRouter);
-  app.use("/control", controlRouter);
+  app.use("/get_monitoring", monitoringRouter);
+  app.use("/get_diagn", diagnRouter);
+  app.use("/get_redchange", redchangeRouter);
+  app.use("/get_control", controlRouter);
+  app.use("/mnemo", mnemoRouter);
+  app.use("/main", mainRouter);
 
   app.use(function (req, res, next) {
     next(createError(404));
@@ -92,15 +101,19 @@ function init(conf) {
         throw err;
       } else {
         console.log("mysql connected");
-        authRouter.setConnection(connection);
-        dashboardRouter.setConnection(connection);
+        profileRouter.setConnection(connection);
+        // patternRouter.setConnection(connection);
+
+        // ниже настройка роутеров основного приложения на работу с СУБД
         optionsRouter.setConnection(connection);
         engineRouter.setConnection(connection);
-        statisticsRouter.setConnection(connection);
+        redchangeRouter.setConnection(connection);
+        diagnRouter.setConnection(connection);
       }
     });
   });
 
+  // НИЖЕ специфические для приложения настройки
   optionsRouter.on("active_gear", (data) => {
     engineRouter.updateActiveGear(data);
   });
@@ -118,6 +131,7 @@ function init(conf) {
   monitoringRouter.setConfig(conf);
   engineRouter.setConfig(conf);
 }
+// ВЫШЕ специфические для приложения настройки
 
 module.exports = app;
 module.exports.init = init;

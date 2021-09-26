@@ -4,7 +4,7 @@ class dresults_units_array_model {
   constructor() {
     this.ColHeaders = ["Реквизиты", "Результат"];
     this.ColWidths = [30, 70];
-    this.url = "/statistics/get_data_units_by_jquery";
+    this.url = "/get_diagn/get_data_units_by_jquery";
     return this;
   }
 

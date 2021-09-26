@@ -28,19 +28,19 @@ mainApi.on("diagn", () => {
 });
 
 ws.on("get_all", (id) => {
-  ws.send(
-    JSON.stringify({
-      configs: {
-        savedNode: object.savedNode,
-        yellow_table,
-        signals,
-        mnemo_config,
-        records,
-        hardware,
-      },
-    }),
-    id
-  );
+  // ws.send(
+  //   JSON.stringify({
+  //     configs: {
+  //       savedNode: object.savedNode,
+  //       yellow_table,
+  //       signals,
+  //       mnemo_config,
+  //       records,
+  //       hardware,
+  //     },
+  //   }),
+  //   id
+  // );
   ws.send(JSON.stringify(current.getAllData()), id); // current посылаем после того как послали конфиг - модель должна успеть проинициализироваться
 });
 

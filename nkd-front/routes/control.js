@@ -1,11 +1,32 @@
 var express = require("express");
 var router = express.Router();
-var nkd = require("../libs/nkd.js");
-// var config = require("../libs/config.js");
+var api = require("../libs/nkd");
 
 const EventEmitter = require("events");
 class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
+
+router.get("/", function (req, res, next) {
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "user"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
+
+  res.render("control/control", {}, (err, html) => {
+    ans.status.success = true;
+    ans.data["html"] = html;
+  });
+
+  res.end(JSON.stringify(ans));
+});
 
 router.post("/cmd", function (req, res, next) {
   let ans = {
@@ -15,7 +36,7 @@ router.post("/cmd", function (req, res, next) {
     data: {},
   };
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
   } else {
     ans.status.success = true;
@@ -29,5 +50,4 @@ function bindEvent(event, handler) {
 }
 
 module.exports = router;
-// module.exports.setConnection = setConnection;
 module.exports.on = bindEvent;

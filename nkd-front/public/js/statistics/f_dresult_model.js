@@ -37,10 +37,7 @@ class dresult_model {
     if (mnemo != undefined) {
       this._mnemo = mnemo;
       mnemo.model = this;
-
-      if (mnemo_ready) mnemo.plot();
-
-      model_ready = true;
+      mnemo.plot();
     }
 
     if (initData != undefined) {
@@ -147,10 +144,57 @@ class dresult_model {
 
   update(diagn) {
     this._subListData = diagn.content;
+    this._diagn = diagn;
     this._treetable__currentResult.plot();
     if (this._mnemo != undefined) {
       this._mnemo.plot();
     }
+    this.processMetaInfoDiagn();
+  }
+
+  processMetaInfoDiagn() {
+    let diagn = this._diagn;
+    let __freq = diagn.freq;
+    let __speed_zone = diagn.speed_zone;
+
+    let __active_gear = ["Редуктор №1", "Редуктор №2"][diagn.active_gear];
+
+    let __configs = JSON.parse(sessionStorage.getItem("configs"));
+
+    let __moto = this._calcMoto(diagn.moto, __configs.signals.cnt.moto_factor);
+
+    let __calc_ts = new Date(diagn.calc_ts * 1000).toLocaleString("ru", {
+      timezone: "UTC",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+
+    let __record_ts = new Date(diagn.record_ts * 1000).toLocaleString("ru", {
+      timezone: "UTC",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+
+    $("div#div__speedfreq").html(
+      `<div class="p-1">Скорость дороги, м/с : <span class="badge bg-primary  p-2">${__speed_zone}</span></div>` +
+        `<div class="p-1">Частота вращения, Гц : <span class="badge bg-primary  p-2">${__freq}</span></div>`
+    );
+    $("div#div__dates").html(
+      `<div class="p-1">Дата замера : <span class="badge bg-primary  p-2">${__record_ts}</span></div>` +
+        `<div class="p-1">Дата вычисления : <span class="badge bg-primary  p-2">${__calc_ts}</span></div>`
+    );
+    $("div#div__gearmoto").html(
+      `<div class="p-1">Редуктор : <span class="badge bg-primary  p-2">${__active_gear}</span></div>` +
+        `<div class="p-1">Наработка, час:мин : <span class="badge bg-primary  p-2">${__moto}</span></div>`
+    );
   }
 
   // updateSignals(data) {
@@ -166,6 +210,20 @@ class dresult_model {
   // private
   _container(content) {
     return `<div class="div__treetable_content">${content}</div>`;
+  }
+
+  _calcMoto(moto, factor) {
+    let m_sec = moto * factor;
+    let m_min = Math.trunc(m_sec / 60);
+    let m_hour = Math.trunc(m_min / 60);
+
+    m_min = m_min - m_hour * 60;
+
+    if (m_min < 10) {
+      m_min = "0" + m_min;
+    }
+
+    return `${m_hour} : ${m_min}`;
   }
 
   _header_container(content) {

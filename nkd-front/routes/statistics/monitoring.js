@@ -1,10 +1,32 @@
 var express = require("express");
 var router = express.Router();
-var nkd = require("../libs/nkd.js");
+var api = require("../../libs/nkd.js");
 const { ClickHouse } = require("clickhouse");
-var config = require("../libs/config.js");
+var config = require("../../libs/config.js");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
 const signals = config.openConfigFile("signals");
+
+router.get("/", async function (req, res, next) {
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "user"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
+
+  res.render("statistics/monitoring", {}, (err, html) => {
+    ans.status.success = true;
+    ans.data["html"] = html;
+  });
+
+  res.end(JSON.stringify(ans));
+});
 
 router.get("/get_stat", async function (req, res, next) {
   let ans = {
@@ -16,7 +38,7 @@ router.get("/get_stat", async function (req, res, next) {
 
   ans.startTime = new Date().getTime();
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }
@@ -228,7 +250,7 @@ router.get("/get_stat_moto", async function (req, res, next) {
 
   ans.startTime = new Date().getTime();
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }

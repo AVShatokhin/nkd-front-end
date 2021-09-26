@@ -6,7 +6,7 @@ var router = express.Router();
 const nodemailer = require("nodemailer");
 var crypto = require("crypto");
 const redis = require("redis");
-var api = require("../libs/nkd.js");
+var api = require("../../libs/nkd.js");
 
 var conf = require("nconf")
   .argv()
@@ -22,15 +22,15 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/auth", function (req, res, next) {
-  res.render("security/auth");
+  res.render("pattern/profile/auth");
 });
 
 router.get("/register", function (req, res, next) {
-  res.render("security/register");
+  res.render("pattern/profile/register");
 });
 
 router.get("/reset_password", function (req, res, next) {
-  res.render("security/reset_password");
+  res.render("pattern/profile/reset_password");
 });
 
 router.get("/logout", function (req, res, next) {
@@ -122,7 +122,14 @@ router.post("/email_verif_req", function (req, res, next) {
             redisClient.set("code:" + hash, email, (redisErr, redisRes) => {
               // добавим code в redis
               if (redisErr) console.log(redisErr);
-              redisClient.expire("code:" + hash, 3600 * 24, () => {});
+              redisClient.expire(
+                "code:" + hash,
+                3600 * 24,
+                (redisErr, redisRes) => {
+                  // console.log(redisErr);
+                  // console.log(redisRes);
+                }
+              );
               if (redisRes == "OK") {
                 // отправим письмо и создадим пользователя
                 sendAuthMail(hash, email);
@@ -148,9 +155,9 @@ router.post("/email_verif_req", function (req, res, next) {
               }
             });
 
-            res.render("security/verif_send"); // сказали что ждём верификацию
+            res.render("pattern/profile/verif_send"); // сказали что ждём верификацию
           } else {
-            res.render("security/user_allready_exists"); // оказалось что пользователь есть уже
+            res.render("pattern/profile/user_allready_exists"); // оказалось что пользователь есть уже
           }
         }
       }
@@ -175,9 +182,9 @@ router.post("/password_reset_req", function (req, res, next) {
           if (sqlRes[0] != undefined) {
             // пользователь такой есть можно продолжать работать над этой задачей
             passwordRecoveryGenCodeAndSend(email);
-            res.render("security/reset_send"); // сказали что ждём верификацию
+            res.render("pattern/profile/reset_send"); // сказали что ждём верификацию
           } else {
-            res.render("security/user_notfound"); // оказалось что пользователь есть уже
+            res.render("pattern/profile/user_notfound"); // оказалось что пользователь есть уже
           }
         }
       }
@@ -189,7 +196,7 @@ router.get("/email_confirm/:code", function (req, res, next) {
   req.session.auth = false;
   let code = req.params["code"];
 
-  console.log(code);
+  // console.log(code);
 
   redisClient.get("code:" + code, (err, email) => {
     console.log("Установка пароля для пользователя: " + email);
@@ -223,38 +230,70 @@ router.get("/email_confirm/:code", function (req, res, next) {
 
 router.get("/set_password_dialog", function (req, res, next) {
   if (req.session.came_by_link == true) {
-    res.render("security/set_password_dialog");
+    res.render("pattern/profile/set_password_dialog");
   } else {
     res.redirect("/auth");
   }
 });
 
 router.get("/profile", function (req, res, next) {
-  res.render("security/profile", {
-    avatar: req.session.ava,
-    name: req.session.name,
-    second_name: req.session.second_name,
-    surname: req.session.surname,
-    address: req.session.address,
-    phone: req.session.phone,
-  });
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "user"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
+
+  res.render(
+    "pattern/profile/profile",
+    {
+      avatar: req.session.ava,
+      name: req.session.name,
+      second_name: req.session.second_name,
+      surname: req.session.surname,
+      address: req.session.address,
+      phone: req.session.phone,
+    },
+    (err, html) => {
+      ans.status.success = true;
+      ans.data["html"] = html;
+    }
+  );
+
+  res.end(JSON.stringify(ans));
 });
 
 router.get("/reset_ava", function (req, res, next) {
-  let ans = { success: false };
-  if (req.session.auth != true) {
-    res.json(ans);
-  } else {
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "user"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
+
+  if (req.session.auth == true) {
     var file_name = "noava.png";
     let sql_data = [file_name, req.session.uid];
     let query = connection.query(
       "UPDATE users set ava = ? where uid = ? limit 1;",
       sql_data,
       (err, result) => {
-        if (err == undefined) ans.success = true;
-        ans.url = "public/img/avatars/" + file_name;
+        if (err == undefined) ans.status.success = true;
+        ans.data.url = "public/img/avatars/" + file_name;
         console.log("Ava deleted for user: " + req.session.email);
-        res.json(ans);
+        res.end(JSON.stringify(ans));
       }
     );
   }
@@ -328,13 +367,27 @@ router.post("/change_user_data", function (req, res, next) {
 });
 
 router.get("/get_users", async function (req, res, next) {
-  if (!api.check_role(req, "admin")) {
-    res.render("security/noauthreq");
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "admin"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
     return;
   }
 
   let users = await getUsers(connection);
-  res.render("security/users", { users: users });
+
+  res.render("pattern/profile/users", { users }, (err, html) => {
+    ans.status.success = true;
+    ans.data["html"] = html;
+  });
+
+  res.end(JSON.stringify(ans));
 });
 
 router.post("/change_role", async function (req, res, next) {
@@ -471,7 +524,10 @@ function passwordRecoveryGenCodeAndSend(email) {
   redisClient.set("code:" + hash, email, (redisErr, redisRes) => {
     // добавим code в redis
     if (redisErr) console.log(redisErr);
-    redisClient.expire("code", 3600 * 24, () => {});
+    redisClient.expire("code:" + hash, 3600 * 24, (redisErr, redisRes) => {
+      // console.log(redisErr);
+      // console.log(redisRes);
+    });
     // отправим письмо
     if (redisRes == "OK") sendPasswordRecoveryMail(hash, email);
   });

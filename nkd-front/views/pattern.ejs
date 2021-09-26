@@ -3,54 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>GTLab.Диагностика - НКД</title>
+    <title><%=app_vendor%> - <%=app_title%></title>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@600&display=swap" >
     <link rel="stylesheet" type="text/css" href="/theme/css/dark.css" >
     <link rel="stylesheet" type="text/css" href="public/css/styles.css">
     <link rel="stylesheet" type="text/css" href="public/css/grid-light.css">
     
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" /> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.13/moment-timezone-with-data-2012-2022.min.js"></script> -->
-    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=" crossorigin="anonymous"></script>
-
+    <script src="/public/js/pattern/f_common.js"></script>
+    <script src="/public/js/pattern/f_users.js"></script>
+    <script src="/public/js/pattern/f_leftMenuClass.js"></script>    
+    <script src="/public/js/pattern/f_profileClass.js"></script>
+    <script src="/public/js/patternViews/f_treeListTableView.js"></script>
+    <script src="/public/js/patternViews/f_dataTableView.js"></script>
+    <script src="/public/js/patternViews/f_tableView.js"></script>
+    
+    <!-- НИЖЕ подключаем остальные элементы приложения -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/boost.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>        
+
+    <script src="/public/js/control/f_control.js"></script>
+    <script src="/public/js/main/f_monitoringTableModel.js"></script>
+    <script src="/public/js/mnemo/f_mnemo_class.js"></script>
+    <script src="/public/js/options/f_options.js"></script>
+    <script src="/public/js/options/f_periodik_list_element_class.js"></script>
+    <script src="/public/js/options/f_periodik_list_model.js"></script>    
+    <script src="/public/js/statistics/f_dresult_model.js"></script>
     <script src="/public/js/statistics/f_dresults_units_array_model.js"></script>
     <script src="/public/js/statistics/f_dresults_units_moto_array_model.js"></script>    
     <script src="/public/js/statistics/f_dresults_array_model.js"></script>
     <script src="/public/js/statistics/f_dresults_moto_array_model.js"></script>
-    <script src="/public/js/statistics/f_datatable_class.js"></script>
     <script src="/public/js/statistics/f_statistics.js"></script>
-    <script src="/public/js/control/f_control.js"></script>
-    <script src="/public/js/options/f_options.js"></script>
-    <script src="/public/js/options/f_periodik_list_element_class.js"></script>
-    <script src="/public/js/options/f_periodik_list_model.js"></script>
-    <script src="/public/js/f_mnemo_class.js"></script>
-    <script src="/public/js/f_treetable_class.js"></script>
-    <script src="/public/js/f_dresult_model.js"></script>
-    <script src="/public/js/f_common.js"></script>
-    <script src="/public/js/f_dashboard.js"></script>
-    <script src="/public/js/f_client.js"></script>
+    <script src="/public/js/WSClient/f_WSClientClass.js"></script>
+    <!-- ВЫШЕ подключаем остальные элементы приложения -->
+
+    <!-- Подключаем основной скрипт. Человек, начинай чтение программы с этого файла! -->
+    <script src="/public/js/f_pattern.js"></script>
 </head>
 
-<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky" ws_url="<%= ws_url %>">
+<body data-theme="default" data-layout="fluid" data-sidebar-position="left" data-sidebar-behavior="sticky">
 
 
     <div class="wrapper">
         <nav id="sidebar" class="sidebar">
             <div class="sidebar-content js-simplebar">
                 <a class="sidebar-brand" href="/">
+                    <!-- логотип приложения -->
                     <img src="/public/img/logo.png" class="align-middle me-1" width="50px">
                 </a>
-                <ul class="sidebar-nav" id="menu__left"></ul>
+                <ul class="sidebar-nav" id="menu__left">
+                    <!-- контейнер для левого меню -->
+                </ul>
         
             </div>
         </nav>
@@ -61,6 +68,7 @@
 				<a class="sidebar-toggle"><i class="hamburger align-self-center"></i></a>      
                 
                 <div class="mb-1">
+                    <!-- другие элементы верхнего меню -->
                     <span class="badge p-2" id="span__serverState"></span>
                 </div>
             
@@ -93,6 +101,7 @@
 
             <main class="content p-3">
                 <div class="container-fluid p-0" id="dashboard_main_content">
+                    <!-- основной контейнер приложения -->
                 </div>
             </main>
 
@@ -100,24 +109,13 @@
                 <div class="container-fluid">
                     <div class="row text-muted">
                         <div class="col-6 text-start">
-                            <!-- <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Техподдержка</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Реквизиты</a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a class="text-muted" href="#">Соглашение</a>
-                                </li>                                
-                            </ul> -->
-                            <p class="mb-0">
-                               Build: <%=build%></a>
-                            </p>
+                            <!-- другие элементы подвала слева -->
+                            <p class="mb-0">Build: <%=build%></p>
                         </div>
                         <div class="col-6 text-end">
+                            <!-- другие элементы подвала справа -->
                             <p class="mb-0">
-                                &copy; 2021 - <a href="/" class="text-muted">GTLab.Диагностика</a>
+                                &copy; 2021 - <a href="/" class="text-muted"><%=app_vendor%></a>
                             </p>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-class datatable {
+class dataTableView {
   // ===================== PUBLIC
   constructor(opts) {
     this._target = opts.target;

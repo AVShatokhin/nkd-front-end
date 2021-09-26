@@ -4,7 +4,7 @@ class dresults_units_moto_array_model {
   constructor() {
     this.ColHeaders = ["Редуктор №1", "Редуктор №2"];
     this.ColWidths = [50, 50];
-    this.url = "/statistics/get_data_units_moto_by_jquery";
+    this.url = "/get_diagn/get_data_units_moto_by_jquery";
     return this;
   }
 

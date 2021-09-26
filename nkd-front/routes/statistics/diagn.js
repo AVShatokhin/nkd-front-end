@@ -1,9 +1,44 @@
 var express = require("express");
 var router = express.Router();
-var nkd = require("../libs/nkd.js");
-var config = require("../libs/config.js");
+var api = require("../../libs/nkd.js");
+var options = require("../../libs/config.js");
+const object_parser = require("../../libs/classes/object_parser");
+let signals = options.openConfigFile("signals");
+let yellow_table = options.openConfigFile("yellow_table");
+let savedNode = options.openObjectXML();
 
-const signals = config.openConfigFile("signals");
+router.get("/", function (req, res, next) {
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "user"),
+    },
+    data: {},
+  };
+
+  if (ans.status.auth != true) {
+    res.end(JSON.stringify(ans));
+    return;
+  }
+
+  let __object_parser = new object_parser({
+    configs: { savedNode: savedNode.savedNode },
+  });
+
+  res.render(
+    "statistics/diagn",
+    {
+      objectSortedList: __object_parser.objectSortedList,
+      yellow_table,
+    },
+    (err, html) => {
+      ans.status.success = true;
+      ans.data["html"] = html;
+    }
+  );
+
+  res.end(JSON.stringify(ans));
+});
 
 router.get("/get_moto_data_by_jquery", async function (req, res, next) {
   let length = req.query.length;
@@ -27,7 +62,7 @@ router.get("/get_moto_data_by_jquery", async function (req, res, next) {
     data: [],
   };
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }
@@ -154,7 +189,7 @@ router.get("/get_data_by_jquery", async function (req, res, next) {
     data: [],
   };
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }
@@ -257,7 +292,7 @@ router.get("/get_data_units_by_jquery", async function (req, res, next) {
     data: [],
   };
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }
@@ -368,7 +403,7 @@ router.get("/get_data_units_moto_by_jquery", async function (req, res, next) {
     data: [],
   };
 
-  if (!nkd.check_role(req, "admin")) {
+  if (!api.check_role(req, "admin")) {
     res.json(ans);
     return;
   }

@@ -1,9 +1,10 @@
-class mnemo {
+class mnemoSchema {
   // ===================== PUBLIC
   constructor(mnemo_config, target, model) {
     this.mnemo_config = mnemo_config;
     this.target = target;
     this.model = model;
+    this._html = "";
   }
 
   set mnemo_config(value) {
@@ -18,7 +19,26 @@ class mnemo {
     this._model = value;
   }
 
+  async load() {
+    return new Promise((resolve) => {
+      sendAjaxGet(
+        `mnemo/`,
+        (res) => {
+          this._html = res;
+          resolve(true);
+        },
+        () => {
+          showMessage("Ошибка загрузки приложения!", "danger");
+          resolve(false);
+        }
+      );
+    });
+  }
+
   plot() {
+    $("#mnemo_container").empty();
+    $("#mnemo_container").html(this._html);
+
     for (let __uuid in this._mnemo_config) {
       let __class = this._model.getMnemoData(__uuid);
       this._mnemo_config[__uuid].forEach((__id) => {
@@ -129,9 +149,27 @@ class mnemo {
     $(`text#text_moto_unit`).html("час : мин");
 
     if (__active_gear == 0) {
-      $(`text#text_moto_value`).html(calcMoto(moto.moto_0, moto.moto_factor));
+      $(`text#text_moto_value`).html(
+        this._calcMoto(moto.moto_0, moto.moto_factor)
+      );
     } else {
-      $(`text#text_moto_value`).html(calcMoto(moto.moto_1, moto.moto_factor));
+      $(`text#text_moto_value`).html(
+        this._calcMoto(moto.moto_1, moto.moto_factor)
+      );
     }
+  }
+
+  _calcMoto(moto, factor) {
+    let m_sec = moto * factor;
+    let m_min = Math.trunc(m_sec / 60);
+    let m_hour = Math.trunc(m_min / 60);
+
+    m_min = m_min - m_hour * 60;
+
+    if (m_min < 10) {
+      m_min = "0" + m_min;
+    }
+
+    return `${m_hour} : ${m_min}`;
   }
 }

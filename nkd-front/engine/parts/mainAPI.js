@@ -14,53 +14,57 @@ const nodemailer = require("nodemailer");
 
 const signals_config = config.openConfigFile("signals");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
-let object = config.openObjectXML();
 
-let configs = {
-  savedNode: object.savedNode,
-  yellow_table: config.openConfigFile("yellow_table"),
-  mnemo_config: config.openConfigFile("mnemo_config"),
-  signals: config.openSignalsConfig(),
-  records: config.openConfigFile("records"),
-  hardware: config.openConfigFile("hardware"),
-  config: config.openConfigFile("config"),
-};
+// let object = config.openObjectXML();
 
-router.get("/text", function (req, res, next) {
-  res.json({ diagns: samples, configs });
-});
+let configs;
 
-router.get("/get_rolling_csv", async function (req, res, next) {
-  let csv = "";
+// let configs = {
+//   savedNode: object.savedNode,
+//   yellow_table: config.openConfigFile("yellow_table"),
+//   mnemo_config: config.openConfigFile("mnemo_config"),
+//   signals: config.openSignalsConfig(),
+//   records: config.openConfigFile("records"),
+//   hardware: config.openConfigFile("hardware"),
+//   config: config.openConfigFile("config"),
+// };
 
-  let items = config.openRollingFromXML().root.parts.item;
+// router.get("/text", function (req, res, next) {
+//   res.json({ diagns: samples, configs });
+// });
 
-  items.forEach((i) => {
-    csv =
-      csv +
-      `${i.vendor};${i.name};${i.internalD};${i.outerD};${i.angle};${i.rollcount};${i.rollerD};\n`;
-  });
+// router.get("/get_rolling_csv", async function (req, res, next) {
+//   let csv = "";
 
-  csv = csv.replace(/\,/g, ".");
+//   let items = config.openRollingFromXML().root.parts.item;
 
-  res.end(csv);
-});
+//   items.forEach((i) => {
+//     csv =
+//       csv +
+//       `${i.vendor};${i.name};${i.internalD};${i.outerD};${i.angle};${i.rollcount};${i.rollerD};\n`;
+//   });
 
-router.get("/get_rolling_json", function (req, res, next) {
-  let ans = {
-    status: {
-      success: true,
-    },
-    data: config.openRollingFromXML(),
-  };
+//   csv = csv.replace(/\,/g, ".");
 
-  res.json(ans);
-});
+//   res.end(csv);
+// });
+
+// router.get("/get_rolling_json", function (req, res, next) {
+//   let ans = {
+//     status: {
+//       success: true,
+//     },
+//     data: config.openRollingFromXML(),
+//   };
+
+//   res.json(ans);
+// });
 
 router.get("/get_config", async function (req, res, next) {
   let ans = {
     status: {
       success: true,
+      auth: true,
     },
     data: await config.openMainConfig(connection),
   };
@@ -302,6 +306,7 @@ function calcSpeedZone(tacho) {
 
 let connection;
 function setConnection(con) {
+  configs = config.openMainConfig(con);
   connection = con;
 }
 
