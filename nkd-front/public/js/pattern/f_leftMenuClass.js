@@ -6,7 +6,7 @@ class leftMenu {
 
   __get_left_menu(options) {
     sendAjaxGet(
-      "dashboard/get_left_menu",
+      "/get_left_menu",
       (res) => {
         $("ul#menu__left").append(res);
         options.forEach((item) => {

@@ -29,7 +29,7 @@ $(async function () {
     mnemo,
   });
 
-  console.log("4) wsoket ... ");
+  console.log("4) wsocket ... ");
   new WSClient({
     url: __configs.ws_url,
     models: {
@@ -79,7 +79,7 @@ function gen_menu_options(options) {
       id: "btn__show_users",
       end_point: "/get_users",
       callback: function () {
-        initUsers();
+        new usersPage();
       },
     },
     {

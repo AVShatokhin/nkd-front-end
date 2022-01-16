@@ -15,50 +15,7 @@ const nodemailer = require("nodemailer");
 const signals_config = config.openConfigFile("signals");
 const gost = config.openConfigFile("gost_iso_10816_1_97");
 
-// let object = config.openObjectXML();
-
 let configs;
-
-// let configs = {
-//   savedNode: object.savedNode,
-//   yellow_table: config.openConfigFile("yellow_table"),
-//   mnemo_config: config.openConfigFile("mnemo_config"),
-//   signals: config.openSignalsConfig(),
-//   records: config.openConfigFile("records"),
-//   hardware: config.openConfigFile("hardware"),
-//   config: config.openConfigFile("config"),
-// };
-
-// router.get("/text", function (req, res, next) {
-//   res.json({ diagns: samples, configs });
-// });
-
-// router.get("/get_rolling_csv", async function (req, res, next) {
-//   let csv = "";
-
-//   let items = config.openRollingFromXML().root.parts.item;
-
-//   items.forEach((i) => {
-//     csv =
-//       csv +
-//       `${i.vendor};${i.name};${i.internalD};${i.outerD};${i.angle};${i.rollcount};${i.rollerD};\n`;
-//   });
-
-//   csv = csv.replace(/\,/g, ".");
-
-//   res.end(csv);
-// });
-
-// router.get("/get_rolling_json", function (req, res, next) {
-//   let ans = {
-//     status: {
-//       success: true,
-//     },
-//     data: config.openRollingFromXML(),
-//   };
-
-//   res.json(ans);
-// });
 
 router.get("/get_config", async function (req, res, next) {
   let ans = {
@@ -138,6 +95,8 @@ router.post("/income/", async function (req, res, next) {
 });
 
 async function DIAGN_sendEmails(connection, diagn) {
+  let app_name = configs.config.app_name;
+
   let __users = await getUsers(connection);
 
   let r = new dresult_render({
@@ -152,7 +111,7 @@ async function DIAGN_sendEmails(connection, diagn) {
       let __opt = {
         from: `"Система вибродиагностики" <${conf.get("smtp_user")}>`,
         to: e.email,
-        subject: `GTLab.Диагностика: получены результаты диагностической процедуры [${Math.random()}]`,
+        subject: `${app_name}: получены результаты диагностической процедуры [${Math.random()}]`,
         html: r.html,
       };
 
@@ -305,8 +264,9 @@ function calcSpeedZone(tacho) {
 }
 
 let connection;
-function setConnection(con) {
-  configs = config.openMainConfig(con);
+async function setConnection(con) {
+  configs = await config.openMainConfig(con);
+  configs.config = await config.openConfigFile("config");
   connection = con;
 }
 

@@ -1,46 +1,11 @@
 class profile {
   // ===================== PUBLIC
-  constructor(options) {
+  constructor() {
     this._initPasswordDialogs();
     this._initProfile();
   }
 
   _initPasswordDialogs() {
-    // $("#btn__change_password").on("click", () => {
-    //   if ($("#newPassword").val() != $("#newPasswordConfirmation").val()) {
-    //     showMessage("Пароли не совпадают!", "danger");
-    //     return;
-    //   }
-
-    //   if ($("#newPassword").val().length < 6) {
-    //     showMessage(
-    //       "Пароль слишком короткий, надо больше 6 символов!",
-    //       "danger"
-    //     );
-    //     return;
-    //   }
-
-    //   sendAjaxForm(
-    //     "/changepass",
-    //     "validation-form",
-    //     (res) => {
-    //       var result = JSON.parse(res);
-    //       if (result.success != true) {
-    //         showMessage("Ошибка на сервере!", "danger");
-    //         $("#btn__go_to_site").addClass("disabled");
-    //       } else {
-    //         $("#btn__go_to_site").removeClass("disabled");
-    //         showMessage("Пароль изменён!", "success");
-    //       }
-    //     },
-    //     (res) => {
-    //       showMessage("Ошибка на сервере!", "danger");
-    //       $("#btn__go_to_site").addClass("disabled");
-    //     }
-    //   );
-    // });
-    // какойто старый код, не пойму откуда он и нужен ли
-
     $("#validation-form").validate({
       ignore: ".ignore, .select2-input",
       focusInvalid: false,
@@ -116,7 +81,7 @@ class profile {
         "validation-form",
         (res) => {
           var result = JSON.parse(res);
-          if (result.success != true) {
+          if (result.status.success != true) {
             showMessage("Ошибка на сервере!", "danger");
           } else {
             showMessage("Пароль изменён!", "success");
@@ -146,7 +111,7 @@ class profile {
               "user_data",
               (res) => {
                 var result = JSON.parse(res.toString());
-                if (result.success != true) {
+                if (result.status.success != true) {
                   showMessage("Ошибка на сервере!", "danger");
                 } else {
                   showMessage("Изменения сохранены!", "success");
@@ -189,7 +154,7 @@ class profile {
               formData,
               (res) => {
                 var result = JSON.parse(res.toString());
-                if (result.success != true) {
+                if (result.status.success != true) {
                   showMessage("Ошибка на сервере!", "danger");
                 } else {
                   showMessage("Картинка сохранена!", "success");

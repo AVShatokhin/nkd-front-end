@@ -22,15 +22,30 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/auth", function (req, res, next) {
-  res.render("pattern/profile/auth");
+  res.render("pattern/profile/i_auth", {
+    app_title: conf.get("app_title"),
+    app_vendor: conf.get("app_vendor"),
+    app_name: conf.get("app_name"),
+    app_update: conf.get("app_update"),
+  });
 });
 
 router.get("/register", function (req, res, next) {
-  res.render("pattern/profile/register");
+  res.render("pattern/profile/i_register", {
+    app_title: conf.get("app_title"),
+    app_vendor: conf.get("app_vendor"),
+    app_name: conf.get("app_name"),
+    app_update: conf.get("app_update"),
+  });
 });
 
 router.get("/reset_password", function (req, res, next) {
-  res.render("pattern/profile/reset_password");
+  res.render("pattern/profile/i_reset_password", {
+    app_title: conf.get("app_title"),
+    app_vendor: conf.get("app_vendor"),
+    app_name: conf.get("app_name"),
+    app_update: conf.get("app_update"),
+  });
 });
 
 router.get("/logout", function (req, res, next) {
@@ -64,10 +79,16 @@ router.post("/login", function (req, res, next) {
           res.redirect("/dashboard");
         } else {
           req.session.auth = false;
+          console.log(
+            `Ошибка авторизации #1: ${req.body.email}:${req.body.password}`
+          );
           res.redirect("/auth");
         }
       } else {
         req.session.auth = false;
+        console.log(
+          `Ошибка авторизации #2: ${req.body.email}:${req.body.password}`
+        );
         res.redirect("/auth");
       }
     }
@@ -75,7 +96,13 @@ router.post("/login", function (req, res, next) {
 });
 
 router.post("/changepass", function (req, res, next) {
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: false,
+    },
+  };
+
   if (req.session.auth != true && req.session.came_by_link != true) {
     console.log("Not authed while changing password");
     res.json(ans);
@@ -86,7 +113,7 @@ router.post("/changepass", function (req, res, next) {
       "UPDATE users set pass_hash = md5(?) where uid = ? limit 1;",
       sql_data,
       (err, result) => {
-        if (err == undefined) ans.success = true;
+        if (err == undefined) ans.status.success = true;
         console.log("Password changed from user: " + req.session.email);
         if (req.session.email != undefined)
           sendPasswordChanged(req.session.email);
@@ -155,9 +182,19 @@ router.post("/email_verif_req", function (req, res, next) {
               }
             });
 
-            res.render("pattern/profile/verif_send"); // сказали что ждём верификацию
+            res.render("pattern/profile/i_verif_send", {
+              app_title: conf.get("app_title"),
+              app_vendor: conf.get("app_vendor"),
+              app_name: conf.get("app_name"),
+              app_update: conf.get("app_update"),
+            }); // сказали что ждём верификацию
           } else {
-            res.render("pattern/profile/user_allready_exists"); // оказалось что пользователь есть уже
+            res.render("pattern/profile/i_user_allready_exists", {
+              app_title: conf.get("app_title"),
+              app_vendor: conf.get("app_vendor"),
+              app_name: conf.get("app_name"),
+              app_update: conf.get("app_update"),
+            }); // оказалось что пользователь есть уже
           }
         }
       }
@@ -182,9 +219,19 @@ router.post("/password_reset_req", function (req, res, next) {
           if (sqlRes[0] != undefined) {
             // пользователь такой есть можно продолжать работать над этой задачей
             passwordRecoveryGenCodeAndSend(email);
-            res.render("pattern/profile/reset_send"); // сказали что ждём верификацию
+            res.render("pattern/profile/i_reset_send", {
+              app_title: conf.get("app_title"),
+              app_vendor: conf.get("app_vendor"),
+              app_name: conf.get("app_name"),
+              app_update: conf.get("app_update"),
+            }); // сказали что ждём верификацию
           } else {
-            res.render("pattern/profile/user_notfound"); // оказалось что пользователь есть уже
+            res.render("pattern/profile/i_user_notfound", {
+              app_title: conf.get("app_title"),
+              app_vendor: conf.get("app_vendor"),
+              app_name: conf.get("app_name"),
+              app_update: conf.get("app_update"),
+            }); // оказалось что пользователь есть уже
           }
         }
       }
@@ -230,7 +277,12 @@ router.get("/email_confirm/:code", function (req, res, next) {
 
 router.get("/set_password_dialog", function (req, res, next) {
   if (req.session.came_by_link == true) {
-    res.render("pattern/profile/set_password_dialog");
+    res.render("pattern/profile/i_set_password_dialog", {
+      app_title: conf.get("app_title"),
+      app_vendor: conf.get("app_vendor"),
+      app_name: conf.get("app_name"),
+      app_update: conf.get("app_update"),
+    });
   } else {
     res.redirect("/auth");
   }
@@ -300,7 +352,13 @@ router.get("/reset_ava", function (req, res, next) {
 });
 
 router.post("/upload_ava", function (req, res, next) {
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, ""),
+    },
+  };
+
   if (req.session.auth != true) {
     res.json(ans);
   } else {
@@ -326,7 +384,7 @@ router.post("/upload_ava", function (req, res, next) {
       "UPDATE users set ava = ? where uid = ? limit 1;",
       sql_data,
       (err, result) => {
-        if (err == undefined) ans.success = true;
+        if (err == undefined) ans.status.success = true;
         console.log("Ava changed for user: " + req.session.email);
         res.json(ans);
       }
@@ -335,7 +393,13 @@ router.post("/upload_ava", function (req, res, next) {
 });
 
 router.post("/change_user_data", function (req, res, next) {
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, ""),
+    },
+  };
+
   if (req.session.auth != true) {
     console.log("Not authed while changing user data");
     res.json(ans);
@@ -353,7 +417,7 @@ router.post("/change_user_data", function (req, res, next) {
       "UPDATE users set name=?, second_name=?, surname=?, address=?, phone=? where uid = ? limit 1;",
       sql_data,
       (err, result) => {
-        if (err == undefined) ans.success = true;
+        if (err == undefined) ans.status.success = true;
         console.log("Data changed from user: " + req.session.email);
         req.session.name = req.body.name;
         req.session.second_name = req.body.second_name;
@@ -391,7 +455,13 @@ router.get("/get_users", async function (req, res, next) {
 });
 
 router.post("/change_role", async function (req, res, next) {
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "admin"),
+    },
+  };
+
   if (!api.check_role(req, "admin")) {
     console.log("Not permit while changing user role");
     res.json(ans);
@@ -399,7 +469,7 @@ router.post("/change_role", async function (req, res, next) {
     let result = await updateUserRole(connection, req.body.role, req.body.uid);
 
     if (result.error == undefined) {
-      ans.success = true;
+      ans.status.success = true;
       console.log(`Change role for user: ${req.body.uid} to ${req.body.role}`);
     }
 
@@ -409,7 +479,13 @@ router.post("/change_role", async function (req, res, next) {
 
 router.post("/reset_pwd", async function (req, res, next) {
   // сброс пароля по запросу администратора через административный интерфейс
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "admin"),
+    },
+  };
+
   if (!api.check_role(req, "admin")) {
     console.log("Not permit while reset req for user");
     res.json(ans);
@@ -418,7 +494,7 @@ router.post("/reset_pwd", async function (req, res, next) {
 
     if (result.error == undefined) {
       passwordRecoveryGenCodeAndSend(result[0].email);
-      ans.success = true;
+      ans.status.success = true;
       console.log(`Reset pwd request by admin for user: ${result[0].email}`);
     }
 
@@ -428,7 +504,13 @@ router.post("/reset_pwd", async function (req, res, next) {
 
 router.post("/delete_user", async function (req, res, next) {
   // сброс пароля по запросу администратора через административный интерфейс
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "admin"),
+    },
+  };
+
   if (!api.check_role(req, "admin")) {
     console.log("Not permit while reset req for user");
     res.json(ans);
@@ -436,7 +518,7 @@ router.post("/delete_user", async function (req, res, next) {
     let result = await deleteUser(connection, req.body.uid);
 
     if (result.error == undefined) {
-      ans.success = true;
+      ans.status.success = true;
       console.log(`User deleted: ${req.body.uid}`);
     }
 
@@ -446,7 +528,13 @@ router.post("/delete_user", async function (req, res, next) {
 
 router.post("/spam", async function (req, res, next) {
   // сброс пароля по запросу администратора через административный интерфейс
-  let ans = { success: false };
+  let ans = {
+    status: {
+      success: false,
+      auth: api.check_role(req, "admin"),
+    },
+  };
+
   if (!api.check_role(req, "admin")) {
     console.log("Not permit while spam on|off for user");
     res.json(ans);
@@ -454,7 +542,7 @@ router.post("/spam", async function (req, res, next) {
     let result = await spamUser(connection, req.body.uid, req.body.spam);
 
     if (result.error == undefined) {
-      ans.success = true;
+      ans.status.success = true;
       console.log(`Spam ${req.body.spam} for user ${req.body.uid} `);
     }
 
@@ -479,42 +567,50 @@ async function spamUser(connection, uid, spam) {
 }
 
 async function sendAuthMail(hash, email) {
+  let app_name = conf.get("app_name");
+  let base_url = conf.get("base_url");
+  let smtp_user = conf.get("smtp_user");
+
   let result = await transporter.sendMail({
-    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
+    from: `"Система контроля доступа" <${smtp_user}>`,
     to: email,
-    subject: `GTLab.Диагностика: подтверждение электронного ящика [${hash}]`,
+    subject: `${app_name}: подтверждение электронного ящика [${hash}]`,
     html:
-      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
-      "<b>Для завершения регистрации перейдите по ссылке:</b> " +
-      `<a href="http://${conf.get(
-        "base_url"
-      )}/email_confirm/${hash}">подтверждение почтового ящика</a>`,
+      `Система контроля доступа <b>${app_name}</b> привествует Вас!<br>` +
+      `<b>Для завершения регистрации перейдите по ссылке:</b> ` +
+      `<a href="http://${base_url}/email_confirm/${hash}">подтверждение почтового ящика</a>`,
   });
   // console.log(result);
 }
 
 async function sendPasswordRecoveryMail(hash, email) {
+  let app_name = conf.get("app_name");
+  let base_url = conf.get("base_url");
+  let smtp_user = conf.get("smtp_user");
+
   let result = await transporter.sendMail({
-    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
+    from: `"Система контроля доступа" <${smtp_user}>`,
     to: email,
-    subject: `GTLab.Диагностика: восстановление пароля [${hash}]`,
+    subject: `${app_name}: восстановление пароля [${hash}]`,
     html:
-      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
-      "<b>Для восстановления пароля пройдите по ссылке:</b>" +
-      ` <a href="http://${conf.get(
-        "base_url"
-      )}/email_confirm/${hash}">восстановление пароля</a>`,
+      `Система контроля доступа <b>${app_name}</b> привествует Вас!<br>` +
+      `<b>Для восстановления пароля пройдите по ссылке:</b>` +
+      ` <a href="http://${base_url}/email_confirm/${hash}">восстановление пароля</a>`,
   });
 }
 
 async function sendPasswordChanged(email) {
+  let app_name = conf.get("app_name");
+  let base_url = conf.get("base_url");
+  let smtp_user = conf.get("smtp_user");
+
   let result = await transporter.sendMail({
-    from: `"Система контроля доступа" <${conf.get("smtp_user")}>`,
+    from: `"Система контроля доступа" <${smtp_user}>`,
     to: email,
-    subject: `GTLab.Диагностика: пароль изменён [${Math.random()}]`,
+    subject: `${app_name}: пароль изменён [${Math.random()}]`,
     html:
-      "Система контроля доступа GTLab.Диагностика привествует Вас!<br>" +
-      "<b>Обращаю ваше внимание на то, что пароль к вашей учетной записи был изменён.</b>",
+      `Система контроля доступа <b>${app_name}</b> привествует Вас!<br>` +
+      "<b>Обращаю Ваше внимание на то, что пароль к Вашей учетной записи был изменён.</b>",
   });
 }
 

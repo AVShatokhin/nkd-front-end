@@ -10,8 +10,9 @@ const session = require("express-session");
 const redisStorage = require("connect-redis")(session);
 const redis = require("redis");
 
-const profileRouter = require("./routes/pattern/profile");
 const patternRouter = require("./routes/pattern");
+const profileRouter = require("./routes/pattern/profile");
+const leftMenuRouter = require("./routes/pattern/leftMenu");
 
 // НИЖЕ объявление специфичных для приложения роутеров
 const engineRouter = require("./engine/engine");
@@ -58,8 +59,9 @@ function init(conf) {
   app.use("/theme", express.static(path.join(__dirname, "/theme")));
   app.use("/public", express.static(path.join(__dirname, "/public")));
 
-  app.use(profileRouter);
   app.use("/dashboard", patternRouter);
+  app.use(profileRouter);
+  app.use("/get_left_menu", leftMenuRouter);
   app.use("/debug", debugRouter);
 
   // ниже роутеры основного приложения
