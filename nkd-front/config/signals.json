@@ -33,6 +33,7 @@
         "name": "Сверху_02",
         "signal_type" : "rms",
         "gost": true,
+        "preproc": "int1",
         "filters": [
             {
                 "name": "butterworth",
@@ -48,6 +49,7 @@
         "name": "Середина_03",
         "signal_type" : "rms",
         "gost": true,
+        "preproc": "int1",
         "filters": [
             {
                 "name": "butterworth",
@@ -63,6 +65,7 @@
         "name": "Входной",
         "signal_type" : "rms",
         "gost": true, 
+        "preproc": "int1",
         "filters": [
             {
                 "name": "butterworth",
